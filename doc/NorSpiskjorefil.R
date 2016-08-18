@@ -23,7 +23,7 @@ preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-valgtVar <- 'B04PabegyntUtd'	#Må velge... Alder, , B04PabegyntUtd, Norsktalende 
+valgtVar <- 'B05FullfortUtd'	#Må velge... Alder, , B04PabegyntUtd, Norsktalende 
 
 outfile <- paste(valgtVar, '_ford.png', sep='')	#Navn angis av Jasper
 setwd("C:/ResultattjenesteGIT/NorSpis/")
