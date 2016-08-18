@@ -12,9 +12,9 @@ NorSpisPreprosess <- function(RegData=RegData)	#, reshID=reshID)
 {
   #Kun ferdigstilte registreringer:
   # Rapporteket får kun levert ferdigstilte registreringer fra MRS/NHN.
-
+      #RegData <- RegData[which(RegData$BasisRegStatus==1), ]
   #Kjønn
-  RegData$ErMann <- NULL
+#  RegData$ErMann <- NULL
 
   #Riktig navn på regions-variabel:
   #Mangler regionsvariabel!!!
@@ -24,10 +24,10 @@ NorSpisPreprosess <- function(RegData=RegData)	#, reshID=reshID)
 	names(RegData)[which(names(RegData) == 'PasientAlder')] <- 'Alder'
 	
 # Riktig format
-	RegData$ShNavn <- as.character(RegData$ShNavn)
+	RegData$SykehusNavn <- as.character(RegData$SykehusNavn)
 
 	#Riktig format på datovariable:
-	RegData$InnDato <- as.POSIXlt(RegData$HovedDato, format="%Y-%m-%d") 
+	RegData$HovedDato <- as.POSIXlt(RegData$HovedDato, format="%Y-%m-%d") 
 	#RegData$InnDato <- strptime(RegData$DateAdmittedIntensive, format="%Y-%m-%d") # %H:%M:%S" )  #"%d.%m.%Y"	"%Y-%m-%d"
 	#RegData$Aar <- 1900 + strptime(RegData$DateAdmittedIntensive, format="%Y")$year
 	

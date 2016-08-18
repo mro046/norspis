@@ -1,0 +1,20 @@
+Skjemanavn;Friendlyname;Spørsmålstekst;Tabell;Fysisk feltnavn;Type;Verdier;Hjelpetekst;Aktiveringsspørsmål;Underspørsmål;Kommentar;Innført dato;Utfaset dato
+cia30.xml;;Skal CIA 3.0 fylles ut?;CIA30;DOCIA;org.openqreg.element.ListBoxVariable;TODO;For pasienter under 14 år skal det vurderes om CIA 3.0 skal fylles ut. For pasienter over 14 år er CIA 3.0 obligatorisk;Nei;Nei;;;
+cia30.xml;;1. ...gjort det vanskelig å konsentrere seg?;CIA30;Q1;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;2. ...gjort at du har følt deg kritisk til deg selv?;CIA30;Q2;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;3. ...hindret deg i å gå ut sammen med andre?;CIA30;Q3;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;4. ...påvirket din prestasjon i jobb eller utdanning? (hvis aktuelt);CIA30;Q4;org.openqreg.element.ListBoxVariable;TODO;Dersom ikke aktuelt svar - 0: Ikke i det hele tatt.;Nei;Nei;;;
+cia30.xml;;5. ...gjort deg glemsk?;CIA30;Q5;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;6. ...påvirket din evne til å ta beslutninger i hverdagen?;CIA30;Q6;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;7. ...skapt vansker ved måltider med familie eller venner?;CIA30;Q7;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;8. ...gjort deg opprørt?;CIA30;Q8;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;9. ...gjort at du har skammet deg over deg selv?;CIA30;Q9;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;10. ...gjort det vanskelig å spise ute med andre?;CIA30;Q10;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;11. ...gitt deg skyldfølelse?;CIA30;Q11;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;12. ...vanskeliggjort eller hindret deg i å gjøre ting du pleide å ha glede av?;CIA30;Q12;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;13. ...gjort deg distré/åndsfraværende?;CIA30;Q13;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;14. ...fått deg til å føle deg mislykket?;CIA30;Q14;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;15. ...hatt negativ innvirkning på ditt forhold til andre?;CIA30;Q15;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;16. ...gjort deg bekymret?;CIA30;Q16;org.openqreg.element.ListBoxVariable;TODO;;Nei;Nei;;;
+cia30.xml;;Internkommentar;CIA30;USERCOMMENT;org.openqreg.element.TextAreaVariable;TODO;Generell fri kommentar, max 2000 tegn.;Nei;Nei;;;
+cia30.xml;;Ferdigstille skjema?;CIA30;STATUS;org.openqreg.element.CheckBoxVariable;TODO;Denne boksen vil angi hvorvidt du er ferdig med å fylle ut skjemaet.;Nei;Nei;;;

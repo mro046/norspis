@@ -7,7 +7,7 @@
 #'    \itemize{
 #'     \item Alder: Aldersfordeling, 5-årige grupper 
 #'     \item BMI: Pasientenes BMI (Body Mass Index)
-#'     \item SivilStatus: Sivilstatus
+#'     \item Norsktalende: Snakker pasienten norsk
 #'     \item Utdanning: Utdanningsnivå
 #'    }
 #'    
@@ -20,8 +20,6 @@
 #'					1: kjør
 #' @param preprosess Skal data preprosesseres, dvs. gjøre standard omregning av variable og beregne nye.
 #'						TRUE (standard) / FALSE
-#' @param tittel Om tittel skal vises i figuren eller ikke. Tittel tas bort i samlerapporter.
-#'					0: ikke vis tittel, 1: vis tittel (standard)
 #' @param datoFra Operasjonsdato, fra og med. Standard: '2012-01-01'
 #' @param datoTil Operasjonsdato, til og med. Standard: '3000-01-01' (siste registreringsdato)
 #' @param minald Alder, fra og med
@@ -36,7 +34,7 @@
 #'
 #' @export
 
-FigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
+NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
 		minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1,
 		reshID, enhetsUtvalg=1)
 {
@@ -64,19 +62,59 @@ NB <- ''
 #Når bare skal sammenlikne med sykehusgruppe eller region, eller ikke sammenlikne,
 #trengs ikke data for hele landet:
 reshID <- as.numeric(reshID)
-indEgen1 <- match(reshID, RegData$ReshId)
-if (enhetsUtvalg == 2) {RegData <- 	RegData[which(RegData$ReshId == reshID),]	#kun egen enhet
+indEgen1 <- match(reshID, RegData$AvdRESH)
+if (enhetsUtvalg == 2) {RegData <- 	RegData[which(RegData$AvdRESH == reshID),]	#kun egen enhet
 	}
 
 if (valgtVar=='Alder') {
 	gr <- c(0,seq(5,50,5),150)
 	RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
 	#grtxt <- c('0-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-89', '90+')	
-	grtxt <- c(levels(RegData$VariabelGr)[-length(gr)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+	grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
 	subtxt <- 'Aldersgruppe'
 	Tittel <- 'Aldersfordeling'
 }
 
+if (valgtVar=='Sivilstatus') {#Foreløpig tom
+      RegData$VariabelGr <- cut(RegData$Sivilstatus, breaks=gr, inlcude.lowest=TRUE, right=FALSE)
+      grtxt <- c()
+      subtxt <- 'Sivilstatus'
+      Tittel <- 'Sivilstatus'
+}
+
+if (valgtVar=='Norsktalende') {
+      #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
+      grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent', 'Ikke registrert')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData$Norsktalende %in% c(0:2,9))
+      RegData$VariabelGr[indDum] <- RegData$Norsktalende[indDum] 
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9,99))
+      Tittel <- 'Norsktalende'
+}
+
+if (valgtVar=='B04PabegyntUtd') {
+      retn <- 'H'
+      grtxt <- c('Grunnskole','Videregående skole (1-3 år)',
+                 'Høgskole eller universitet, mindre enn 4 år', 'Høgskole eller universitet, 4 år eller mer','Ukjent', 
+                 'Ikke registrert')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData$B04PabegyntUtd %in% c(1:4,9))
+      RegData$VariabelGr[indDum] <- RegData$B04PabegyntUtd[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:4,9,99))
+      Tittel <- 'Høyeste påbegynte utdanning'
+}
+
+if (valgtVar=='B05FullfortUtd') {
+      retn <- 'H'
+      grtxt <- c('Ikke fullført grunnskole','Grunnskole','Videregående skole (1-3 år)',
+                 'Høgskole/universitet (<4 år)', 'Høgskole/universitet (>=4 år)','Ukjent', 
+                 'Ikke registrert')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData$B05FullfortUtd %in% c(1:5,9))
+      RegData$VariabelGr[indDum] <- RegData$B05FullfortUtd[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5,9,99))
+      Tittel <- 'Høyeste fullførte utdanning'
+}
 
 if (valgtVar %in% c('ArbeidstausPreOp', 'Arbeidstaus3mnd', 'Arbeidstaus12mnd')) {
   retn <- 'H'
@@ -137,7 +175,7 @@ utvalgTxt <- NorSpisUtvalg$utvalgTxt
 
 #Generere hovedgruppe og sammenlikningsgruppe
 #Trenger indeksene før genererer tall for figurer med flere variable med ulike utvalg
-indEgen1 <- match(reshID, RegData$ReshId)
+indEgen1 <- match(reshID, RegData$AvdRESH)
 if (enhetsUtvalg %in% c(1,2)) {	#Involverer egen enhet
 		shtxt <- as.character(RegData$SykehusNavn[indEgen1]) } else {
 		shtxt <- 'Hele landet'
@@ -150,9 +188,9 @@ if (enhetsUtvalg %in% c(1,2)) {	#Involverer egen enhet
   } else {						#Skal gjøre sammenlikning
     medSml <- 1
     if (enhetsUtvalg == 1) {
-      indHoved <-which(as.numeric(RegData$ReshId)==reshID)
+      indHoved <-which(as.numeric(RegData$AvdRESH)==reshID)
       smltxt <- 'landet forøvrig'
-      indRest <- which(as.numeric(RegData$ReshId) != reshID)
+      indRest <- which(as.numeric(RegData$AvdRESH) != reshID)
     }
   }
 
@@ -266,11 +304,9 @@ if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprInd
 
 
 
-if (tittel==0) {Tittel<-''} else {Tittel <- Tittel}
-
 #-----------Figur---------------------------------------
 #Hvis for få observasjoner..
-if ( NHoved %in% 1:5 | 	(medSml ==1 & NRest<10)) {	
+if ( NHoved %in% 1:5 | 	(medSml ==1 & NRest<5)) {	
 FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()
@@ -299,7 +335,7 @@ farger <- FigTypUt$farger
 fargeHoved <- farger[1]
 fargeRest <- farger[3]
 antGr <- length(grtxt)
-lwdRest <- 3	#tykkelse på linja som repr. landet
+lwdRest <- 1	#tykkelse på linja som repr. landet
 cexleg <- 1	#Størrelse på legendtekst
 
 #Horisontale søyler
@@ -314,7 +350,7 @@ if (retn == 'H') {
 		legend('top', c(paste(shtxt, ' (N=', NHoved,')', sep=''),
 						paste(smltxt, ' (N=', NRest,')', sep='')),
 			border=c(fargeHoved,NA), col=c(fargeHoved,fargeRest), bty='n', pch=c(15,18), pt.cex=2,
-			lwd=lwdRest,	lty=NA, ncol=1, cex=cexleg)
+			lty=NA, ncol=1,lwd=lwdRest, cex=cexleg) #	
 		} else {
 		legend('top', paste(shtxt, ' (N=', NHoved,')', sep=''),
 			border=NA, fill=fargeHoved, bty='n', ncol=1, cex=cexleg)
@@ -333,17 +369,17 @@ if (medSml == 1) {
 	points(pos, as.numeric(Andeler$Rest), col=fargeRest,  cex=2, pch=18) #c("p","b","o"),
 	legend('top', c(paste(shtxt, ' (N=', NHoved,')', sep=''), paste(smltxt, ' (N=', NRest,')', sep='')),
 		border=c(fargeHoved,NA), col=c(fargeHoved,fargeRest), bty='n', pch=c(15,18), pt.cex=2, lty=c(NA,NA),
-		lwd=lwdRest, ncol=2, cex=cexleg)
+		lwd=lwdRest, ncol=2, cex=cexleg)	#
 	} else {
 	legend('top', paste(shtxt, ' (N=', NHoved,')', sep=''),
 		border=NA, fill=fargeHoved, bty='n', ncol=1, cex=cexleg)
 	}
 }
 
-if (tittel==1) {title(Tittel, line=1, font.main=1)}
+title(Tittel, line=1, font.main=1)
 
 #Tekst som angir hvilket utvalg som er gjort
-mtext(utvalgTxt, side=3, las=1, cex=0.9, adj=0, col=farger[1], line=c(3-(1-tittel)+0.8*((NutvTxt-1):0)))
+mtext(utvalgTxt, side=3, las=1, cex=0.9, adj=0, col=farger[1], line=c(3+0.8*((NutvTxt-1):0)))
 
 par('fig'=c(0, 1, 0, 1))
 if ( outfile != '') {dev.off()}
