@@ -34,7 +34,7 @@
 #'
 #' @export
 
-NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
+NorSpisAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
 		minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1,
 		reshID, enhetsUtvalg=1)
 {
@@ -47,231 +47,127 @@ NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil=
      if (preprosess==1){
        RegData <- NorSpisPreprosess(RegData=RegData)
      }
-
-
-#----------- Figurparametre ------------------------------
-
-retn <- 'V'		#Vertikal som standard. 'H' angis evt. for enkeltvariable
-grtxt <- ''		#Spesifiseres for hver enkelt variabel
-grtxt2 <- ''	#Spesifiseres evt. for hver enkelt variabel
-subtxt <- ''	#Benevning
-flerevar <- 0
-antDes <- 1
-NB <- ''
-
-#Når bare skal sammenlikne med sykehusgruppe eller region, eller ikke sammenlikne,
-#trengs ikke data for hele landet:
-#reshID <- as.character(reshID)
-indEgen1 <- match(reshID, RegData$AvdRESH)
-if (enhetsUtvalg == 2) {RegData <- 	RegData[which(RegData$AvdRESH == reshID),]	#kun egen enhet
-	}
-
-
-#----
-
-if (valgtVar %in% c('ArbeidstausPreOp', 'Arbeidstaus3mnd', 'Arbeidstaus12mnd')) {
-  retn <- 'H'
-  RegData <- RegData[which(RegData$PasientSkjemaStatus == 1), ] #LENA? Hjelpeargument?
-  grtxt <- c('I arbeid','Hjemmeværende', 'Studie/skole', 'Pensjonist', 'Arbeidsledig', 'Sykemeldt',
-		'Delvis sykemeldt', 'Attføring/rehab.', 'Uførepensjon', 'Ufør og sykem.', 'Ikke utfylt')
-	RegData$VariabelGr <- 99
-	indDum <- which(RegData[ ,valgtVar] %in% 1:10)
-	RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-	RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:10,99))
-	Tittel <- switch(valgtVar,
-	    ArbeidstausPreOp = 'Arbeidsstatus før operasjon',
-	    Arbeidstaus3mnd = 'Arbeidsstatus 3 mnd. etter operasjon' ,
-	    Arbeidstaus12mnd = 'Arbeidsstatus 12 mnd. etter operasjon')
-}
-
-#Lage indekser for:PO01Forstod	PO02Tillit	PO03InfoDiagnose	PO04Tilpasset	PO05Involvert	PO06Organisert	PO07Tilfredsstillende	PO08Tilgjengelighet	PO09Utbytte	PO10Pasientsikkerhet
-
-
-
-if (valgtVar == 'Morsmal') {
-  RegData <- RegData[which(RegData$PasientSkjemaStatus == 1), ]
-  grtxt <- c('Norsk', 'Samisk', 'Annet', 'Ukjent')
-	RegData$VariabelGr <- 9
-	indDum <- which(RegData$Morsmal %in% 1:3)
-	RegData$VariabelGr[indDum] <- RegData$Morsmal[indDum]
-	RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:3,9))
-	Tittel <- 'Morsmål'
-}
-if (valgtVar=='Utdanning') {
-	retn <- 'H'
-	grtxt <- c('Grunnskole++, 7-10år','Real-, yrkes- el vg skole',
-				 'Allmennfaglig vg skole','Høyskole/universitet, <4 år','Høyskole/universitet, 4år+', 'Ukjent')
-	RegData$VariabelGr <- 9
-	indDum <- which(RegData$Utdanning %in% 1:5)
-	RegData$VariabelGr[indDum] <- RegData$Utdanning[indDum]
-	RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5,9))
-	Tittel <- 'Utdanningsnivå'
-}
-
-
-#------------Gjøre utvalg-------------------------
-NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, minald=minald, maxald=maxald,
-		erMann=erMann)
-RegData <- NorSpisUtvalg$RegData
-utvalgTxt <- NorSpisUtvalg$utvalgTxt
-
-
-
-#Generere hovedgruppe og sammenlikningsgruppe
-#Trenger indeksene før genererer tall for figurer med flere variable med ulike utvalg
-#indEgen1 <- match(reshID, RegData$AvdRESH)
-if (enhetsUtvalg %in% c(1,2)) {	#Involverer egen enhet
-		shtxt <- as.character(RegData$SykehusNavn[indEgen1]) } else {
-		shtxt <- 'Hele landet'
-			}
-
-  if (enhetsUtvalg %in% c(0,2)) {		#Ikke sammenlikning
-    medSml <- 0
-    indHoved <- 1:dim(RegData)[1]	#Tidligere redusert datasettet for 2,4,7. (+ 3og6)
-    indRest <- NULL
-  } else {						#Skal gjøre sammenlikning
-    medSml <- 1
-    if (enhetsUtvalg == 1) {
-      indHoved <-which(RegData$AvdRESH==reshID)
-      smltxt <- 'landet forøvrig'
-      indRest <- which(RegData$AvdRESH != reshID)
-    }
-  }
-
-
-#Gjør beregninger selv om det evt ikke skal vise figur ut. Trenger utdata.
-Andeler <- list(Hoved = 0, Rest =0)
-NRest <- 0
-AntRest <- 0
-
-if (flerevar == 0 ) {
-AntHoved <- table(RegData$VariabelGr[indHoved])
-NHoved <- sum(AntHoved)
-Andeler$Hoved <- 100*AntHoved/NHoved
-	if (medSml==1) {
-		AntRest <- table(RegData$VariabelGr[indRest])
-		NRest <- sum(AntRest)	#length(indRest)- Kan inneholde NA
-		Andeler$Rest <- 100*AntRest/NRest
-	}
-}
+      
 
 
 #FIGURER SATT SAMMEN AV FLERE VARIABLE, ULIKT TOTALUTVALG. EKSEMPLER FOR ULIKE SITUASJONER.
 #DENNE DELEN VIL VI TRENGE FOR F.EKS. "HONOS, ENKELTLEDD"
-if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprIndikSmerter',
-                    'OprIndikMyelopati', 'Radiologi')){
-  flerevar <-  1
-  utvalg <- c('Hoved', 'Rest')	#Hoved vil angi enhet, evt. hele landet hvis ikke gjøre sml, 'Rest' utgjør sammenligningsgruppa
-  RegDataLand <- RegData
-  NHoved <-length(indHoved)
-  NRest <- length(indRest)
 
-  for (teller in 1:(medSml+1)) {
-  #  Variablene kjøres for angitt indeks, dvs. to ganger hvis vi skal ha sammenligning med Resten.
-    RegData <- RegDataLand[switch(utvalg[teller], Hoved = indHoved, Rest=indRest), ]
+#Vi har en "interessekonflikt" for figurer satt sammen av fler variable:
+#Utvalg må kjøres etter all variabelfiltrering for å få riktig utvalgstekst i figuren.
+#Vi må kjøre utvalg før variabeldefinisjon for å få riktige indekser - 
+#Løsning: Må tilrettelegge generelle variable som representerer de sammensatte variablene.
 
+#--------------- Definere variable ------------------------------
 
-     if (valgtVar=='OprIndik') {
-         retn <- 'H'
-         #OprIndiasjonasjonUfylt <>1 - tom variabel,
-         #Svært få (ca 20 av 3000) har tom registrering. Setter derfor felles N lik alle reg.
-         indSmerterk <- which(RegData$OprIndikSmerter == 1)
-         indMyelopati <- which(RegData$OprIndikMyelopati == 1)
-         Nmyelopati <- sum(RegData$OprIndikMyelopati, na.rm=T)
-         AntVar <- cbind(
-              #length(indAnnet),
-              Pareser = sum(RegData$OprIndikParese, na.rm=T), #length(indPareser),
-              Myelopati = length(indMyelopati),
-              Smerter = length(indSmerterk),
-              SmerterMyelop = length(intersect(indMyelopati, indSmerterk)),
-              Annet = sum(RegData$OprIndikAnnet, na.rm=T)
-         )
-         NVar<-rep(dim(RegData)[1], length(AntVar))
-         grtxt <- c('Pareser', 'Myelopati', 'Smerter', 'Sm. og Myelop.', 'Annet')
-         Tittel <- 'Operasjonsårsak'
-    }
+NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
+RegData <- NorSpisVarSpes$RegData
+#Flere av variablene fra NorSpisVarTilrettelegg hentet ut lengre ned.
+
+NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, minald=minald, 
+                               maxald=maxald, erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)
+RegData <- NorSpisUtvalg$RegData
+ind <- NorSpisUtvalg$ind
+medSml <- NorSpisUtvalg$medSml
+hovedgrTxt <- NorSpisUtvalg$hovedgrTxt
+smltxt <- NorSpisUtvalg$smltxt
+utvalgTxt <- NorSpisUtvalg$utvalgTxt
+fargepalett=NorSpisUtvalg$fargepalett
+medSml=NorSpisUtvalg$medSml
 
 
-    if (valgtVar=='Komorbiditet') {
-         retn <- 'H'
-          RegData <- RegData[which(RegData$AndreRelSykdommer>-1), ]
-         RegData$SykdReumatisk <- 0
-          indSykdReumatisk <- (RegData$SykdAnnenreumatisk ==1 | (RegData$SykdBechtrew==1 | RegData$SykdReumatoidartritt==1))
-          RegData$SykdReumatisk[indSykdReumatisk] <- 1
-         Variable <- c('SykdAnnenendokrin', 'SykdAnnet','SykdCarpalTunnelSyndr', 'SykdCerebrovaskular',
-               'SykdDepresjonAngst', 'SykdHjertekar', 'SykdHodepine', 'SykdHypertensjon', 'SykDiabetesMellitus',
-              'SykdKreft', 'SykdKroniskLunge', 'SykdKroniskNevrologisk', 'SykdKrSmerterMuskelSkjelSyst',
-             'SykdOsteoporose', 'SykdSkulderImpigment', 'SykdWhiplashNorSpis')
-         AntVar <- colSums (RegData[ ,c("SykdReumatisk", Variable, "AndreRelSykdommer")], na.rm = TRUE)
-         NVar<-rep(dim(RegData)[1], length(AntVar))
-         grtxt <- c('Annen Reumatisk', 'Annen endokrin', 'Andre', 'Carpal TS', 'Cerebrovaskulær', 'Depresjon/Angst',
-         'Hjerte-/Karsykd.', 'Hodepine', 'Hypertensjon', 'Diabetes', 'Kreft', 'Kr. lungesykdom',
-         'Kr. nevrologisk', 'Kr. muskel/skjelettsm.', 'Osteoporose', 'Skuldersyndrom', 'Whiplash/skade', 'Tot. komorb')
 
-         Tittel <- 'Komorbiditet'
-    }
+#----------------------BEREGNINGER
+#Gjør beregninger selv om det evt ikke skal vise figur ut. Trenger utdata.
 
-  if (valgtVar=='OprIndikSmerter') {
-  	retn <- 'H'
-  	indSmerteArm <- which(RegData$OprIndikSmerteLokArm == 1)
-  	indSmerteNorSpis <- which(RegData$OprIndikSmerteLokNorSpis == 1)
-  	Nsmerte <- sum(RegData$OprIndikSmerter, na.rm=T)
-  	AntVar <- cbind(
-  		Smerte = Nsmerte,
-  		SmerteArm = length(indSmerteArm),
-  		SmerteNorSpis = length(indSmerteNorSpis),
-  		SmerteArmNorSpis = length(intersect(indSmerteArm, indSmerteNorSpis))
-  	)
-  	NVar<- cbind(
-  		Smerte = length(which(RegData$OprIndikSmerter > -1)),
-  		SmerteArm = Nsmerte,
-  		SmerteNorSpis = Nsmerte,
-  		SmerteArmNorSpis = Nsmerte
-  	)
-  	grtxt <- c('Smerter', '...Arm', '...Nakke', '...Arm og Nakke')
-  	Tittel <- 'Operasjonsårsak: Smerter'
-  		}
+      Andeler <- list(Hoved = 0, Rest =0)
+      N <- list(Hoved = 0, Rest =0)
+      Ngr <- list(Hoved = 0, Rest =0)
+      ind <- NorSpisUtvalg$ind
+      
+      Ngr$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
+                          '0' = table(RegData$VariabelGr[ind$Hoved]),
+                          '1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
+      N$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
+                        '0' = sum(Ngr$Hoved),	#length(ind$Hoved)- Kan inneholde NA
+                        '1' = length(ind$Hoved))
+      Andeler$Hoved <- 100*Ngr$Hoved/N$Hoved
+      
+      if (NorSpisUtvalg$medSml==1) {
+            Ngr$Rest <- switch(as.character(NorSpisVarSpes$flerevar), 
+                               '0' = table(RegData$VariabelGr[ind$Rest]),
+                               '1' = colSums(sapply(RegData[ind$Rest ,variable], as.numeric), na.rm=T))
+            N$Rest <- switch(as.character(NorSpisVarSpes$flerevar), 
+                             '0' = sum(Ngr$Rest),	#length(ind$Rest)- Kan inneholde NA
+                             '1' = length(ind$Rest))
+            Andeler$Rest <- 100*Ngr$Rest/N$Rest
+      }
+      
+      
+      grtxt2 <- paste0('(', sprintf('%.1f',Andeler$Hoved), '%)')
+      yAkseTxt='Andel pasienter (%)'
+      
+      FigDataParam <- list(AggVerdier=Andeler, N=N, 
+                           Ngr=Ngr,	
+                           KImaal <- NorSpisVarSpes$KImaal,
+                           #soyletxt=soyletxt,
+                           grtxt2=grtxt2, 
+                           grtxt=NorSpisVarSpes$grtxt,
+                           tittel=NorSpisVarSpes$tittel, 
+                           retn=NorSpisVarSpes$retn, 
+                           xAkseTxt=NorSpisVarSpes$xAkseTxt,
+                           yAkseTxt=yAkseTxt,
+                           utvalgTxt=NorSpisUtvalg$utvalgTxt, 
+                           fargepalett=NorSpisUtvalg$fargepalett, 
+                           medSml=NorSpisUtvalg$medSml,
+                           hovedgrTxt=NorSpisUtvalg$hovedgrTxt,
+                           smltxt=NorSpisUtvalg$smltxt)
+ 
+#Definerer opp variable siden vi fortsatt genererer figuren i denne funksjonen.     
+grtxt=NorSpisVarSpes$grtxt
+tittel=NorSpisVarSpes$tittel
+retn=NorSpisVarSpes$retn
+xAkseTxt=NorSpisVarSpes$xAkseTxt
+hovedgrTxt=NorSpisUtvalg$hovedgrTxt
 
-#Generelt for alle figurer med sammensatte variable:
-  	if (teller == 1) {
-  		AntHoved <- AntVar
-  		NHoved <- max(NVar, na.rm=T)
-  		Andeler$Hoved <- 100*AntVar/NVar
-  	}
-  	if (teller == 2) {
-  		AntRest <- AntVar
-  		NRest <- max(NVar,na.rm=T)	#length(indRest)- Kan inneholde NA
-  		Andeler$Rest <- 100*AntVar/NVar
-  	}
-  } #end medSml (med sammenligning)
-}	#end sjekk om figuren inneholder flere variable
-
+lagFig <- 0      
+      if (lagFig == 1) {
+            #cexgr <- 1-ifelse(AntGr>20, 0.25*AntGr/60, 0)
+            NorSpisFigSoyler(RegData, AggVerdier, Ngr, tittel=NorSpisVarSpes$tittel, hovedgrTxt=NorSpisUtvalg$hovedgrTxt, 
+                         smltxt=NorSpisUtvalg$smltxt, Ngr = Ngr, KImaal <- NorSpisVarSpes$KImaal,
+                         N=N, retn='V', utvalgTxt, grtxt=NorSpisVarSpes$grtxt, grtxt2=grtxt2, medSml=NorSpisUtvalg$medSml, 
+                         xAkseTxt=NorSpisVarSpes$xAkseTxt, yAkseTxt=yAkseTxt, 
+                         outfile=outfile)	
+            #ENDRE så figurparametrene skrives fullt ut i parameterkallet
+      }
+      
 
 
 #-----------Figur---------------------------------------
 #Hvis for få observasjoner..
-if ( NHoved %in% 1:5 | 	(medSml ==1 & NRest<5)) {
+if (dim(RegData)[1] < 10 | (N$Hoved<5 )) {
 FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()
-	title(Tittel)	#, line=-6)
+	title(tittel)	#, line=-6)
 	legend('topleft',utvalgTxt, bty='n', cex=0.9, text.col=farger[1])
-	text(0.5, 0.6, 'Færre enn 5 registreringer i egen- eller sammenlikningsgruppa', cex=1.2)
+	text(0.5, 0.6, 'For få registreringer', cex=1.2)
 	if ( outfile != '') {dev.off()}
 
 } else {
 
 #-----------Figur---------------------------------------
-#Innparametre: subtxt, grtxt, grtxt2, tittel, Andeler, utvalgTxt, retn, cexgr
+#Innparametre: xAkseTxt, grtxt, grtxt2, tittel, Andeler, utvalgTxt, retn, cexgr
 cexgr <- 1	#Kan endres for enkeltvariable
+antDes <- 1
 
 
 #Plottspesifikke parametre:
 FigTypUt <- figtype(outfile, fargepalett=NorSpisUtvalg$fargepalett)
 #Tilpasse marger for å kunne skrive utvalgsteksten
 NutvTxt <- length(utvalgTxt)
-antDesTxt <- paste('%.', antDes, 'f', sep='')
-grtxtpst <- paste(rev(grtxt), ' (', rev(sprintf(antDesTxt, Andeler$Hoved)), '%)', sep='')
+antDesTxt <- paste0('%.', antDes, 'f')
+grtxtpst <- paste0(rev(grtxt), ' (', rev(sprintf(antDesTxt, Andeler$Hoved)), '%)')
 vmarg <- switch(retn, V=0, H=max(0, strwidth(grtxtpst, units='figure', cex=cexgr)*0.7))
 par('fig'=c(vmarg, 1, 0, 1-0.02*(NutvTxt-1)))	#Har alltid datoutvalg med
 
@@ -287,40 +183,40 @@ if (retn == 'H') {
 	xmax <- max(c(Andeler$Hoved, Andeler$Rest),na.rm=T)*1.15
 	pos <- barplot(rev(as.numeric(Andeler$Hoved)), horiz=TRUE, beside=TRUE, las=1, xlab="Andel pasienter (%)", #main=tittel,
 		col=fargeHoved, border='white', font.main=1, xlim=c(0, xmax), ylim=c(0.05,1.4)*antGr)	#
-	if (NHoved>0) {mtext(at=pos+0.05, text=grtxtpst, side=2, las=1, cex=cexgr, adj=1, line=0.25)}
+	if (N$Hoved>0) {mtext(at=pos+0.05, text=grtxtpst, side=2, las=1, cex=cexgr, adj=1, line=0.25)}
 
 	if (medSml == 1) {
 		points(as.numeric(rev(Andeler$Rest)), pos, col=fargeRest,  cex=2, pch=18) #c("p","b","o"),
-		legend('top', c(paste(shtxt, ' (N=', NHoved,')', sep=''),
-						paste(smltxt, ' (N=', NRest,')', sep='')),
+		legend('top', c(paste0(hovedgrTxt, ' (N=', N$Hoved,')'),
+						paste0(smltxt, ' (N=', N$Rest,')')),
 			border=c(fargeHoved,NA), col=c(fargeHoved,fargeRest), bty='n', pch=c(15,18), pt.cex=2,
 			lty=NA, ncol=1,lwd=lwdRest, cex=cexleg) #
 		} else {
-		legend('top', paste(shtxt, ' (N=', NHoved,')', sep=''),
+		legend('top', paste0(hovedgrTxt, ' (N=', N$Hoved,')'),
 			border=NA, fill=fargeHoved, bty='n', ncol=1, cex=cexleg)
 		}
 }
 
 if (retn == 'V' ) {
 #Vertikale søyler eller linje
-	if (length(grtxt2) == 1) {grtxt2 <- paste('(', sprintf(antDesTxt, Andeler$Hoved), '%)', sep='')}
+	if (length(grtxt2) == 1) {grtxt2 <- paste0('(', sprintf(antDesTxt, Andeler$Hoved), '%)')}
 	ymax <- max(c(Andeler$Hoved, Andeler$Rest),na.rm=T)*1.15
 	pos <- barplot(as.numeric(Andeler$Hoved), beside=TRUE, las=1, ylab="Andel pasienter (%)",
-		xlab=subtxt, col=fargeHoved, border='white', ylim=c(0, ymax))	#sub=subtxt,
+		xlab=xAkseTxt, col=fargeHoved, border='white', ylim=c(0, ymax))	
 	mtext(at=pos, grtxt, side=1, las=1, cex=cexgr, adj=0.5, line=0.5)
 	mtext(at=pos, grtxt2, side=1, las=1, cex=cexgr, adj=0.5, line=1.5)
 if (medSml == 1) {
 	points(pos, as.numeric(Andeler$Rest), col=fargeRest,  cex=2, pch=18) #c("p","b","o"),
-	legend('top', c(paste(shtxt, ' (N=', NHoved,')', sep=''), paste(smltxt, ' (N=', NRest,')', sep='')),
+	legend('top', c(paste0(hovedgrTxt, ' (N=', N$Hoved,')'), paste0(smltxt, ' (N=', N$Rest,')')),
 		border=c(fargeHoved,NA), col=c(fargeHoved,fargeRest), bty='n', pch=c(15,18), pt.cex=2, lty=c(NA,NA),
 		lwd=lwdRest, ncol=2, cex=cexleg)	#
 	} else {
-	legend('top', paste(shtxt, ' (N=', NHoved,')', sep=''),
+	legend('top', paste0(hovedgrTxt, ' (N=', N$Hoved,')'),
 		border=NA, fill=fargeHoved, bty='n', ncol=1, cex=cexleg)
 	}
 }
 
-title(Tittel, line=1, font.main=1)
+title(tittel, line=1, font.main=1)
 
 #Tekst som angir hvilket utvalg som er gjort
 mtext(utvalgTxt, side=3, las=1, cex=0.9, adj=0, col=farger[1], line=c(3+0.8*((NutvTxt-1):0)))
@@ -332,10 +228,10 @@ if ( outfile != '') {dev.off()}
 #Beregninger som returneres fra funksjonen.
 AndelerUt <- rbind(Andeler$Hoved, Andeler$Rest)
 rownames(AndelerUt) <- c('Hoved', 'Rest')
-AntallUt <- rbind(AntHoved, AntRest)
+AntallUt <- rbind(N$Hoved, N$Rest)
 rownames(AntallUt) <- c('Hoved', 'Rest')
 
-UtData <- list(paste(toString(Tittel),'.', sep=''), AndelerUt, AntallUt, grtxt )
+UtData <- list(paste0(toString(tittel),'.'), AndelerUt, AntallUt, grtxt )
 names(UtData) <- c('Tittel', 'Andeler', 'Antall', 'GruppeTekst')
 return(invisible(UtData))
 
