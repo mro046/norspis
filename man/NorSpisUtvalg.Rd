@@ -11,9 +11,9 @@ NorSpisUtvalg(RegData, datoFra, datoTil, aar = 0, minald = 0,
 \arguments{
 \item{RegData}{Dataramme med alle nødvendige variable fra registeret}
 
-\item{datoFra}{Operasjonsdato, fra og med. Standard: '2012-01-01'}
+\item{datoFra}{Hoveddato, fra og med. Standard: '2012-01-01'}
 
-\item{datoTil}{Operasjonsdato, til og med. Standard: '3000-01-01' (siste registreringsdato)}
+\item{datoTil}{Hoveddato, til og med. Standard: '3000-01-01' (siste registreringsdato)}
 
 \item{minald}{Alder, fra og med}
 

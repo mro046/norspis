@@ -7,9 +7,9 @@
 NSPHentRegData(datoFra = "2015-01-01", datoTil = "2099-01-01")
 }
 \arguments{
-\item{datoFra}{Operasjonsdato, fra og med. Standard: '2012-01-01'}
+\item{datoFra}{Hoveddato, fra og med. Standard: '2012-01-01'}
 
-\item{datoTil}{Operasjonsdato, til og med. Standard: '3000-01-01' (siste registreringsdato)}
+\item{datoTil}{Hoveddato, til og med. Standard: '3000-01-01' (siste registreringsdato)}
 }
 \value{
 RegData data frame

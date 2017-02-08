@@ -29,7 +29,7 @@
 #'	   \item 8: Egen region mot resten [NB: Mangler pt. variabel for region]
 #'    	}							
 #'    				
-#' @inheritParams NorSpisAndeler
+#' @inheritParams NorSpisFigAndeler
 #'				
 #' @return Definisjon av valgt variabel.
 #'

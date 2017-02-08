@@ -34,7 +34,7 @@
 #'
 #' @export
 
-NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
+NorSpisFigAndelerInklVarDef  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
 		minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1,
 		reshID, enhetsUtvalg=1)
 {
@@ -78,7 +78,7 @@ if (valgtVar %in% c('ArbeidstausPreOp', 'Arbeidstaus3mnd', 'Arbeidstaus12mnd')) 
 	indDum <- which(RegData[ ,valgtVar] %in% 1:10)
 	RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
 	RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:10,99))
-	Tittel <- switch(valgtVar,
+	tittel <- switch(valgtVar,
 	    ArbeidstausPreOp = 'Arbeidsstatus før operasjon',
 	    Arbeidstaus3mnd = 'Arbeidsstatus 3 mnd. etter operasjon' ,
 	    Arbeidstaus12mnd = 'Arbeidsstatus 12 mnd. etter operasjon')
@@ -95,7 +95,7 @@ if (valgtVar == 'Morsmal') {
 	indDum <- which(RegData$Morsmal %in% 1:3)
 	RegData$VariabelGr[indDum] <- RegData$Morsmal[indDum]
 	RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:3,9))
-	Tittel <- 'Morsmål'
+	tittel <- 'Morsmål'
 }
 if (valgtVar=='Utdanning') {
 	retn <- 'H'
@@ -105,7 +105,7 @@ if (valgtVar=='Utdanning') {
 	indDum <- which(RegData$Utdanning %in% 1:5)
 	RegData$VariabelGr[indDum] <- RegData$Utdanning[indDum]
 	RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5,9))
-	Tittel <- 'Utdanningsnivå'
+	tittel <- 'Utdanningsnivå'
 }
 
 
@@ -188,7 +188,7 @@ if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprInd
          )
          NVar<-rep(dim(RegData)[1], length(AntVar))
          grtxt <- c('Pareser', 'Myelopati', 'Smerter', 'Sm. og Myelop.', 'Annet')
-         Tittel <- 'Operasjonsårsak'
+         tittel <- 'Operasjonsårsak'
     }
 
 
@@ -208,7 +208,7 @@ if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprInd
          'Hjerte-/Karsykd.', 'Hodepine', 'Hypertensjon', 'Diabetes', 'Kreft', 'Kr. lungesykdom',
          'Kr. nevrologisk', 'Kr. muskel/skjelettsm.', 'Osteoporose', 'Skuldersyndrom', 'Whiplash/skade', 'Tot. komorb')
 
-         Tittel <- 'Komorbiditet'
+         tittel <- 'Komorbiditet'
     }
 
   if (valgtVar=='OprIndikSmerter') {
@@ -229,7 +229,7 @@ if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprInd
   		SmerteArmNorSpis = Nsmerte
   	)
   	grtxt <- c('Smerter', '...Arm', '...Nakke', '...Arm og Nakke')
-  	Tittel <- 'Operasjonsårsak: Smerter'
+  	tittel <- 'Operasjonsårsak: Smerter'
   		}
 
 #Generelt for alle figurer med sammensatte variable:
@@ -254,7 +254,7 @@ if ( NHoved %in% 1:5 | 	(medSml ==1 & NRest<5)) {
 FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()
-	title(Tittel)	#, line=-6)
+	title(tittel)	#, line=-6)
 	legend('topleft',utvalgTxt, bty='n', cex=0.9, text.col=farger[1])
 	text(0.5, 0.6, 'Færre enn 5 registreringer i egen- eller sammenlikningsgruppa', cex=1.2)
 	if ( outfile != '') {dev.off()}
@@ -320,7 +320,7 @@ if (medSml == 1) {
 	}
 }
 
-title(Tittel, line=1, font.main=1)
+title(tittel, line=1, font.main=1)
 
 #Tekst som angir hvilket utvalg som er gjort
 mtext(utvalgTxt, side=3, las=1, cex=0.9, adj=0, col=farger[1], line=c(3+0.8*((NutvTxt-1):0)))
@@ -335,7 +335,7 @@ rownames(AndelerUt) <- c('Hoved', 'Rest')
 AntallUt <- rbind(AntHoved, AntRest)
 rownames(AntallUt) <- c('Hoved', 'Rest')
 
-UtData <- list(paste(toString(Tittel),'.', sep=''), AndelerUt, AntallUt, grtxt )
+UtData <- list(paste(toString(tittel),'.', sep=''), AndelerUt, AntallUt, grtxt )
 names(UtData) <- c('Tittel', 'Andeler', 'Antall', 'GruppeTekst')
 return(invisible(UtData))
 

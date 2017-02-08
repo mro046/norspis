@@ -20,8 +20,8 @@
 #'					1: kjør
 #' @param preprosess Skal data preprosesseres, dvs. gjøre standard omregning av variable og beregne nye.
 #'						TRUE (standard) / FALSE
-#' @param datoFra Operasjonsdato, fra og med. Standard: '2012-01-01'
-#' @param datoTil Operasjonsdato, til og med. Standard: '3000-01-01' (siste registreringsdato)
+#' @param datoFra Hoveddato, fra og med. Standard: '2012-01-01'
+#' @param datoTil Hoveddato, til og med. Standard: '3000-01-01' (siste registreringsdato)
 #' @param minald Alder, fra og med
 #' @param maxald Alder, til og med
 #' @param erMann Kjønn, 1-menn, 0-kvinner, standard: '' (alt annet enn 0 og 1), dvs. begge
@@ -34,7 +34,7 @@
 #'
 #' @export
 
-NorSpisAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
+NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
 		minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1,
 		reshID, enhetsUtvalg=1)
 {
