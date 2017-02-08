@@ -4,8 +4,9 @@
 \alias{NorSpisUtvalg}
 \title{Funksjon som gjør utvalg av dataene, returnerer det filtrerte datasettet og utvalgsteksten.}
 \usage{
-NorSpisUtvalg(RegData, datoFra, datoTil, minald = 0, maxald = 130,
-  erMann = "", InnMaate = "", fargepalett = "BlaaOff")
+NorSpisUtvalg(RegData, datoFra, datoTil, aar = 0, minald = 0,
+  maxald = 130, erMann = "", enhetsUtvalg = 0, reshID = 0,
+  fargepalett = "BlaaOff")
 }
 \arguments{
 \item{RegData}{Dataramme med alle nødvendige variable fra registeret}
@@ -20,10 +21,17 @@ NorSpisUtvalg(RegData, datoFra, datoTil, minald = 0, maxald = 130,
 
 \item{erMann}{Kjønn, 1-menn, 0-kvinner, standard: '' (alt annet enn 0 og 1), dvs. begge}
 
+\item{enhetsUtvalg}{Sammenlikning eller ikke: 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet}
+
+\item{reshID}{Avdelingsid (reshID) for egen avdeling,}
+
 \item{fargepalett}{Hvilken fargepalett skal brukes i figurer (Standard: BlaaRapp)}
 }
 \value{
-UtData En liste bestående av det filtrerte datasettet, utvalgstekst for figur og tekststreng som angir fargepalett
+UtData En liste bestående av det filtrerte datasettet (RegData), utvalgstekst for 
+figur (UtvalgTxt), fargepalett, indekser for hovedgruppe og sammenlikningsgruppe (ind), 
+tekststreng som angir fargepalett,  om vi har sammenlikning eller ikke (medSml), tekst som angir
+hovedgruppa (hovedgrTxt) og gruppa det evt. sammenliknes mot (smltxt)
 }
 \description{
 Funksjon som gjør utvalg av dataene, returnerer det filtrerte datasettet og utvalgsteksten.

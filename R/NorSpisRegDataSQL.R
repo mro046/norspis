@@ -8,17 +8,18 @@
 #' @export
 #'
 #'
-NIRRegDataSQL <- function(datoFra = '2011-01-01', datoTil = '2099-01-01') {
+NIRRegDataSQL <- function(datoFra = '2017-01-01', datoTil = '2099-01-01') {
   
-  registryName <- "nir"
+  registryName <- "norspis"
   dbType <- "mysql"
   
   query <- paste0('SELECT
-	PatientAge,
-	TypeOfAdmission,
-	UrineOutput
+	f.Alder,
+	f.TypeOfAdmission,
+	el.UrineOutput
 FROM
-	Main
+	ForlopsOversikt f 
+LEFT JOIN EnkeltLeddNum el 
 WHERE DateAdmittedIntensive >= \'', datoFra, '\' AND DateAdmittedIntensive <= \'', datoTil, '\'')
   
   

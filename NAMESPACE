@@ -2,6 +2,8 @@
 
 export(NIRRegDataSQL)
 export(NSPHentRegData)
+export(NorSpisAndeler)
 export(NorSpisFigAndeler)
 export(NorSpisPreprosess)
 export(NorSpisUtvalg)
+export(NorSpisVarTilrettelegg)
