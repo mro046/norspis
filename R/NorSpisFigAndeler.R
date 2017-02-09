@@ -40,7 +40,7 @@ NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil=
 {
 
 	if (hentData == 1) {
-		RegData <- NorSpisRegDataSQL(datoFra=datoFra, datoTil=datoTil)
+		RegData <- NorSpisELAlleScorData(datoFra=datoFra, datoTil=datoTil)
 	  }
 
 # Preprosessere data
@@ -63,6 +63,7 @@ NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil=
 NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
 RegData <- NorSpisVarSpes$RegData
 #Flere av variablene fra NorSpisVarTilrettelegg hentet ut lengre ned.
+
 
 NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, minald=minald, 
                                maxald=maxald, erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)
@@ -145,7 +146,7 @@ lagFig <- 0
 
 #-----------Figur---------------------------------------
 #Hvis for få observasjoner..
-if (dim(RegData)[1] < 10 | (N$Hoved<5 )) {
+if (dim(RegData)[1] < 0 | (N$Hoved<0 )) {
 FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()

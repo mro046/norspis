@@ -45,25 +45,23 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
       tittel <- '' 
       flerevar <- 0
       sortAvtagende <- T
+      variable <- 'Ingen'
       
       
       
-#if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12dAldrForsteBeh')) {
-#      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-#      gr <- c(0,seq(5,50,5),150)
-#      RegData$VariabelGr <- 99
-#      indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
-#      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-#      RegData$VariabelGr <- cut(RegData$valgtVar, breaks=gr, include.lowest=TRUE, right=FALSE)
-#      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
-#      subtxt <- 'Aldersgruppe'
-#      tittel <- switch(valgtVar,
-#                       Alder = 'Aldersfordeling',
-#                       B08StartAldrProbl = 'Alder da problemene startet',
-#                       B12dAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
-#}
-
-
+if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12dAldrForsteBeh')) {
+      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
+      gr <- c(0,seq(5,50,5),150)
+      #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
+      #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+      RegData$VariabelGr <- cut(RegData$valgtVar, breaks=gr, include.lowest=TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+      subtxt <- 'Aldersgruppe'
+      tittel <- switch(valgtVar,
+                       Alder = 'Aldersfordeling',
+                       B08StartAldrProbl = 'Alder da problemene startet',
+                       B12dAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
+}
 
 if (valgtVar=='Alder') {
 gr <- c(0,seq(5,50,5),150)
@@ -104,7 +102,7 @@ if (valgtVar=='B05FullfortUtd') {
                  'Høgskole/universitet (<4 år)', 'Høgskole/universitet (>=4 år)','Ukjent',
                  'Ikke registrert')
       RegData$VariabelGr <- 99
-      indDum <- which(RegData$B05FullfortUtd %in% c(1:5,9))
+      indDum <- which(RegData[, valgtVar] %in% c(1:5,9))
       RegData$VariabelGr[indDum] <- RegData$B05FullfortUtd[indDum]
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5,9,99))
       tittel <- 'Høyeste fullførte utdanning'
@@ -201,7 +199,7 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
                     'B25Avhengighet')) {
   retn <- 'H'
 #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-  grtxt <- c('Nei', 'Ja', 'Ukjent')
+  grtxt <- c('Nei', 'Ja', 'Ukjent', 'Ikke reg.')
       RegData$VariabelGr <- 99
       indDum <- which(RegData[ ,valgtVar] %in% c(0,1,9))
       RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
@@ -218,6 +216,30 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
                    B25Avhengighet = 'Misbruk/avhengighet')
 }
 
+      
+      if (valgtVar %in% ) {
+            variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+            retn <- 'H'
+            #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
+            grtxt <- c('FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+            indDum <- which(RegData[ ,valgtVar] %in% 0:1)
+            RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+            RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9,99))
+            tittel <- switch(valgtVar,
+                             B17FysMishandl = 'Negativ hendelse: Tidligere fysisk mishandling',
+                             B18PsykMishandl = 'Negativ hendelse: Tidligere psykisk mishandling',
+                             B19Overgrep = 'Negativ hendelse: Tidligere misbruk/overgrep',
+                             B20Mobbing = 'Negativ hendelse: Tidligere mobbing',
+                             B21SelvskadTidl = 'Selvskading tidligere',
+                             B22SelvskadSisteAr = 'Selvskading siste år',
+                             B23SelvmordFTidl = 'Selvmordsforsøk tidligere',
+                             B24SelvmordFSisteAr = 'Selvmordsforsøk siste år',
+                             B25Avhengighet = 'Misbruk/avhengighet')
+      }
+      
+      
+      
+      
 if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
                     'PT05OrientertBrukerorg')) {
       retn <- 'H'
@@ -234,15 +256,27 @@ if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg',
                        PT05OrientertBrukerorg = 'Pasienttilfredshet: Informasjon om brukerorganisasjoner ila. behandlingen?')
 }
 
-if (valgtVar=='PT03Utfallsvurd') {
-      grtxt <- c('Ikke noe problem lenger', 'Klar bedring', 'Noe bedring', 'Uendret', 'Forverring')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$PT03Utfallsvurd %in% c(1:5))
-      RegData$VariabelGr[indDum] <- RegData$PT03Utfallsvurd[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5, 99))
+if (valgtVar=='DiagVSF') {
+      grtxt <- c('F500', 'F509')
+      RegData$DiagVSF <- as.character(RegData$DiagVSF)
+      RegData$VariabelGr <- 'Andre Diag'
+      indDum <- which(RegData$DiagVSF %in% grtxt)
+      RegData$VariabelGr[indDum] <- RegData$DiagVSF[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(grtxt, 'Andre Diag'))
       tittel <- 'Pasienttilfredshet: "Hvordan vurderer du utfallet av mottatt behandling?"'
 }
 
+            if (valgtVar=='PT03Utfallsvurd') {
+            grtxt <- c('Ikke noe problem lenger', 'Klar bedring', 'Noe bedring', 'Uendret', 'Forverring')
+           # RegData$VariabelGr <- 99
+            indDum <- which(RegData$PT03Utfallsvurd %in% c(1:5))
+            RegData <- RegData[indDum, ]
+            RegData$VariabelGr <- factor(RegData$PT03Utfallsvurd, levels = c(1:5))
+            tittel <- 'Pasienttilfredshet: "Hvordan vurderer du utfallet av mottatt behandling?"'
+      }
+      
+      
+      
 #if (MedPsykofarmaka == 1) Hvordan legge inn betingelsen?
 if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh')) {
       retn <- 'H'
@@ -363,8 +397,8 @@ if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprInd
       
       
       
-UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, KImaal=KImaal, retn=retn,
-               tittel=tittel, flerevar=flerevar, sortAvtagende=sortAvtagende)
+UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, retn=retn, #KImaal=KImaal, 
+               tittel=tittel, variable= variable, flerevar=flerevar)  #, sortAvtagende=sortAvtagende
 #RegData inneholder nå variablene 'Variabel' og 'VariabelGr'
 return(invisible(UtData)) 
       

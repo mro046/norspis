@@ -7,7 +7,7 @@
 #' @return RegData data frame
 #' @export
 #'
-NSPHentRegData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01') {
+NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01') {
 
   registryName <- "norspis"
   dbType <- "mysql"
