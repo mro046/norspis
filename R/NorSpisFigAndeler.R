@@ -89,6 +89,7 @@ medSml=NorSpisUtvalg$medSml
       Ngr$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
                           '0' = table(RegData$VariabelGr[ind$Hoved]),
                           '1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
+      #N$ gjelder nå hvis samme totalutvalg for alle
       N$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
                         '0' = sum(Ngr$Hoved),	#length(ind$Hoved)- Kan inneholde NA
                         '1' = length(ind$Hoved))

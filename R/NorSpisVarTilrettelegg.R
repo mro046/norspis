@@ -217,24 +217,20 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
 }
 
       
-      if (valgtVar %in% ) {
+      if (valgtVar == 'NegHend' ) {
+            flerevar <- 1
             variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
             retn <- 'H'
             #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
             grtxt <- c('FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
-            indDum <- which(RegData[ ,valgtVar] %in% 0:1)
-            RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-            RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9,99))
-            tittel <- switch(valgtVar,
-                             B17FysMishandl = 'Negativ hendelse: Tidligere fysisk mishandling',
-                             B18PsykMishandl = 'Negativ hendelse: Tidligere psykisk mishandling',
-                             B19Overgrep = 'Negativ hendelse: Tidligere misbruk/overgrep',
-                             B20Mobbing = 'Negativ hendelse: Tidligere mobbing',
-                             B21SelvskadTidl = 'Selvskading tidligere',
-                             B22SelvskadSisteAr = 'Selvskading siste år',
-                             B23SelvmordFTidl = 'Selvmordsforsøk tidligere',
-                             B24SelvmordFSisteAr = 'Selvmordsforsøk siste år',
-                             B25Avhengighet = 'Misbruk/avhengighet')
+            ind01 <- which(RegData[ ,variable] %in% 0:1) #Alle ja/nei
+            ind1 <- which(RegData[ ,variable] == 1) #Ja i alle variable
+            #dummydata <- RegData[, variable]
+            #dummydata <- matrix(NA, dim(RegData)[1],length(variable))
+            RegData[,variable] <- NA
+            RegData[ind01,variable] <- 0
+            RegData[ind1,variable] <- 1
+            tittel <- 'Negative hendelser'
       }
       
       
