@@ -44,15 +44,24 @@ NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
       }
       
       #------- Tilrettelegge variable
-      NIRVarSpes <- NIRVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
-      RegData <- NIRVarSpes$RegData
-      
+#      NIRVarSpes <- NIRVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
+#      RegData <- NIRVarSpes$RegData
+
+      if (valgtVar=='diabetes') { #AndelerGrVar
+       RegData$Variabel <- RegData$Dod30
+       tittel <- 'Opphold der pasienten døde innen 30 dager etter innleggelse'
+       sortAvtagende <- FALSE
+ }
+
+	  
       #------- Gjøre utvalg
       NIRUtvalg <- NIRUtvalgEnh(RegData=RegData, datoFra=datoFra, datoTil=datoTil, minald=minald, maxald=maxald, 
                                 aar=aar, overfPas=overfPas, erMann=erMann, InnMaate=InnMaate, dodInt=dodInt, grType=grType)
       RegData <- NIRUtvalg$RegData
       utvalgTxt <- NIRUtvalg$utvalgTxt
-      
+#      NorSpisUtvalg <- function(RegData, datoFra, datoTil, aar=0, minald=0, maxald=130, erMann='', 
+#					enhetsUtvalg=0, reshID=0, fargepalett='BlaaOff')  #grType=99, 
+
       
       
       if (dim(RegData)[1] >= 0) {
