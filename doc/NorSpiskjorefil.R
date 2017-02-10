@@ -48,6 +48,13 @@ for (valgtVar in variable) {
 
 
 
+#------------------------------ Andeler per enhet (evt. annen grupperingsvariabel) --------------------------
+source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')
+NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
+                       reshID=reshID, enhetsUtvalg=enhetsUtvalg, grVar=grVar, outfile=outfile, 
+                       minald=minald, maxald=maxald)
+
+
 
 
 #------------------------------ Andel, per enhet --------------------------
@@ -79,12 +86,12 @@ NorSpisFigAndelerGrVar(RegData=RegData, datoFra=datoFra, valgtVar=valgtVar,
                 datoTil=datoTil, minald=minald, maxald=maxald, #erMann=erMann,
                 reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile) #Mads:Påse at riktige innparametre...(sammenlign med de variablene funksjonen bygger på (se filaNorSpisFigAndelerGrVar.R)).  
 
-#Teste variables
-variable <- c('Alder','Utdanning')
+##Teste variables
+#variable <- c('Alder','Utdanning')
 
-for (valgtVar in variable) {
-      outfile <- paste(valgtVar, '.png', sep='')
-      FigAndelerGrVar(RegData=NakkeData, datoFra=datoFra, valgtVar=valgtVar,
-                      datoTil=datoTil, minald=minald, maxald=maxald, erMann=erMann,
-                      reshID=reshID, libkat=libkat, outfile=outfile)
-}
+#for (valgtVar in variable) {
+#      outfile <- paste(valgtVar, '.png', sep='')
+#      FigAndelerGrVar(RegData=NakkeData, datoFra=datoFra, valgtVar=valgtVar,
+#                      datoTil=datoTil, minald=minald, maxald=maxald, erMann=erMann,
+#                      reshID=reshID, libkat=libkat, outfile=outfile)
+#}
