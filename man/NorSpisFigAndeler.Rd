@@ -25,7 +25,7 @@ Detajer...:}
 
 \item{erMann}{Kjønn, 1-menn, 0-kvinner, standard: '' (alt annet enn 0 og 1), dvs. begge}
 
-\item{outfile}{Navn på fil figuren skrives ned til}
+\item{outfile}{Navn på fil figuren skrives ned til. outfile lik '' skriver til skjerm.}
 
 \item{hentData}{Angir om funksjonen skal kjøre spørring for å hente data eller ikke.
 0: ikke kjør (standard)

@@ -54,9 +54,11 @@ NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoT
 
 #------------------------------ Andeler per enhet (evt. annen grupperingsvariabel) --------------------------
 
+valgtVar <- 'alder_u18'
+outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
-                  reshID=reshID, enhetsUtvalg=enhetsUtvalg, grVar=grVar, outfile=outfile, 
-                  minald=minald, maxald=maxald )
+                  grVar=grVar, outfile=outfile, 
+                  minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
 
 #(Mads-fjerne alfanum når NorSpis-pakke OK) #Teste variables
 #(Mads-fjerne alfanum når NorSpis-pakke OK) variable <- c('Alder', 'Education')
