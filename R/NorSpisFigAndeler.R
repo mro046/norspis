@@ -80,6 +80,12 @@ medSml=NorSpisUtvalg$medSml
 
 #----------------------BEREGNINGER
 #Gjør beregninger selv om det evt ikke skal vise figur ut. Trenger utdata.
+# Når vi har figurer som viser andel av flere variable (flerevar=1), må vi omdefinere variablene 
+# slik at alle gyldige registreringer 
+#(dvs. alle registreringer som skal telles med) er 0 eller 1. De som har oppfylt spørsmålet
+# er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
+# som i kategorier av typen "Ukjent" kodes disse som NA, mens hvis de skal være med kodes de
+# som 0.
 
       Andeler <- list(Hoved = 0, Rest =0)
       N <- list(Hoved = 0, Rest =0)

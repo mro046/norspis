@@ -218,18 +218,23 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
 
       
       if (valgtVar == 'NegHend' ) {
+            #For flerevar=1 må vi omdefinere variablene slik at alle gyldige registreringer 
+            #(dvs. alle registreringer som skal telles med) er 0 eller 1. De som har oppfylt spørsmålet
+            # er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
+            # som i kategorier av typen "Ukjent" kodes disse som NA, mens hvis de skal være med kodes de
+            # som 0.
             flerevar <- 1
             variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
             retn <- 'H'
             #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
             grtxt <- c('FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
-            ind01 <- which(RegData[ ,variable] %in% 0:1) #Alle ja/nei
-            ind1 <- which(RegData[ ,variable] == 1) #Ja i alle variable
+            ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
+            ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
             #dummydata <- RegData[, variable]
             #dummydata <- matrix(NA, dim(RegData)[1],length(variable))
-            RegData[,variable] <- NA
-            RegData[ind01,variable] <- 0
-            RegData[ind1,variable] <- 1
+            RegData[ ,variable] <- NA
+            RegData[ ,variable][ind01] <- 0
+            RegData[ ,variable][ind1] <- 1
             tittel <- 'Negative hendelser'
       }
       

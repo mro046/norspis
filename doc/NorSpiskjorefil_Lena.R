@@ -2,8 +2,7 @@
 
 
 
-#--------------------------------------------------------
-#------------------------------ Andeler flere var --------------------------
+#-------------------------Hente data-------------------------------
 rm(list=ls())
 library(norspis)
 NorSpisAlleScorer <- read.table('C:/Registre/NorSpis/AlleScorer2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8') #,
@@ -15,6 +14,7 @@ ForlAlleSc <- merge(NorSpisForlop, NorSpisAlleScorer, suffixes = c('','X'),
 NorSpisData <- merge(ForlAlleSc, NorSpisEnkeltledd, suffixes = c('','X'),
                      by = "ForlopsID", all = FALSE)
 
+RegData <- NorSpisData
 
 #ForlopTab <- NorSpisForlop[ ,c('AvdRESH', 'erMann','PasientAlder','ForlopsID','HovedDato','SykehusNavn')]
 #EnkeltleddTab <- NorSpisEnkeltledd[,c('ForlopsID','DiagVSF')]
@@ -24,9 +24,9 @@ NorSpisData <- merge(ForlAlleSc, NorSpisEnkeltledd, suffixes = c('','X'),
 #                by = "ForlopsID", all = FALSE)
 
 
+#------------------------Definere parametre
 
 setwd('C:/ResultattjenesteGIT/norspis/')
-RegData <- NorSpisData
 
 # Inndata til funksjon:
 reshID <- 'TESTNO'  	#Må sendes med til funksjon
@@ -39,13 +39,24 @@ preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-valgtVar <- 'B18PsykMishandl'	#Må velge... PT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner, MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI, B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
+grVar <- 'ShNavn'
 
-outfile <-''#paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
+#------------------------------ Andeler flere var --------------------------
+
+valgtVar <- 'NegHend'	#Må velge... NegHend, PT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner, MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI, B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
+
+outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald )
 
+
+
+#------------------------------ Andeler per enhet (evt. annen grupperingsvariabel) --------------------------
+
+NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
+                  reshID=reshID, enhetsUtvalg=enhetsUtvalg, grVar=grVar, outfile=outfile, 
+                  minald=minald, maxald=maxald )
 
 #(Mads-fjerne alfanum når NorSpis-pakke OK) #Teste variables
 #(Mads-fjerne alfanum når NorSpis-pakke OK) variable <- c('Alder', 'Education')
