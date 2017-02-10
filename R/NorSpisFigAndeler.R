@@ -176,7 +176,7 @@ FigTypUt <- figtype(outfile, fargepalett=NorSpisUtvalg$fargepalett)
 #Tilpasse marger for å kunne skrive utvalgsteksten
 NutvTxt <- length(utvalgTxt)
 antDesTxt <- paste0('%.', antDes, 'f')
-grtxtpst <- paste0(rev(grtxt), ' (', rev(sprintf(antDesTxt, Andeler$Hoved)), '%)')
+grtxtpst <- paste0(grtxt, ' (', sprintf(antDesTxt, Andeler$Hoved), '%)')
 vmarg <- switch(retn, V=0, H=max(0, strwidth(grtxtpst, units='figure', cex=cexgr)*0.7))
 par('fig'=c(vmarg, 1, 0, 1-0.02*(NutvTxt-1)))	#Har alltid datoutvalg med
 
@@ -190,12 +190,12 @@ cexleg <- 1	#Størrelse på legendtekst
 #Horisontale søyler
 if (retn == 'H') {
 	xmax <- max(c(Andeler$Hoved, Andeler$Rest),na.rm=T)*1.15
-	pos <- barplot(rev(as.numeric(Andeler$Hoved)), horiz=TRUE, beside=TRUE, las=1, xlab="Andel pasienter (%)", #main=tittel,
+	pos <- barplot(as.numeric(Andeler$Hoved), horiz=TRUE, beside=TRUE, las=1, xlab="Andel pasienter (%)", #main=tittel,
 		col=fargeHoved, border='white', font.main=1, xlim=c(0, xmax), ylim=c(0.05,1.4)*antGr)	#
 	if (N$Hoved>0) {mtext(at=pos+0.05, text=grtxtpst, side=2, las=1, cex=cexgr, adj=1, line=0.25)}
 
 	if (medSml == 1) {
-		points(as.numeric(rev(Andeler$Rest)), pos, col=fargeRest,  cex=2, pch=18) #c("p","b","o"),
+		points(as.numeric(Andeler$Rest), pos, col=fargeRest,  cex=2, pch=18) #c("p","b","o"),
 		legend('top', c(paste0(hovedgrTxt, ' (N=', N$Hoved,')'),
 						paste0(smltxt, ' (N=', N$Rest,')')),
 			border=c(fargeHoved,NA), col=c(fargeHoved,fargeRest), bty='n', pch=c(15,18), pt.cex=2,
