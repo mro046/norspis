@@ -2,6 +2,7 @@
 
 export(NorSpisELAlleScorData)
 export(NorSpisFigAndeler)
+export(NorSpisFigAndelerGrVar)
 export(NorSpisFigAndelerInklVarDef)
 export(NorSpisPreprosess)
 export(NorSpisRegDataSQL)
