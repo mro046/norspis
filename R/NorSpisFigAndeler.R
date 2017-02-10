@@ -91,6 +91,7 @@ medSml=NorSpisUtvalg$medSml
       N <- list(Hoved = 0, Rest =0)
       Ngr <- list(Hoved = 0, Rest =0)
       ind <- NorSpisUtvalg$ind
+      variable <- NorSpisVarSpes$variable
       
       Ngr$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
                           '0' = table(RegData$VariabelGr[ind$Hoved]),
