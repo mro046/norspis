@@ -48,13 +48,14 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
 #      NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
 #      RegData <- NorSpisVarSpes$RegData
 
-      if (valgtVar=='alder_u18') {	#endret fra under18
+      #Disse skal flyttes til NorSpisVarTilrettelegg:
+      if (valgtVar=='alder_u18') {	#fungerer
             RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
             RegData$Variabel[which(RegData$Alder<18)] <- 1 
             tittel <- 'Pasienter under 18 år'
       }
 
-            if (valgtVar=='diabetes') { #AndelerGrVar
+      if (valgtVar=='diabetes') { #ikke klargjort
        RegData$Variabel <- RegData$Dod30
        tittel <- 'Opphold der pasienten døde innen 30 dager etter innleggelse'
        sortAvtagende <- FALSE
@@ -124,11 +125,7 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
 #                               medSml=NorSpisUtvalg$medSml, 
 #                               smltxt=NorSpisUtvalg$smltxt)
       
-      #Lagre beregnede data
-      #if (hentData==1) {
-#      save(AndelerGrVarData, file='data/AndelerGrVarData.RData')
-      #}
-      
+     
       #FigDataParam skal inn som enkeltparametre i funksjonskallet
 	  lagFig=0
 	  cexgr <- 1-ifelse(AntGr>20, 0.25*AntGr/60, 0)
@@ -189,41 +186,24 @@ if (dim(RegData)[1] < 10 |
 	  pos <- rev(barplot(rev(as.numeric(AggVerdier$Hoved)), horiz=T, xlim=c(0,xmax), ylim=c(ymin, ymax), #, plot=FALSE)
 	                     xlab=xAkseTxt, border=NA, col.axis='white', col='white'))
 	  indOK <- which(AggVerdier$Hoved>=0)
-	  posOK <- pos[indOK]
 	  posOver <- max(pos)+0.35*log(max(pos))
-	  posDiff <- 1.2*(pos[1]-pos[2])
-	  posOK <- pos[indOK]
-	  minpos <- min(posOK)-0.7
-	  maxpos <- max(posOK)+0.7
+	  #posDiff <- 1.2*(pos[1]-pos[2])
+	  minpos <- min(pos[indOK])-0.7
+	  maxpos <- max(pos[indOK])+0.7
 	  
-
-	if (grVar %in% c('ShNavn')) {	#Må si noe om den "gamle figurtypen"
-	      #grtxt <- rev(grtxt)
-	      mtext(at=posOver, paste0('(N)' ), side=2, las=1, cex=cexgr, adj=1, line=0.25)
-	      #Linje for hele landet/utvalget:
-	      lines(x=rep(AndelHele, 2), y=c(minpos, maxpos), col=farger[1], lwd=2.5) #y=c(0, max(pos)+0.55), 
-	      #Linje for kvalitetsindikatormål:
-		      barplot(rev(as.numeric(AggVerdier$Hoved)), horiz=TRUE, beside=TRUE, las=1, add=TRUE,
-	              col=fargeHoved, border=NA, cex.names=cexgr) #, xlim=c(0, xmax), ylim=c(ymin,ymax)
-	      soyleXpos <- 1.1*xmax*max(strwidth(soyletxt, units='figure')) # cex=cexgr
-	      text(x=soyleXpos, y=pos+0.1, soyletxt, las=1, cex=cexgr, adj=1, col=farger[1])	#AggVerdier, hvert sykehus
-	      }
-
-
-	#--------------------------------------
-
+      #grtxt <- rev(grtxt)
+      mtext(at=posOver, paste0('(N)' ), side=2, las=1, cex=cexgr, adj=1, line=0.25)
+      #Linje for hele landet/utvalget:
+      lines(x=rep(AndelHele, 2), y=c(minpos, maxpos), col=farger[1], lwd=2.5) #y=c(0, max(pos)+0.55), 
+      #Linje for kvalitetsindikatormål:
+	      barplot(rev(as.numeric(AggVerdier$Hoved)), horiz=TRUE, beside=TRUE, las=1, add=TRUE,
+              col=fargeHoved, border=NA, cex.names=cexgr) #, xlim=c(0, xmax), ylim=c(ymin,ymax)
+      soyleXpos <- 1.1*xmax*max(strwidth(soyletxt, units='figure')) # cex=cexgr
+      text(x=soyleXpos, y=pos+0.1, soyletxt, las=1, cex=cexgr, adj=1, col=farger[1])	#AggVerdier, hvert sykehus
 
       #Legge på gruppe/søylenavn
       mtext(at=pos+0.05, text=grtxt, side=2, las=1, cex=cexgr, adj=1, line=0.25) 
-      
-      #Fordelingsfigurer:
-      #if (grVar == '') {
-      	if (medSml == 1) { #Legge på prikker for sammenlikning
-      		  points(as.numeric(rev(AggVerdier$Rest)), pos, col=fargeRest,  cex=2, pch=18) #c("p","b","o"), 
-      	}
-      	
-	
-	title(tittel, line=1.5) #cex.main=1.3)
+ 	title(tittel, line=1.5) #cex.main=1.3)
 
 	#Tekst som angir hvilket utvalg som er gjort
 	avst <- 0.8

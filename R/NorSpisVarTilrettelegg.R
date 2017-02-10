@@ -49,76 +49,71 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
       
       
       
-if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12dAldrForsteBeh')) {
+if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
       gr <- c(0,seq(5,50,5),150)
       #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
       #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- cut(RegData$valgtVar, breaks=gr, include.lowest=TRUE, right=FALSE)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
       subtxt <- 'Aldersgruppe'
       tittel <- switch(valgtVar,
                        Alder = 'Aldersfordeling',
                        B08StartAldrProbl = 'Alder da problemene startet',
-                       B12dAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
+                       B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
 }
 
-if (valgtVar=='Alder') {
-gr <- c(0,seq(5,50,5),150)
-RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
+      #if (valgtVar=='Alder') {
+#gr <- c(0,seq(5,50,5),150)
+#RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
 #grtxt <- c('0-11', '11-12', '13-14', '15-16', '17-18', '19-20', '21-25', '26-30', '31-35', '36-40', '41-45', '46-50', '51-60, '61+')
-grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
-subtxt <- 'Aldersgruppe'
-tittel <- 'Aldersfordeling'
-}
+#grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+#subtxt <- 'Aldersgruppe'
+#tittel <- 'Aldersfordeling'
+#}
 
 if (valgtVar=='Norsktalende') {
       #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
-      grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent', 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$Norsktalende %in% c(0:2,9))
+      grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent')
+      indDum <- which(as.character(RegData$Norsktalende) %in% grtxt[-4])
       RegData$VariabelGr[indDum] <- RegData$Norsktalende[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9,99))
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9))
       tittel <- 'Norsktalende'
 }
 
-if (valgtVar=='B04PabegyntUtd') {
+if (valgtVar %in% c('B04PabegyntUtd', 'B05FullfortUtd')) {
   #OBS - se over/korrigere kategoriene
       retn <- 'H'
-      grtxt <- c('Grunnskole','Videregående skole (1-3 år)',
-                 'Høgskole eller universitet, mindre enn 4 år', 'Høgskole eller universitet, 4 år eller mer','Ukjent',
-                 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$B04PabegyntUtd %in% c(1:4,9))
-      RegData$VariabelGr[indDum] <- RegData$B04PabegyntUtd[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:4,9,99))
+      grtxt <- switch(valgtVar, 
+                      B04PabegyntUtd=c('Grunnskole','Videregående skole (1-3 år)',
+                                       'Høgskole eller universitet, \nmindre enn 4 år', 
+                                       'Høgskole eller universitet, \n4 år eller mer','Ukjent'),
+                 B05FullfortUtd=c('Ikke fullført grunnskole','Grunnskole','Videregående skole (1-3 år)',
+                                  'Høgskole eller universitet, \nmindre enn 4 år', 
+                                  'Høgskole eller universitet, \n4 år eller mer','Ukjent'))
+      verdier <- switch(valgtVar,
+                        B04PabegyntUtd=c(1:4,9),
+                        B05FullfortUtd=c(1:5,9))
+      indDum <- which(RegData[ ,valgtVar] %in% verdier)
+      RegData <- RegData[indDum, ]
+      RegData$VariabelGr <- RegData[ ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = verdier)
       tittel <- 'Høyeste påbegynte utdanning'
 }
 
-if (valgtVar=='B05FullfortUtd') {
-  #OBS - se over/korrigere kategoriene
-      retn <- 'H'
-      grtxt <- c('Ikke fullført grunnskole','Grunnskole','Videregående skole (1-3 år)',
-                 'Høgskole/universitet (<4 år)', 'Høgskole/universitet (>=4 år)','Ukjent',
-                 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData[, valgtVar] %in% c(1:5,9))
-      RegData$VariabelGr[indDum] <- RegData$B05FullfortUtd[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5,9,99))
-      tittel <- 'Høyeste fullførte utdanning'
-}
 
 if (valgtVar=='MedBMI') {
-  gr <- c(-1, 0, 18.5, 25, 30, 1000)
+  gr <- c(0, 18.5, 25, 30, 1000)
   #RegData$VariabelGr <- -1
-  RegData$VariabelGr <- cut(RegData$MedBMI, breaks=gr, include.lowest=TRUE, right=FALSE)
   ind <- which(RegData$MedBMI>0)
-  RegData$VariabelGr[ind] <- RegData$MedBMI[ind]
+  RegData <- RegData[ind, ]
+  #RegData$VariabelGr[ind] <- RegData$MedBMI[ind]
+  RegData$VariabelGr <- cut(RegData$MedBMI, breaks=gr, include.lowest=TRUE, right=FALSE)
   # RegData$VariabelGr[ind] <- cut(RegData[ind ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
   # RegData$VariabelGr <- cut(RegData[,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
   # grtxt <- c('', '<18,5', levels(RegData$VariabelGr)[3:(length(gr)-2)],'30+')
-  grtxt <- c('', '<18,5', '18,5-25', '25-30','30+')
-  grtxt2 <- c('Ukjent', 'Undervekt', 'Normalvekt', 'Overvekt', 'Fedme')
+  grtxt <- c( '<18,5', '18,5-25', '25-30','30+')
+  grtxt2 <- c('Undervekt', 'Normalvekt', 'Overvekt', 'Fedme')
   subtxt <- "Body Mass Index"
   tittel <-  'Pasientenes BMI (Body Mass Index)'
 }
@@ -165,8 +160,7 @@ if (valgtVar=='B11FamilieSF') {
 }
 
 if (valgtVar=='B12TidlBehSF') {
-  retn <- 'H'
-  grtxt <- c('Nei', 'Ja')
+  grtxt <- c('Nei', 'Ja', 'Ukjent')
   RegData$VariabelGr <- 99
   indDum <- which(RegData$B12TidlBehSF %in% c(0,1))
   RegData$VariabelGr[indDum] <- RegData$B12TidlBehSF[indDum]
@@ -240,16 +234,14 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
       
       
       
-      
+#Endre til en figur med Pasienttilfredshet (flerevar=1)      
 if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
                     'PT05OrientertBrukerorg')) {
-      retn <- 'H'
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
       grtxt <- c('Nei', 'Ja')
-      RegData$VariabelGr <- 99
       indDum <- which(RegData[ ,valgtVar] %in% c(0,1))
-      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
+      RegData <- RegData[indDum, ]
+      RegData$VariabelGr <- factor(RegData[ ,valgtVar], levels = c(0,1))
       tittel <- switch(valgtVar,
                        PT01OnsketInvolv = 'Pasienttilfredshet: Ønske om involvering av andre nære i behandlingen',
                        PT02BleInvolv = 'Pasienttilfredshet: Ble nære involvert i behandlingen?',
@@ -280,9 +272,8 @@ if (valgtVar=='DiagVSF') {
       
 #if (MedPsykofarmaka == 1) Hvordan legge inn betingelsen?
 if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh')) {
-      retn <- 'H'
       #RegData <- RegData[which(RegData$PasientSkjemaStatus == 1), ] #LENA? Hjelpeargument?
-      grtxt <- c('Nei', 'Ja')
+      grtxt <- c('Nei', 'Ja','Ukjent')
       RegData$VariabelGr <- 99
       indDum <- which(RegData[ ,valgtVar] %in% 0,1)
       RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
@@ -290,7 +281,8 @@ if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika'
       tittel <- switch(valgtVar,
                        MedAntidepressiva = 'Antidepressiva',
                        MedBenzodiazepiner = 'Benzodiazepiner' ,
-                       MedNevroleptika = 'Nevroleptika')
+                       MedNevroleptika = 'Nevroleptika',
+                       MedAnnenMedBeh = 'Annen medisinsk behandling')
 }
 
 if (valgtVar=='BehUtfallsvurdSamlet') {
