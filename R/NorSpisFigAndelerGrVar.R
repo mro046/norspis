@@ -18,7 +18,7 @@
 #'     \item respStotte: Pasienter som har fått respiratorstøtte
 #'     \item reinn: Andel reinnlagte (kun hvor dette er registrert, dvs. fjerner ukjente)
 #'    }
-#' Funksjonen benytter funksjonene: NIRRegDataSQL, NIRPreprosess, NIRVarTilrettelegg, NIRUtvalgEnh
+#' Funksjonen benytter funksjonene: NorSpisRegDataSQL, NorSpisPreprosess, NorSpisVarTilrettelegg, NorSpisUtvalg
 #' og NIRFigSoyler
 #'
 #' @inheritParams NIRAndeler
@@ -27,25 +27,26 @@
 #' @return Søylediagram med AggVerdier av valgt variabel for hvert sykehus
 #'
 #' @export
-NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
-                            minald=0, maxald=130, grType=99, grVar='', InnMaate=99, dodInt='', erMann='', hentData=0, preprosess=1, 
+NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, 
+                            minald=0, maxald=130, grVar='', erMann='', hentData=0, preprosess=1, 
                             outfile='', lagFig=1) 
       
+      #aar=0,InnMaate=99,grType=99, 
                               
 {
       #NB: Tomme grVar fjernes så vurder om dette kan være standard...
       if (hentData == 1) {		
-            RegData <- NIRRegDataSQL(datoFra, datoTil)
+            RegData <- NorSpisRegDataSQL(datoFra, datoTil)
       }
       
       # Hvis RegData ikke har blitt preprosessert. (I samledokument gjøre dette i samledokumentet)
       if (preprosess){
-            RegData <- NIRPreprosess(RegData=RegData)	#, reshID=reshID)
+            RegData <- NorSpisPreprosess(RegData=RegData)	#, reshID=reshID)
       }
       
       #------- Tilrettelegge variable
-#      NIRVarSpes <- NIRVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
-#      RegData <- NIRVarSpes$RegData
+#      NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
+#      RegData <- NorSpisVarSpes$RegData
 
       if (valgtVar=='diabetes') { #AndelerGrVar
        RegData$Variabel <- RegData$Dod30
@@ -55,10 +56,12 @@ NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
 
 	  
       #------- Gjøre utvalg
-      NIRUtvalg <- NIRUtvalgEnh(RegData=RegData, datoFra=datoFra, datoTil=datoTil, minald=minald, maxald=maxald, 
-                                aar=aar, overfPas=overfPas, erMann=erMann, InnMaate=InnMaate, dodInt=dodInt, grType=grType)
-      RegData <- NIRUtvalg$RegData
-      utvalgTxt <- NIRUtvalg$utvalgTxt
+      NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
+                                      erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID, fargepalett = fargepalett)
+            
+      
+      RegData <- NorSpisUtvalg$RegData
+      #utvalgTxt <- NorSpisUtvalg$utvalgTxt
 #      NorSpisUtvalg <- function(RegData, datoFra, datoTil, aar=0, minald=0, maxald=130, erMann='', 
 #					enhetsUtvalg=0, reshID=0, fargepalett='BlaaOff')  #grType=99, 
 
@@ -79,7 +82,7 @@ NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
       
       if (sum(which(Ngr < Ngrense))>0) {indGrUt <- as.numeric(which(Ngr<Ngrense))} else {indGrUt <- 0}
       AndelerGr[indGrUt] <- NA #-0.0001
-      sortInd <- order(as.numeric(AndelerGr), decreasing=NIRVarSpes$sortAvtagende, na.last = FALSE) 
+      sortInd <- order(as.numeric(AndelerGr), decreasing=NorSpisVarSpes$sortAvtagende, na.last = FALSE) 
       
       AndelerGrSort <- AndelerGr[sortInd]
       AndelHele <- sum(RegData$Variabel==1)/N*100	
@@ -98,7 +101,7 @@ NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
       xAkseTxt <- "Andel pasienter (%)"	#Denne kan avhenge av figurtype
       
       
-      #Se NIRFigSoyler for forklaring av innhold i AndelerGrVarData
+      #Se NorSpisFigSoyler for forklaring av innhold i AndelerGrVarData
       AndelerGrVarData <- list(AggVerdier=AggVerdier, 
                                AggTot=AndelHele, 
                                N=N, 
@@ -106,16 +109,16 @@ NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
                                grtxt2='', 
                                soyletxt=andeltxt,
                                grtxt=GrNavnSort,
-                               tittel=NIRVarSpes$tittel, 
+                               tittel=NorSpisVarSpes$tittel, 
                                #yAkseTxt=yAkseTxt, 
                                retn='H', 
-                               xAkseTxt=xAkseTxt, #NIRVarSpes$xAkseTxt,
-                               KImaal = NIRVarSpes$KImaal,
-                               grTypeTxt=NIRUtvalg$grTypeTxt,			 
-                               utvalgTxt=NIRUtvalg$utvalgTxt, 
-                               fargepalett=NIRUtvalg$fargepalett, 
-                               medSml=NIRUtvalg$medSml, 
-                               smltxt=NIRUtvalg$smltxt)
+                               xAkseTxt=xAkseTxt, #NorSpisVarSpes$xAkseTxt,
+                               KImaal = NorSpisVarSpes$KImaal,
+                               grTypeTxt=NorSpisUtvalg$grTypeTxt,			 
+                               utvalgTxt=NorSpisUtvalg$utvalgTxt, 
+                               fargepalett=NorSpisUtvalg$fargepalett, 
+                               medSml=NorSpisUtvalg$medSml, 
+                               smltxt=NorSpisUtvalg$smltxt)
       
       #Lagre beregnede data
       #if (hentData==1) {
@@ -127,11 +130,11 @@ NorSpisAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, aar=0,
       if (lagFig == 1) {
             cexgr <- 1-ifelse(AntGr>20, 0.25*AntGr/60, 0)
             NIRFigSoyler(RegData, AggVerdier=AggVerdier, AggTot=AndelHele, Ngr=Ngr,N=N, cexgr=cexgr, 
-                         tittel=NIRVarSpes$tittel, 
-                         smltxt=NIRUtvalg$smltxt, utvalgTxt=NIRUtvalg$utvalgTxt, #yAkseTxt=yAkseTxt,
-                         grTypeTxt=NIRUtvalg$grTypeTxt,  fargepalett=NIRUtvalg$fargepalett, grtxt=GrNavnSort, 
-                         soyletxt=andeltxt,grVar=grVar, KImaal = NIRVarSpes$KImaal, #medKI = medKI,
-                         medSml=NIRUtvalg$medSml, xAkseTxt=xAkseTxt, outfile=outfile)
+                         tittel=NorSpisVarSpes$tittel, 
+                         smltxt=NorSpisUtvalg$smltxt, utvalgTxt=NorSpisUtvalg$utvalgTxt, #yAkseTxt=yAkseTxt,
+                         grTypeTxt=NorSpisUtvalg$grTypeTxt,  fargepalett=NorSpisUtvalg$fargepalett, grtxt=GrNavnSort, 
+                         soyletxt=andeltxt,grVar=grVar, KImaal = NorSpisVarSpes$KImaal, #medKI = medKI,
+                         medSml=NorSpisUtvalg$medSml, xAkseTxt=xAkseTxt, outfile=outfile)
       }
       #---------------------------------------FRA FIGANDELER, FigGjsnGrVar og FigAndelGrVar--------------------------
 #Hvis for få observasjoner..
