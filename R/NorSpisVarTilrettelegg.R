@@ -304,6 +304,12 @@ if (valgtVar=='BehVidereBeh') {
       tittel <- 'Videre behandling annen instans?'
 }
 
+if (valgtVar=='B01Sivilstatus') {
+      grtxt <- c('Enslig','Samboer','Gift','Skilt','Enke/enkemann','Annen')
+      RegData$VariabelGr <- factor(RegData$B01Sivilstatus, levels = c(1:5,9))
+      tittel <- 'Sivilstatus'
+}
+      
 #Lage indekser for:PO01Forstod	PO02Tillit	PO03InfoDiagnose	PO04Tilpasset	PO05Involvert	PO06Organisert	PO07Tilfredsstillende	PO08Tilgjengelighet	PO09Utbytte	PO10Pasientsikkerhet
 
       
