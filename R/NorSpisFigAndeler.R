@@ -13,7 +13,7 @@
 #'
 #'
 #' @param RegData Dataramme med alle nødvendige variable fra registeret
-#' @param outfile Navn på fil figuren skrives ned til
+#' @param outfile Navn på fil figuren skrives ned til. outfile lik '' skriver til skjerm.
 #' @param reshID Avdelingsid (reshID) for egen avdeling,
 #' @param hentData Angir om funksjonen skal kjøre spørring for å hente data eller ikke.
 #'					0: ikke kjør (standard)
