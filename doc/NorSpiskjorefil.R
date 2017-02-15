@@ -1,19 +1,40 @@
 
-library(rapbase)
+#library(rapbase)
 
 
-#--------------------------------------------------------
-#------------------------------ Andeler flere var --------------------------
+#-------------------------Hente data-------------------------------
 rm(list=ls())
 library(norspis)
-NorSpisEnkeltledd <- read.table('C:/Users/spa-ressp-2/Documents/norspis/data/EnkeltLeddNum2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8') #,
-NorSpisForlop <- read.table('C:/Users/spa-ressp-2/Documents/norspis/data/ForlopsOversikt2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8')
-NorSpisData <- merge(NorSpisForlop, suffixes = c('','X'), by = c("ForlopsID" ), NorSpisEnkeltledd, all = FALSE)  #by.x = "ForlopsID", by.y = "ForlopsID",#"SykehusNavn", "AvdRESH"
-NorSpisForlop <- read.table('C:/Users/spa-ressp-2/Documents/norspis/data/ForlopsOversikt2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8')
 
-setwd('C:/Users/spa-ressp-2/Documents/norspis/')
+NorSpisForlop <- read.table('C:/Users/spa-ressp-2/NorSpisTestData/ForlopsOversikt2017-02-01.csv', sep=';',
+                            header=T, encoding = 'UTF-8')
+NorSpisEnkeltledd <- read.table('C:/Users/spa-ressp-2/NorSpisTestData/EnkeltLeddNum2017-02-01.csv', sep=';', 
+                                header=T, encoding = 'UTF-8') 
+NorSpisAlleScorer <- read.table('C:/Users/spa-ressp-2/NorSpisTestData/AlleScorer2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8') #,
+
+
+#-------------------------Merge data-------------------------------
+ForlAlleSc <- merge(NorSpisForlop, NorSpisAlleScorer, suffixes = c('','X'), by = "ForlopsID", all = FALSE)
+
+
+NorSpisData <- merge(ForlAlleSc, NorSpisEnkeltledd, suffixes = c('','X'), by = "ForlopsID", all = FALSE)
+
+
+#NorSpisData <- merge(NorSpisForlop, suffixes = c('','X'), by = c("ForlopsID" ), NorSpisEnkeltledd, 
+#                     all = FALSE)  #by.x = "ForlopsID", by.y = "ForlopsID",#"SykehusNavn", "AvdRESH"
+
+
+
+#------------------------Endre navn-------------------------------
 RegData <- NorSpisData
 
+
+#------------------------setwd-----------------------------------
+
+setwd('C:/Users/spa-ressp-2/Documents/norspis/')
+
+
+#------------------------Definere parametre
 # Inndata til funksjon:
 reshID <- 'TESTNO'  	#Må sendes med til funksjon
 minald <- 0	#alder, fra og med
