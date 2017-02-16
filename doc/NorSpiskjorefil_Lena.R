@@ -55,11 +55,12 @@ NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoT
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald )
 
  
-variable <- c('PT03Utfallsvurd','BehUtfallsvurdSamlet', 'MedBenzodiazepiner', 
-              'MedAntidepressiva','MedNevroleptika', 'PT01OnsketInvolv','PT02BleInvolv', 'PT04KontaktBrukerorg', 
-              'PT05OrientertBrukerorg', 'Alder','B08StartAldrProbl', 'B12cAldrForsteBeh', 'B04PabegyntUtd', 
-              'Norsktalende', 'B05FullfortUtd','MedBMI', 'B06Hovedaktivitet', 'B07Hovedinntekt', 'B12TidlBehSF', 
-              'B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+               "B07Hovedinntekt", "B08StartAldrProbl", "B12cAldrForsteBeh", "B12TidlBehSF",  
+               "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",    
+               "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner", "MedBMI",        
+               "MedNevroleptika", "Norsktalende", "PT01OnsketInvolv", "PT02BleInvolv", 
+               "PT03Utfallsvurd", "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")
 
  for (valgtVar in variable) {
 	outfile <- paste0(valgtVar, '_ford.png')
