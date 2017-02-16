@@ -69,9 +69,10 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
       ForlopsOversikt.SykehusNavn
 FROM EnkeltLeddNum 
 INNER JOIN ForlopsOversikt 
-LEFT JOIN AlleScorer
-ON EnkeltLeddNum.MCEID = ForlopsOversikt.ForlopsID
-                  WHERE HovedDato >= \'', datoFra, '\' AND HovedDato <= \'', datoTil, '\'')
+ON EnkeltLeddNum.ForlopsID = ForlopsOversikt.ForlopsID
+LEFT JOIN AlleScorer  
+ON ForlopsOversikt.ForlopsID = AlleScorer.ForlopsID
+WHERE HovedDato >= \'', datoFra, '\' AND HovedDato <= \'', datoTil, '\'')
 				  
 #  FROM AlleVarNum
 #  INNER JOIN ForlopsOversikt
