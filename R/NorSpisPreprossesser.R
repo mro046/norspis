@@ -24,7 +24,7 @@ NorSpisPreprosess <- function(RegData=RegData)	#, reshID=reshID)
 	names(RegData)[which(names(RegData) == 'PasientAlder')] <- 'Alder'
 	
 # Riktig format
-	RegData$ShNavn <- as.character(RegData$SykehusNavn)
+	RegData$EnhNavn <- as.character(RegData$SykehusNavn)
 	RegData$ReshId <- as.character(RegData$AvdRESH)
 
 	#Riktig format på datovariable:

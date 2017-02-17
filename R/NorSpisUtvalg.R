@@ -57,7 +57,7 @@ utvalgTxt <- c(paste0(
       #Enhetsutvalg:
       indEgen1 <- match(reshID, RegData$ReshId)
       if (enhetsUtvalg %in% c(1,2,3,6)) {	#Involverer egen enhet
-            hovedgrTxt <- as.character(RegData$ShNavn[indEgen1]) } else {
+            hovedgrTxt <- as.character(RegData$EnhNavn[indEgen1]) } else {
                   hovedgrTxt <- switch(as.character(enhetsUtvalg), 	
                                   '0' = 'Hele landet',
                                   '4' = grTypetextstreng[RegData$EnhType[indEgen1]],

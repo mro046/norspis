@@ -1,7 +1,7 @@
 #' Søylediagram med AggVerdier for hver grupperingsenhet (sykehus, RHF, ...)
 #'
 #' Funksjon som genererer en figur med AggVerdier av en gitt variabel for ei valgt gruppering, 
-#' f.eks. enheter. I øyeblikket benytter funksjonen bare 'ShNavn' som grupperingsvariabel, men 
+#' f.eks. enheter. I øyeblikket benytter funksjonen bare 'EnhNavn' som grupperingsvariabel, men 
 #' andre valg kan lett inkluderes. 
 #'
 #' Figurtypen som genereres er avhengig av valgtVar. Ved valgtVar='InnMaate', får man ei oversikt oversikt
@@ -168,7 +168,7 @@ if (dim(RegData)[1] < 10 |
 	
 	
 	farger <- FigTypUt$farger
-	fargeHoved <- ifelse(grVar %in% c('ShNavn'), farger[4], farger[1])
+	fargeHoved <- ifelse(grVar %in% c('EnhNavn'), farger[4], farger[1])
 	fargeRest <- farger[3]
 	antGr <- length(grtxt)
 	lwdRest <- 3	#tykkelse på linja som repr. landet
