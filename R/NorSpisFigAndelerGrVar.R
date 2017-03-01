@@ -29,22 +29,27 @@
 #' @export
 NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, 
                             minald=0, maxald=130, grVar='', erMann='', hentData=0, preprosess=1, 
-                            outfile='', lagFig=1) 
+                            outfile='', lagFig=1)                                               #SpmLena: lagFig? Settes lik 0 lenger ned...
       
       #aar=0,InnMaate=99,grType=99, 
                               
+
 {
-      #NB: Tomme grVar fjernes så vurder om dette kan være standard...
+
+#------ Hente data      
+       #NB: Tomme grVar fjernes så vurder om dette kan være standard...
       if (hentData == 1) {		
             RegData <- NorSpisRegDataSQL(datoFra, datoTil)
       }
-      
+
+#------ Preprosessere data
       # Hvis RegData ikke har blitt preprosessert. (I samledokument gjøre dette i samledokumentet)
       if (preprosess){
             RegData <- NorSpisPreprosess(RegData=RegData)	#, reshID=reshID)
       }
       
-      #------- Tilrettelegge variable
+
+#------- Tilrettelegge variable
 #      NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
 #      RegData <- NorSpisVarSpes$RegData
 
@@ -62,11 +67,10 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
  }
 
 	  
-      #------- Gjøre utvalg
+#------- Gjøre utvalg
       NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
                                       erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)
             
-      
       RegData <- NorSpisUtvalg$RegData
       utvalgTxt <- NorSpisUtvalg$utvalgTxt
 
@@ -81,11 +85,21 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
 #------------Gjøre beregninger      
       Ngrense <- 10	
       N <- dim(RegData)[1]
-      if(N > 0) {Ngr <- table(RegData[ ,grVar])} else {Ngr <- 0}
-      AntGr <- length(which(Ngr >= Ngrense))	#length(which(Midt>0))
-      AndelerGr <- as.vector(table(RegData[which(RegData$Variabel==1) , grVar])/Ngr*100)	#round(100*Nvar/Ngr,2)
       
-      if (sum(which(Ngr < Ngrense))>0) {indGrUt <- as.numeric(which(Ngr<Ngrense))} else {indGrUt <- 0}
+      if(N > 0) {
+            Ngr <- table(RegData[ ,grVar])      #lager en tabell med antall(N) (e.g. under 18 år) i hver gruppe(e.g. på hvert sykehus)
+      } else {
+            Ngr <- 0}
+      
+      AntGr <- length(which(Ngr >= Ngrense))	#length(which(Midt>0))
+      AndelerGr <- as.vector(table(RegData[which(RegData$Variabel==1) , grVar])/Ngr*100)	#round(100*Nvar/Ngr,2) #beregner størrelsen på andelene i hver gruppe, e.g. andeler pasienter under 18 år på ulike sykehus
+      
+      
+      if (sum(which(Ngr < Ngrense))>0) {
+            indGrUt <- as.numeric(which(Ngr<Ngrense))
+      } else {
+            indGrUt <- 0}
+      
       AndelerGr[indGrUt] <- NA #-0.0001
       sortInd <- order(as.numeric(AndelerGr),na.last = FALSE) #decreasing=NorSpisVarSpes$sortAvtagende
       
@@ -126,7 +140,8 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
 #                               smltxt=NorSpisUtvalg$smltxt)
       
      
-      #FigDataParam skal inn som enkeltparametre i funksjonskallet
+
+#FigDataParam skal inn som enkeltparametre i funksjonskallet
 	  lagFig=0
 	  cexgr <- 1-ifelse(AntGr>20, 0.25*AntGr/60, 0)
 	  
@@ -138,12 +153,13 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
                          soyletxt=andeltxt,grVar=grVar, KImaal = NorSpisVarSpes$KImaal, #medKI = medKI,
                          medSml=NorSpisUtvalg$medSml, xAkseTxt=xAkseTxt, outfile=outfile)
       }
-      #---------------------------------------FRA FIGANDELER, FigGjsnGrVar og FigAndelGrVar--------------------------
+#---------------------------------------FRA FIGANDELER, FigGjsnGrVar og FigAndelGrVar--------------------------
 #Hvis for få observasjoner..
 
-if (dim(RegData)[1] < 10 | 
+if (dim(RegData)[1] < 10 |                                                                            # "|" = "or"
 		(grVar=='' & length(which(RegData$ReshId == reshID))<5 & enhetsUtvalg %in% c(1,3))) {
-	#-----------Figur---------------------------------------
+
+#-----------Figur---------------------------------------
       FigTypUt <-figtype(outfile)  #FigTypUt <- figtype(outfile)
 	farger <- FigTypUt$farger
 	plot.new()
@@ -181,6 +197,8 @@ if (dim(RegData)[1] < 10 |
 	  ymin <- 0.5/cexgr^4	#0.05*antGr #Fordi avstand til x-aksen av en eller annen grunn øker når antall sykehus øker
 	  ymax <- 0.2+1.2*length(AggVerdier$Hoved) #c(0.3/xkr^4,  0.3+1.25*length(Midt))
 
+	  
+	  #HERFRA BEGYNNER SELVE TEGNINGEN AV FIGUREN
 	  #Må def. pos først for å få strek for hele gruppa bak søylene
 	  ### reverserer for å slippe å gjøre det på konf.int
 	  pos <- rev(barplot(rev(as.numeric(AggVerdier$Hoved)), horiz=T, xlim=c(0,xmax), ylim=c(ymin, ymax), #, plot=FALSE)
@@ -192,13 +210,13 @@ if (dim(RegData)[1] < 10 |
 	  maxpos <- max(pos[indOK])+0.7
 	  
       #grtxt <- rev(grtxt)
-      mtext(at=posOver, paste0('(N)' ), side=2, las=1, cex=cexgr, adj=1, line=0.25)
+      mtext(at=posOver, paste0('(N)' ), side=2, las=1, cex=cexgr, adj=1, line=0.25) #legger til en "(N)"
       #Linje for hele landet/utvalget:
-      lines(x=rep(AndelHele, 2), y=c(minpos, maxpos), col=farger[1], lwd=2.5) #y=c(0, max(pos)+0.55), 
+      lines(x=rep(AndelHele, 2), y=c(minpos, maxpos), col=farger[1], lwd=2.5) #y=c(0, max(pos)+0.55), #mads-denne skal vel lage en vertikal linje som representerer hele landet, men fungerer ikke på nåværende tidspunkt. 
       #Linje for kvalitetsindikatormål:
 	      barplot(rev(as.numeric(AggVerdier$Hoved)), horiz=TRUE, beside=TRUE, las=1, add=TRUE,
-              col=fargeHoved, border=NA, cex.names=cexgr) #, xlim=c(0, xmax), ylim=c(ymin,ymax)
-      soyleXpos <- 1.1*xmax*max(strwidth(soyletxt, units='figure')) # cex=cexgr
+              col=farger[3], border=NA, cex.names=cexgr) #, xlim=c(0, xmax), ylim=c(ymin,ymax), col=fargeHoved
+      soyleXpos <- 1.5*xmax*max(strwidth(soyletxt, units='figure')) # cex=cexgr #mads endret fra 1.1 til 1.5
       text(x=soyleXpos, y=pos+0.1, soyletxt, las=1, cex=cexgr, adj=1, col=farger[1])	#AggVerdier, hvert sykehus
 
       #Legge på gruppe/søylenavn
