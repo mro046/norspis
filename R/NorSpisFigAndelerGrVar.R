@@ -87,7 +87,7 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
       N <- dim(RegData)[1]
       
       if(N > 0) {
-            Ngr <- table(RegData[ ,grVar])      #lager en tabell med antall(N) (e.g. under 18 år) i hver gruppe(e.g. på hvert sykehus)
+            Ngr <- table(RegData[ ,grVar])      #lager en tabell med antall(N) (e.g. antall under 18 år) i hver gruppe(e.g. på hvert sykehus)
       } else {
             Ngr <- 0}
       

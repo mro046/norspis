@@ -73,28 +73,32 @@ for (valgtVar in variable) {
 
  
 
-#------------------------------ Andeler per enhet (evt. annen grupperingsvariabel) --------------------------
-#--------------------Definere parametre
+#-------------------- Teste andeler per enhet (evt. annen grupperingsvariabel) --------------------------
 valgtVar <- 'alder_u18'
 grVar <- 'SykehusNavn'             #variabel til figuren andeler per enhet (tenk "valgtvar2")
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 #source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')
 
-#-------------------teste Andeler per enhet
+source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
+
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
                        grVar=grVar, outfile=outfile, 
                        minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
 
-#------------------teste gjennomsnitt per enhet
+#------------------Teste gjennomsnitt per enhet
 
-valgtVar <- 'Alder'
+valgtVar <- 'SCL90TGSI' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TGSI
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
+#source funksjonen hvis den (ved en feil) ikke kommer inn når man bygger pakken
+getwd()
+setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
+
+source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
 NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                     minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
-
 
 
 
