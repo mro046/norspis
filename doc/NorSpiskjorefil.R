@@ -41,7 +41,7 @@ preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-valgtVar <- 'BehVidereBeh'	#Må velge... AlderPT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner,
+valgtVar <- 'B08StartAldrProbl'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
 #MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
 #Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI,
 #B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
@@ -51,11 +51,11 @@ valgtVar <- 'BehVidereBeh'	#Må velge... AlderPT03Utfallsvurd,BehUtfallsvurdSaml
 outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 
-#--------------------Teste valgtvar
+#--------------------Teste NorSpisFigAndeler
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
 
-#--------------------Teste flere/alle variabler
+      #--------------------teste flere/alle variabler
 variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
                "B07Hovedinntekt", "B08StartAldrProbl", "B12cAldrForsteBeh", "B12TidlBehSF", 
                "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",   
@@ -88,7 +88,7 @@ NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, 
 
 #------------------Teste gjennomsnitt per enhet
 
-valgtVar <- 'SCL90TGSI' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TGSI
+valgtVar <- 'SCL90TDepresjon' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
@@ -101,6 +101,44 @@ NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMa
                     minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
 
 
+      #--------------------teste flere
+variable <- c("EDEQ60GlobalScore",
+            "EDEQ60Restriksjon",
+            "EDEQ60Kroppsform",
+            "EDEQ60Spising",
+            "EDEQ60Vekt",
+            "EDEQ60GlobalScore",
+            "EDEQ60Restriksjon",
+            "EDEQ60Kroppsform",
+            "EDEQ60Spising",
+            "EDEQ60Vekt",
+            "RAND36FysFunk", 
+            "RAND36RollebegFys", 
+            "RAND36RollebegEmo", 
+            "RAND36Tretthet", 
+            "RAND36MentalHelse", 
+            "RAND36SosialFunk", 
+            "RAND36Smerte", 
+            "RAND36GenHelse", 
+            "RAND36EndringHelse",
+            "SCL90TGSI",
+            "SCL90TSomatisering",
+            "SCL90TTvang",
+            "SCL90TSensitivitet",
+            "SCL90TDepresjon",
+            "SCL90TAngst",
+            "SCL90TFiendlighet",
+            "SCL90TFobi",
+            "SCL90TParanoia",
+            "SCL90TPsykotisk")                       #ikke sortert alfabetisk enda
+
+for (valgtVar in variable) {
+      outfile <- paste0(valgtVar, '_ford.png')
+      setwd('C:/Users/spa-ressp-2/Documents/norspis/testfigurer')
+      
+      NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
+                          minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)      
+}
 
 
 

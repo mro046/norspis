@@ -9,6 +9,7 @@
 #'     \item BMI: Pasientenes BMI (Body Mass Index)
 #'     \item Norsktalende: Snakker pasienten norsk
 #'     \item Utdanning: Utdanningsnivå
+#'     \item 
 #'    }
 #'
 #'
@@ -28,7 +29,7 @@
 #' @param enhetsUtvalg Sammenlikning eller ikke: 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #' @param valgtVar Hvilken variabel som skal visualiseres. Se \strong{Details} for oversikt.
 #'
-#' Detajer...:
+#' 
 #'
 #' @return En figur med søylediagram (fordeling) av ønsket variabel
 #'
