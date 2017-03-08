@@ -28,8 +28,7 @@ RegData <- NorSpisData
 setwd('C:/Users/spa-ressp-2/Documents/norspis/')
 
 
-#------------------------Definere parametre
-# Inndata til funksjon:
+#------------------------Definere parametre (som sendes inn til funksjonen)
 reshID <- 'TESTNO'  	#Må sendes med til funksjon
 minald <- 0	#alder, fra og med
 maxald <- 130	#alder, til og med
@@ -40,10 +39,7 @@ preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-valgtVar <- 'NegHend'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
-#MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
-#Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI,
-#B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
+
 
 
 
@@ -51,6 +47,13 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 
 #--------------------Teste NorSpisFigAndeler
+
+valgtVar <- 'Alder'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
+#MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
+#Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, NegHend, Norsktalende, B05FullfortUtd, MedBMI,
+#B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
+
+
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
 
@@ -59,7 +62,7 @@ variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
                "B07Hovedinntekt", "B08StartAldrProbl", "B12cAldrForsteBeh", "B12TidlBehSF", 
                "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",   
                "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner", "MedBMI",       
-               "MedNevroleptika", "Norsktalende", "PT01OnsketInvolv", "PT02BleInvolv",
+               "MedNevroleptika", "NegHend", "Norsktalende", "PT01OnsketInvolv", "PT02BleInvolv",
                "PT03Utfallsvurd", "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")                #sortert alfabetisk
 
 
@@ -70,7 +73,7 @@ for (valgtVar in variable) {
                         reshID=reshID, outfile=outfile, minald=minald, maxald=maxald)
 }
 
-#-------------------- Teste andeler per enhet (evt. annen grupperingsvariabel) --------------------------
+#-------------------- Teste NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) --------------------------
 valgtVar <- 'DiagVDiabetes'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
 grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
@@ -86,9 +89,9 @@ NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, 
 
 
 
-#------------------Teste gjennomsnitt per enhet
+#------------------Teste FigGjsnGrVar(gjennomsnitt per enhet)
 
-valgtVar <- 'SCL90TDepresjon' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
+valgtVar <- 'AldersGjsn' #AldersGjsn, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
@@ -139,13 +142,6 @@ for (valgtVar in variable) {
       NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                           minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)      
 }
-
-
-
-
-
-
-
 
 
 

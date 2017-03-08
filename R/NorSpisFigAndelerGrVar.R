@@ -50,47 +50,17 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
       
 
 #------- Tilrettelegge variable
-#      NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
-#      RegData <- NorSpisVarSpes$RegData
-
-      #Disse skal flyttes til NorSpisVarTilrettelegg:
-      if (valgtVar=='alder_u18') {	#fungerer
-            RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
-            RegData$Variabel[which(RegData$Alder<18)] <- 1 
-            tittel <- 'Pasienter under 18 år'
-      }
-
-      if (valgtVar=='BehDodUnderBeh') {	
-            RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
-            RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
-            tittel <- 'Mortalitet'
-      }
-      
-      if (valgtVar=='DiagVDiabetes') {
-       RegData$Variabel <- RegData$DiagVDiabetes
-       tittel <- 'Diabetes'
-       sortAvtagende <- FALSE
- 
- #     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
-  #          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
-   #         RegData$Variabel <-      
-
-
-#VentetidOverXMnd <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y.%m.%d"),
-#strptime(RegData$RegHenvMottattDato, format = "%Y.%m.%d"),units="weeks")
-
-                  
-                  
-                  
-}
-
+NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
+ #--------og hente inn RegData og parametre fra tilretteleggingen
+RegData <- NorSpisVarSpes$RegData
+tittel <- NorSpisVarSpes$tittel
 	  
 #------- Gjøre utvalg
-      NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
+NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
                                       erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)
             
-      RegData <- NorSpisUtvalg$RegData
-      utvalgTxt <- NorSpisUtvalg$utvalgTxt
+RegData <- NorSpisUtvalg$RegData
+utvalgTxt <- NorSpisUtvalg$utvalgTxt
 
       
       if (dim(RegData)[1] >= 0) {

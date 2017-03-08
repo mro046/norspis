@@ -47,7 +47,174 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
       sortAvtagende <- T
       variable <- 'Ingen'
       
+
       
+#--------FigGjsnGrVar: Tilrettelegging av variabler til FigGjsnGrVar
+if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging heter alder. Ikke testet enda...
+      #Alle skal ha alder
+      #Legeskjema.
+      RegData <- RegData[which(RegData[ ,'Alder'] >0), ]
+      RegData$Variabel <- RegData[ ,'Alder']
+      deltittel <- 'alder'
+      xaksetxt <- 'Alder (år)'
+}
+      
+if (valgtVar =='B08StartAldrProbl'){
+      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      RegData$Variabel <- RegData[ ,valgtVar]
+      deltittel <- 'alder ved start av problematikk'
+      xaksetxt <- 'Alder (år)'
+}
+      
+if (valgtVar =='B12cAldrForsteBeh'){
+      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      RegData$Variabel <- RegData[ ,valgtVar]
+      deltittel <- 'alder ved første behandling'
+      xaksetxt <- 'Alder (år)'
+}
+      
+if (valgtVar %in% c('SCL90TGSI',
+                    'SCL90TSomatisering', 
+                    'SCL90TTvang',
+                    'SCL90TSensitivitet',
+                    'SCL90TDepresjon',
+                    'SCL90TAngst', 
+                    'SCL90TFiendlighet', 
+                    'SCL90TFobi', 
+                    'SCL90TParanoia', 
+                    'SCL90TPsykotisk'))
+{
+      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      RegData$Variabel <- RegData[ ,valgtVar]
+      deltittel <- switch(valgtVar, 
+                          SCL90TGSI = 'symptomtrykk: Global Severity Index, SCL-90-R',
+                          SCL90TSomatisering = 'symptomtrykk: Somatisering, SCL-90-R,',
+                          SCL90TTvang = 'symptomtrykk: Tvang, SCL-90-R',
+                          SCL90TSensitivitet = 'symptomtrykk: Sensitivitet, SCL-90-R',
+                          SCL90TDepresjon = 'symptomtrykk: Depresjon, SCL-90-R',
+                          SCL90TAngst = 'symptomtrykk: Angst, SCL-90-R',
+                          SCL90TFiendlighet = 'symptomtrykk: Fiendtlighet, SCL-90-R',
+                          SCL90TFobi = 'symptomtrykk: Fobi, SCL-90-R',
+                          SCL90TParanoia = 'symptomtrykk: Paranoia, SCL90-R',
+                          SCL90TPsykotisk = 'symptomtrykk: Psykotisisme, SCL90-R')
+      xaksetxt <- switch(valgtVar, 
+                         SCL90TGSI = 'Global Severity Index (T-skår; mean=50, std=10)',
+                         SCL90TSomatisering = 'Somatisering (T-skår; mean=50, std=10)',
+                         SCL90TTvang = 'Tvang (T-skår; mean=50, std=10)',
+                         SCL90TSensitivitet = 'Sensitivitet (T-skår; mean=50, std=10)',
+                         SCL90TDepresjon = 'Depresjon (T-skår; mean=50, std=10)',
+                         SCL90TAngst = 'Angst (T-skår; mean=50, std=10)',
+                         SCL90TFiendlighet = 'Fiendtlighet (T-skår; mean=50, std=10)',
+                         SCL90TFobi = 'Fobi (T-skår; mean=50, std=10)',
+                         SCL90TParanoia = 'Paranoia (T-skår; mean=50, std=10)',
+                         SCL90TPsykotisk = 'Psykotisisme (T-skår; mean=50, std=10)')
+}
+      
+if (valgtVar %in% c('EDEQ60GlobalScore',
+                    'EDEQ60Restriksjon', 
+                    'EDEQ60Kroppsform', 
+                    'EDEQ60Spising', 
+                    'EDEQ60Vekt'))
+{
+      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      RegData$Variabel <- RegData[ ,valgtVar]
+      deltittel <- switch(valgtVar, 
+                          EDEQ60GlobalScore = 'symptomtrykk: Global-skåre, EDE-Q 6.0',
+                          EDEQ60Restriksjon = 'symptomtrykk: Restriksjon, EDE-Q 6.0',
+                          EDEQ60Kroppsform = 'symptomtrykk: Kroppsform, EDE-Q 6.0',
+                          EDEQ60Spising = 'symptomtrykk: Spising, EDE-Q 6.0',
+                          EDEQ60Vekt = 'symptomtrykk: Vekt,EDE-Q 6.0')
+      xaksetxt <- switch(valgtVar, 
+                         EDEQ60GlobalScore = 'Global-skåre',
+                         EDEQ60Restriksjon = 'Restriksjon',
+                         EDEQ60Kroppsform = 'Kroppsform',
+                         EDEQ60Spising = 'Spising',
+                         EDEQ60Vekt = 'Vekt')
+}
+      
+      
+if (valgtVar %in% c('RAND36FysFunk', 
+                    'RAND36RollebegFys', 
+                    'RAND36RollebegEmo', 
+                    'RAND36Tretthet', 
+                    'RAND36MentalHelse', 
+                    'RAND36SosialFunk', 
+                    'RAND36Smerte', 
+                    'RAND36GenHelse', 
+                    'RAND36EndringHelse'))
+{
+      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      RegData$Variabel <- RegData[ ,valgtVar]
+      deltittel <- switch(valgtVar, 
+                          RAND36FysFunk = 'skåre: Global skåre, RAND-36',
+                          RAND36RollebegFys = 'skåre: Rollefungering (fysisk), RAND-36',
+                          RAND36RollebegEmo = 'skåre: Rollefungering (emosjonelt), RAND-36',
+                          RAND36Tretthet = 'skåre: Vitalitet, RAND-36',
+                          RAND36MentalHelse = 'skåre: Mental helse, RAND-36',
+                          RAND36SosialFunk = 'skåre: Sosial fungering, RAND-36',
+                          RAND36Smerte = 'skåre: Smerte, RAND-36',
+                          RAND36GenHelse = 'skåre: Generell helse, RAND-36',
+                          RAND36EndringHelse ='skåre: Endring i helse, RAND-36')
+      xaksetxt <- switch(valgtVar, 
+                         RAND36FysFunk = 'Global skåre',
+                         RAND36RollebegFys = 'Rollefungering (fysisk)',
+                         RAND36RollebegEmo = 'Rollefungering (emosjonelt)',
+                         RAND36Tretthet = 'Vitalitet',
+                         RAND36MentalHelse = 'Mental helse',
+                         RAND36SosialFunk = 'Sosial fungering',
+                         RAND36Smerte = 'Smerte',
+                         RAND36GenHelse = 'Generell helse',
+                         RAND36EndringHelse ='Endring i helse')
+}
+    
+      
+      
+      
+#      
+#     
+#        
+#--------FigAndelerGrVar: (Tilrettelegging av variabel som) brukes i figurtypen FigAndelerGrVar:
+      
+if (valgtVar=='alder_u18') {	#brukes i: NorspisFigAndelerGrVar
+      RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
+      RegData$Variabel[which(RegData$Alder<18)] <- 1 
+      tittel <- 'Pasienter under 18 år'
+}
+      
+if (valgtVar=='BehDodUnderBeh') {	#brukes i: NorspisFigAndelerGrVar
+      RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
+      RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
+      tittel <- 'Mortalitet'
+}      
+      
+if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
+      RegData$Variabel <- RegData$DiagVDiabetes
+      tittel <- 'Diabetes'
+      sortAvtagende <- FALSE
+}
+      
+
+#     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+#          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
+#         RegData$Variabel <-      
+      
+#VentetidOverXMnd <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y.%m.%d"),
+#strptime(RegData$RegHenvMottattDato, format = "%Y.%m.%d"),units="weeks")
+      
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+#     
+#     
+#     
+#--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
       
 if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
@@ -285,7 +452,9 @@ if (valgtVar=='DiagVSF') {
             tittel <- 'Pasienttilfredshet: "Hvordan vurderer du utfallet av mottatt behandling?"'
       }
       
-      
+
+            
+
       
 #if (MedPsykofarmaka == 1) Hvordan legge inn betingelsen?
 if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh')) {
@@ -332,86 +501,7 @@ if (valgtVar=='B01Sivilstatus') {
 
 
 
-      
-if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprIndikSmerter',
-                    'OprIndikMyelopati', 'Radiologi')){
-      flerevar <-  1
-      
-      utvalg <- c('Hoved', 'Rest')	#Hoved vil angi enhet, evt. hele landet hvis ikke gjøre sml, 'Rest' utgjør sammenligningsgruppa
-      RegDataLand <- RegData
-      NHoved <-length(indHoved)
-      NRest <- length(indRest)
-      
-      for (teller in 1:(medSml+1)) {
-            #  Variablene kjøres for angitt indeks, dvs. to ganger hvis vi skal ha sammenligning med Resten.
-            RegData <- RegDataLand[switch(utvalg[teller], Hoved = indHoved, Rest=indRest), ]
-            
-            
-            if (valgtVar=='OprIndik') {
-                  retn <- 'H'
-                  #OprIndiasjonasjonUfylt <>1 - tom variabel,
-                  #Svært få (ca 20 av 3000) har tom registrering. Setter derfor felles N lik alle reg.
-                  indSmerterk <- which(RegData$OprIndikSmerter == 1)
-                  indMyelopati <- which(RegData$OprIndikMyelopati == 1)
-                  Nmyelopati <- sum(RegData$OprIndikMyelopati, na.rm=T)
-                  AntVar <- cbind(
-                        #length(indAnnet),
-                        Pareser = sum(RegData$OprIndikParese, na.rm=T), #length(indPareser),
-                        Myelopati = length(indMyelopati),
-                        Smerter = length(indSmerterk),
-                        SmerterMyelop = length(intersect(indMyelopati, indSmerterk)),
-                        Annet = sum(RegData$OprIndikAnnet, na.rm=T)
-                  )
-                  NVar<-rep(dim(RegData)[1], length(AntVar))
-                  grtxt <- c('Pareser', 'Myelopati', 'Smerter', 'Sm. og Myelop.', 'Annet')
-                  tittel <- 'Operasjonsårsak'
-            }
-            
-            
-            if (valgtVar=='Komorbiditet') {
-                  retn <- 'H'
-                  RegData <- RegData[which(RegData$AndreRelSykdommer>-1), ]
-                  RegData$SykdReumatisk <- 0
-                  indSykdReumatisk <- (RegData$SykdAnnenreumatisk ==1 | (RegData$SykdBechtrew==1 | RegData$SykdReumatoidartritt==1))
-                  RegData$SykdReumatisk[indSykdReumatisk] <- 1
-                  Variable <- c('SykdAnnenendokrin', 'SykdAnnet','SykdCarpalTunnelSyndr', 'SykdCerebrovaskular',
-                                'SykdDepresjonAngst', 'SykdHjertekar', 'SykdHodepine', 'SykdHypertensjon', 'SykDiabetesMellitus',
-                                'SykdKreft', 'SykdKroniskLunge', 'SykdKroniskNevrologisk', 'SykdKrSmerterMuskelSkjelSyst',
-                                'SykdOsteoporose', 'SykdSkulderImpigment', 'SykdWhiplashNorSpis')
-                  AntVar <- colSums (RegData[ ,c("SykdReumatisk", Variable, "AndreRelSykdommer")], na.rm = TRUE)
-                  NVar<-rep(dim(RegData)[1], length(AntVar))
-                  grtxt <- c('Annen Reumatisk', 'Annen endokrin', 'Andre', 'Carpal TS', 'Cerebrovaskulær', 'Depresjon/Angst',
-                             'Hjerte-/Karsykd.', 'Hodepine', 'Hypertensjon', 'Diabetes', 'Kreft', 'Kr. lungesykdom',
-                             'Kr. nevrologisk', 'Kr. muskel/skjelettsm.', 'Osteoporose', 'Skuldersyndrom', 'Whiplash/skade', 'Tot. komorb')
-                  
-                  tittel <- 'Komorbiditet'
-            }
-            
-            if (valgtVar=='OprIndikSmerter') {
-                  retn <- 'H'
-                  indSmerteArm <- which(RegData$OprIndikSmerteLokArm == 1)
-                  indSmerteNorSpis <- which(RegData$OprIndikSmerteLokNorSpis == 1)
-                  Nsmerte <- sum(RegData$OprIndikSmerter, na.rm=T)
-                  AntVar <- cbind(
-                        Smerte = Nsmerte,
-                        SmerteArm = length(indSmerteArm),
-                        SmerteNorSpis = length(indSmerteNorSpis),
-                        SmerteArmNorSpis = length(intersect(indSmerteArm, indSmerteNorSpis))
-                  )
-                  NVar<- cbind(
-                        Smerte = length(which(RegData$OprIndikSmerter > -1)),
-                        SmerteArm = Nsmerte,
-                        SmerteNorSpis = Nsmerte,
-                        SmerteArmNorSpis = Nsmerte
-                  )
-                  grtxt <- c('Smerter', '...Arm', '...Nakke', '...Arm og Nakke')
-                  tittel <- 'Operasjonsårsak: Smerter'
-            }
-      }
-}
-
-
-
+ 
 
       
       

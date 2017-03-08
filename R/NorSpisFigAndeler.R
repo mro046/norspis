@@ -176,7 +176,7 @@ lagFig <- 0
 
 #-----------Figur---------------------------------------
 #Hvis for få observasjoner..
-if (dim(RegData)[1] < 0 | (N$Hoved<0 )) {
+if (dim(RegData)[1] < 0 | (max(N$Hoved)<0 )) {    #HUSK: endre begge 0 fra 0 til 10 når lager endelig pakke...
 FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()

@@ -34,133 +34,12 @@ NorSpisFigGjsnGrVar <- function(RegData, valgtVar, valgtMaal='Gjsn', datoFra='20
       }
       
 #------- Tilrettelegge variable
-#      NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
-#      RegData <- NorSpisVarSpes$RegData
-      
-#Disse skal flyttes til NorSpisVarTilrettelegg:
-      
-            
-      if (valgtVar == 'Alder') {
-            #Alle skal ha alder
-            #Legeskjema.
-            RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-            RegData$Variabel <- RegData[ ,valgtVar]
-            deltittel <- 'alder'
-            xaksetxt <- 'Alder (år)'
-      }
-      if (valgtVar =='B08StartAldrProbl'){
-            RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-            RegData$Variabel <- RegData[ ,valgtVar]
-            deltittel <- 'alder ved start av problematikk'
-            xaksetxt <- 'Alder (år)'
-      }
+NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
+ #-------og hente inn RegData og parametre fra tilretteleggingen
+RegData <- NorSpisVarSpes$RegData
+deltittel <- NorSpisVarSpes$deltittel
+xaksetxt <- NorSpisVarSpes$tittel
 
-      if (valgtVar =='B12cAldrForsteBeh'){
-            RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-            RegData$Variabel <- RegData[ ,valgtVar]
-            deltittel <- 'alder ved første behandling'
-            xaksetxt <- 'Alder (år)'
-      }
-      
-      if (valgtVar %in% c('SCL90TGSI',
-                          'SCL90TSomatisering', 
-                          'SCL90TTvang',
-                          'SCL90TSensitivitet',
-                          'SCL90TDepresjon',
-                          'SCL90TAngst', 
-                          'SCL90TFiendlighet', 
-                          'SCL90TFobi', 
-                          'SCL90TParanoia', 
-                          'SCL90TPsykotisk'))
-      {
-            RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-            RegData$Variabel <- RegData[ ,valgtVar]
-            deltittel <- switch(valgtVar, 
-                                SCL90TGSI = 'symptomtrykk: Global Severity Index, SCL-90-R',
-                                SCL90TSomatisering = 'symptomtrykk: Somatisering, SCL-90-R,',
-                                SCL90TTvang = 'symptomtrykk: Tvang, SCL-90-R',
-                                SCL90TSensitivitet = 'symptomtrykk: Sensitivitet, SCL-90-R',
-                                SCL90TDepresjon = 'symptomtrykk: Depresjon, SCL-90-R',
-                                SCL90TAngst = 'symptomtrykk: Angst, SCL-90-R',
-                                SCL90TFiendlighet = 'symptomtrykk: Fiendtlighet, SCL-90-R',
-                                SCL90TFobi = 'symptomtrykk: Fobi, SCL-90-R',
-                                SCL90TParanoia = 'symptomtrykk: Paranoia, SCL90-R',
-                                SCL90TPsykotisk = 'symptomtrykk: Psykotisisme, SCL90-R')
-            xaksetxt <- switch(valgtVar, 
-                                SCL90TGSI = 'Global Severity Index (T-skår; mean=50, std=10)',
-                                SCL90TSomatisering = 'Somatisering (T-skår; mean=50, std=10)',
-                                SCL90TTvang = 'Tvang (T-skår; mean=50, std=10)',
-                                SCL90TSensitivitet = 'Sensitivitet (T-skår; mean=50, std=10)',
-                                SCL90TDepresjon = 'Depresjon (T-skår; mean=50, std=10)',
-                                SCL90TAngst = 'Angst (T-skår; mean=50, std=10)',
-                                SCL90TFiendlighet = 'Fiendtlighet (T-skår; mean=50, std=10)',
-                                SCL90TFobi = 'Fobi (T-skår; mean=50, std=10)',
-                                SCL90TParanoia = 'Paranoia (T-skår; mean=50, std=10)',
-                                SCL90TPsykotisk = 'Psykotisisme (T-skår; mean=50, std=10)')
-      }
-      
-      
-
-if (valgtVar %in% c('EDEQ60GlobalScore',
-                    'EDEQ60Restriksjon', 
-                    'EDEQ60Kroppsform', 
-                    'EDEQ60Spising', 
-                    'EDEQ60Vekt'))
-      {
-            RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-            RegData$Variabel <- RegData[ ,valgtVar]
-            deltittel <- switch(valgtVar, 
-                                EDEQ60GlobalScore = 'symptomtrykk: Global-skåre, EDE-Q 6.0',
-                                EDEQ60Restriksjon = 'symptomtrykk: Restriksjon, EDE-Q 6.0',
-                                EDEQ60Kroppsform = 'symptomtrykk: Kroppsform, EDE-Q 6.0',
-                                EDEQ60Spising = 'symptomtrykk: Spising, EDE-Q 6.0',
-                                EDEQ60Vekt = 'symptomtrykk: Vekt,EDE-Q 6.0')
-            xaksetxt <- switch(valgtVar, 
-                                EDEQ60GlobalScore = 'Global-skåre',
-                                EDEQ60Restriksjon = 'Restriksjon',
-                                EDEQ60Kroppsform = 'Kroppsform',
-                                EDEQ60Spising = 'Spising',
-                                EDEQ60Vekt = 'Vekt')
-      }
-
-
-      
-
-if (valgtVar %in% c('RAND36FysFunk', 
-                    'RAND36RollebegFys', 
-                    'RAND36RollebegEmo', 
-                    'RAND36Tretthet', 
-                    'RAND36MentalHelse', 
-                    'RAND36SosialFunk', 
-                    'RAND36Smerte', 
-                    'RAND36GenHelse', 
-                    'RAND36EndringHelse'))
-      {
-            RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-            RegData$Variabel <- RegData[ ,valgtVar]
-            deltittel <- switch(valgtVar, 
-                                RAND36FysFunk = 'skåre: Global skåre, RAND-36',
-                                RAND36RollebegFys = 'skåre: Rollefungering (fysisk), RAND-36',
-                                RAND36RollebegEmo = 'skåre: Rollefungering (emosjonelt), RAND-36',
-                                RAND36Tretthet = 'skåre: Vitalitet, RAND-36',
-                                RAND36MentalHelse = 'skåre: Mental helse, RAND-36',
-                                RAND36SosialFunk = 'skåre: Sosial fungering, RAND-36',
-                                RAND36Smerte = 'skåre: Smerte, RAND-36',
-                                RAND36GenHelse = 'skåre: Generell helse, RAND-36',
-                                RAND36EndringHelse ='skåre: Endring i helse, RAND-36')
-            xaksetxt <- switch(valgtVar, 
-                                RAND36FysFunk = 'Global skåre',
-                                RAND36RollebegFys = 'Rollefungering (fysisk)',
-                                RAND36RollebegEmo = 'Rollefungering (emosjonelt)',
-                                RAND36Tretthet = 'Vitalitet',
-                                RAND36MentalHelse = 'Mental helse',
-                                RAND36SosialFunk = 'Sosial fungering',
-                                RAND36Smerte = 'Smerte',
-                                RAND36GenHelse = 'Generell helse',
-                                RAND36EndringHelse ='Endring i helse')
-      }
-
-      
 #------- Gjøre utvalg
       NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
                                      erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)  #SpmLena: Trenger vi alle disse innparamentrene (kokt fra NorSpisFigAndlerGrVar. 
@@ -189,10 +68,6 @@ if (valgtVar %in% c('RAND36FysFunk',
             Ngr <- 0}
       
       AntGr <- length(which(Ngr >= Ngrense))	#length(which(Midt>0))  #MULIGENS OVERFLØDIG - KOMMER LENGER NED...
-      
-      
-      
-      
       
       
       
