@@ -71,12 +71,23 @@ variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
 #------------------------------ Andeler per enhet (evt. annen grupperingsvariabel) --------------------------
 
 valgtVar <- 'alder_u18'
-outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
+outfile <- paste0(valgtVar, '_ford.png')#Navn angis av Jasper
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
                   grVar=grVar, outfile=outfile, 
                   minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
 
-#(Mads-fjerne alfanum når NorSpis-pakke OK) #Teste variables
-#(Mads-fjerne alfanum når NorSpis-pakke OK) variable <- c('Alder', 'Education')
+
+#------------------------------ Gjennomsnitt/median per enhet (evt. annen grupperingsvariabel) --------------------------
+
+grVar <- 'SykehusNavn'
+valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
+valgtVar <- 'Alder' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, 
+      #SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
+outfile <- paste0(valgtVar, 'GjMed.png')
+
+#source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
+NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
+                    minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
+
 
 

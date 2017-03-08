@@ -11,9 +11,7 @@ NorSpisFigAndelerGrVar(RegData, valgtVar, datoFra = 0, datoTil = 0,
 \arguments{
 \item{RegData}{Dataramme med alle nødvendige variable fra registeret}
 
-\item{valgtVar}{Hvilken variabel som skal visualiseres. Se \strong{Details} for oversikt.
-
-Detajer...:}
+\item{valgtVar}{Hvilken variabel som skal visualiseres. Se \strong{Details} for oversikt.}
 
 \item{datoFra}{Hoveddato, fra og med. Standard: '2012-01-01'}
 
@@ -39,7 +37,7 @@ Søylediagram med AggVerdier av valgt variabel for hvert sykehus
 }
 \description{
 Funksjon som genererer en figur med AggVerdier av en gitt variabel for ei valgt gruppering, 
-f.eks. enheter. I øyeblikket benytter funksjonen bare 'ShNavn' som grupperingsvariabel, men 
+f.eks. enheter. I øyeblikket benytter funksjonen bare 'EnhNavn' som grupperingsvariabel, men 
 andre valg kan lett inkluderes.
 }
 \details{
@@ -60,4 +58,3 @@ Argumentet \emph{valgtVar} har følgende valgmuligheter:
 Funksjonen benytter funksjonene: NorSpisRegDataSQL, NorSpisPreprosess, NorSpisVarTilrettelegg, NorSpisUtvalg
 og NIRFigSoyler
 }
-

@@ -220,6 +220,7 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
             flerevar <- 1
             variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
             retn <- 'H'
+			apply(RegData[,variable], MARGIN=2, FUN=, ...)
             #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
             grtxt <- c('FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
             ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
@@ -247,6 +248,19 @@ if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg',
                        PT02BleInvolv = 'Pasienttilfredshet: Ble nære involvert i behandlingen?',
                        PT04KontaktBrukerorg = 'Pasienttilfredshet: Noen gang kontak med brukerorganisasjoner?',
                        PT05OrientertBrukerorg = 'Pasienttilfredshet: Informasjon om brukerorganisasjoner ila. behandlingen?')
+}
+#STARTET Endre til en figur med Pasienttilfredshet (flerevar=1)      
+if (valgtVar == 'pasienttilfredshet') {
+#Her har vi ulik N for de ulike variablene.(?)
+flerevar <- 1 
+variable <- c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
+                    'PT05OrientertBrukerorg')) {
+	  grtxt <- c'Ønske om andre nære i beh.', 'Nære involvert i beh.', 'Kontakt med brukerorg.?',
+                       'Fått info om brukerorg.')
+      indDum <- which(RegData[ ,valgtVar] %in% c(0,1))
+      RegData <- RegData[indDum, ]
+      RegData$VariabelGr <- factor(RegData[ ,valgtVar], levels = c(0,1))
+      tittel <- 'Pasienttilfredshet' 
 }
 
 if (valgtVar=='DiagVSF') {
@@ -310,7 +324,10 @@ if (valgtVar=='B01Sivilstatus') {
       tittel <- 'Sivilstatus'
 }
       
-#Lage indekser for:PO01Forstod	PO02Tillit	PO03InfoDiagnose	PO04Tilpasset	PO05Involvert	PO06Organisert	PO07Tilfredsstillende	PO08Tilgjengelighet	PO09Utbytte	PO10Pasientsikkerhet
+#Lage indekser for:PO01Forstod	PO02Tillit	PO03InfoDiagnose	PO04Tilpasset	PO05Involvert	
+#PO06Organisert	PO07Tilfredsstillende	PO08Tilgjengelighet	PO09Utbytte	PO10Pasientsikkerhet
+
+
 
       
 if (valgtVar %in% c('Komorbiditet', 'KomplOpr', 'Kompl3mnd', 'OprIndik', 'OprIndikSmerter',

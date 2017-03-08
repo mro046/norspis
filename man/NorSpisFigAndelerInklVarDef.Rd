@@ -54,4 +54,3 @@ avhengig av hvor stor plass kategorinavnet til søyla tar.
     \item Utdanning: Utdanningsnivå
    }
 }
-

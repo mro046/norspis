@@ -9,9 +9,7 @@ NorSpisVarTilrettelegg(RegData, valgtVar, grVar = "")
 \arguments{
 \item{RegData}{Dataramme med alle nødvendige variable fra registeret}
 
-\item{valgtVar}{Hvilken variabel som skal visualiseres. Se \strong{Details} for oversikt.
-
-Detajer...:}
+\item{valgtVar}{Hvilken variabel som skal visualiseres. Se \strong{Details} for oversikt.}
 }
 \value{
 Definisjon av valgt variabel.
@@ -47,4 +45,3 @@ Argumentet \emph{enhetsUtvalg} har følgende valgmuligheter:
    \item 8: Egen region mot resten [NB: Mangler pt. variabel for region]
    	}
 }
-

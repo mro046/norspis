@@ -13,7 +13,6 @@
 #'
 #' @export
 
-
 NorSpisFigGjsnGrVar <- function(RegData, valgtVar, valgtMaal='Gjsn', datoFra='2012-04-01', datoTil='2050-12-31',
                          minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1, grVar='')
       
@@ -199,10 +198,10 @@ if (valgtVar %in% c('RAND36FysFunk',
       
 #FØLGENDE KOMMER FRA NakkeFigGjsnGrVar.R:
       #Ngrtxt <- paste(', N=', as.character(Ngr), sep='') #paste('N=', as.character(Ngr), sep='')
-      Ngrtxt <- paste('N=', as.character(Ngr), sep='') #paste('N=', as.character(Ngr), sep='')
+      Ngrtxt <- paste0('N=', as.character(Ngr)) #paste('N=', as.character(Ngr), sep='')
       indGrUt <- as.numeric(which(Ngr < Ngrense))
       if (length(indGrUt)==0) { indGrUt <- 0}
-      Ngrtxt[indGrUt] <- paste(' (<', Ngrense,')',sep='')	#paste('N<', Ngrense,sep='')
+      Ngrtxt[indGrUt] <- paste0(' (<', Ngrense,')')	#paste('N<', Ngrense,sep='')
       
       
       if (valgtMaal=='Med') {
@@ -222,7 +221,7 @@ if 	( max(Ngr) < Ngrense)	{#Dvs. hvis ALLE er mindre enn grensa.
       farger <- FigTypUt$farger
       plot.new()
       if (dim(RegData)[1]>0) {
-            tekst <- paste('Færre enn ', Ngrense, ' registreringer ved hvert av sykehusene', sep='')
+            tekst <- paste0('Færre enn ', Ngrense, ' registreringer ved hvert av sykehusene')
       } else {tekst <- 'Ingen registrerte data for dette utvalget'}
       title(main=tittel, cex=0.95)	#line=-8,
       text(0.5, 0.6, tekst, cex=1.2)

@@ -1,8 +1,8 @@
 Package: norspis
 Type: Package
 Title: Resultatrapporter for NorSpis
-Version: 0.1.0
-Date: 2016-08-17
+Version: 0.2.0
+Date: 2017-03-08
 Authors@R: c(person("Rohde", "Mads", email = "mads.kristian.rohde@nordlandssykehuset.no",
     role = "aut"), person("Olsen", "Lena", email = "Lena.Ringstad.Olsen@unn.no",
     role = c("cre", "aut")))
@@ -17,7 +17,7 @@ Depends:
 Imports:
     plyr,
     xtable
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests:
     knitr,
     rmarkdown

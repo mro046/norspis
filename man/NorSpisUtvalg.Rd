@@ -36,4 +36,3 @@ hovedgruppa (hovedgrTxt) og gruppa det evt. sammenliknes mot (smltxt)
 \description{
 Funksjon som gjør utvalg av dataene, returnerer det filtrerte datasettet og utvalgsteksten.
 }
-
