@@ -63,6 +63,7 @@ NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil=
 
 NorSpisVarSpes <- NorSpisVarTilrettelegg(RegData=RegData, valgtVar=valgtVar)
 RegData <- NorSpisVarSpes$RegData
+flerevar <- NorSpisVarSpes$flerevar
 #Flere av variablene fra NorSpisVarTilrettelegg hentet ut lengre ned.
 
 
@@ -89,30 +90,49 @@ medSml=NorSpisUtvalg$medSml
 # som 0.
 
       Andeler <- list(Hoved = 0, Rest =0)
-      N <- list(Hoved = 0, Rest =0)
-      Ngr <- list(Hoved = 0, Rest =0)
+      N <- list(Hoved = 0, Rest =0)   #Nevner
+      Ngr <- list(Hoved = 0, Rest =0) #Teller 
       ind <- NorSpisUtvalg$ind
       variable <- NorSpisVarSpes$variable
       
-      Ngr$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
+      Ngr$Hoved <- switch(as.character(flerevar), 
                           '0' = table(RegData$VariabelGr[ind$Hoved]),
-                          '1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
-      #N$ gjelder nå hvis samme totalutvalg for alle
-      N$Hoved <- switch(as.character(NorSpisVarSpes$flerevar), 
+                          #'1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
+                          '1' = apply(RegData[ind$Hoved,variable], MARGIN=2, 
+                                      FUN=function(x) sum(x == 1, na.rm=T)))
+      #N$ gjelder selv om totalutvalget er ulikt for de ulike variablene i flerevar
+      N$Hoved <- switch(as.character(flerevar), 
                         '0' = sum(Ngr$Hoved),	#length(ind$Hoved)- Kan inneholde NA
-                        '1' = length(ind$Hoved))
+                  #      '1' = length(ind$Hoved)
+                        '1' = apply(RegData[ind$Hoved,variable], MARGIN=2, 
+                                    FUN=function(x) sum(x %in% 0:1, na.rm=T)))
       Andeler$Hoved <- 100*Ngr$Hoved/N$Hoved
       
+      
+      
       if (NorSpisUtvalg$medSml==1) {
-            Ngr$Rest <- switch(as.character(NorSpisVarSpes$flerevar), 
+            Ngr$Rest <- switch(as.character(flerevar), 
                                '0' = table(RegData$VariabelGr[ind$Rest]),
-                               '1' = colSums(sapply(RegData[ind$Rest ,variable], as.numeric), na.rm=T))
-            N$Rest <- switch(as.character(NorSpisVarSpes$flerevar), 
+                               #'1' = colSums(sapply(RegData[ind$Rest ,variable], as.numeric), na.rm=T))
+                               '1' = apply(RegData[ind$Rest,variable], MARGIN=2, 
+                                           FUN=function(x) sum(x == 1, na.rm=T)))
+            N$Rest <- switch(as.character(flerevar), 
                              '0' = sum(Ngr$Rest),	#length(ind$Rest)- Kan inneholde NA
-                             '1' = length(ind$Rest))
+                             #'1' = length(ind$Rest)
+                             '1' = apply(RegData[ind$Rest,variable], MARGIN=2, 
+                                   FUN=function(x) sum(x %in% 0:1, na.rm=T)))
             Andeler$Rest <- 100*Ngr$Rest/N$Rest
       }
       
+      if(flerevar==1) {
+            Nfig$Hoved <- ifelse(min(N$Hoved)==max(N$Hoved),
+                                 min(N$Hoved[1]), 
+                                 paste0(min(N$Hoved),'-',max(N$Hoved)))
+            Nfig$Rest <- ifelse(min(N$Rest)==max(N$Rest),
+                                min(N$Rest[1]), 
+                                paste0(min(N$Rest),'-',max(N$Rest)))
+      } else {
+            Nfig <- N}
       
       grtxt2 <- paste0('(', sprintf('%.1f',Andeler$Hoved), '%)')
       yAkseTxt='Andel pasienter (%)'
@@ -187,7 +207,7 @@ fargeRest <- farger[3]
 antGr <- length(grtxt)
 lwdRest <- 1	#tykkelse på linja som repr. landet
 cexleg <- 1	#Størrelse på legendtekst
-
+               
 #Horisontale søyler
 if (retn == 'H') {
 	xmax <- max(c(Andeler$Hoved, Andeler$Rest),na.rm=T)*1.15
@@ -197,12 +217,12 @@ if (retn == 'H') {
 
 	if (medSml == 1) {
 		points(as.numeric(Andeler$Rest), pos, col=fargeRest,  cex=2, pch=18) #c("p","b","o"),
-		legend('top', c(paste0(hovedgrTxt, ' (N=', N$Hoved,')'),
-						paste0(smltxt, ' (N=', N$Rest,')')),
+		legend('top', c(paste0(hovedgrTxt, ' (N=', Nfig$Hoved,')'),
+						paste0(smltxt, ' (N=', Nfig$Rest,')')),
 			border=c(fargeHoved,NA), col=c(fargeHoved,fargeRest), bty='n', pch=c(15,18), pt.cex=2,
 			lty=NA, ncol=1,lwd=lwdRest, cex=cexleg) #
 		} else {
-		legend('top', paste0(hovedgrTxt, ' (N=', N$Hoved,')'),
+		legend('top', paste0(hovedgrTxt, ' (N=', Nfig$Hoved,')'),
 			border=NA, fill=fargeHoved, bty='n', ncol=1, cex=cexleg)
 		}
 }

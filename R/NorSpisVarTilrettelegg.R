@@ -217,19 +217,21 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
             # er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
             # som i kategorier av typen "Ukjent" kodes disse som NA, mens hvis de skal være med kodes de
             # som 0.
+            #Vi kan velge å sende tilbake alle variable som indikatorvariable, dvs. med 0,1,NA
+            #Eller vi kan gjøre beregninga her og sende tilbake teller og nevner for den sammensatte variabelen
             flerevar <- 1
             variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+            #Sjekk <- RegData[,variable]
             retn <- 'H'
-			apply(RegData[,variable], MARGIN=2, FUN=, ...)
-            #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-            grtxt <- c('FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+            grtxt <- c('Fysisk mishandl.', 'Psykisk mishandl.', 'Overgrep', 'Mobbing')
             ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
             ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
-            #dummydata <- RegData[, variable]
-            #dummydata <- matrix(NA, dim(RegData)[1],length(variable))
             RegData[ ,variable] <- NA
+            #RegData[,variable] <- 
             RegData[ ,variable][ind01] <- 0
             RegData[ ,variable][ind1] <- 1
+            #Beregne direkte:
+			#apply(RegData[,variable], MARGIN=2, FUN=function(x) sum(x %in% 0:1))
             tittel <- 'Negative hendelser'
       }
       
@@ -251,11 +253,12 @@ if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg',
 }
 #STARTET Endre til en figur med Pasienttilfredshet (flerevar=1)      
 if (valgtVar == 'pasienttilfredshet') {
-#Her har vi ulik N for de ulike variablene.(?)
-flerevar <- 1 
-variable <- c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
-                    'PT05OrientertBrukerorg')) {
-	  grtxt <- c'Ønske om andre nære i beh.', 'Nære involvert i beh.', 'Kontakt med brukerorg.?',
+      #IKKE KLAR!!
+      #Her har vi ulik N for de ulike variablene. 
+      flerevar <- 1 
+      variable <- c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
+                    'PT05OrientertBrukerorg') 
+	  grtxt <- c('Ønske om andre nære i beh.', 'Nære involvert i beh.', 'Kontakt med brukerorg.?',
                        'Fått info om brukerorg.')
       indDum <- which(RegData[ ,valgtVar] %in% c(0,1))
       RegData <- RegData[indDum, ]
