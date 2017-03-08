@@ -43,13 +43,13 @@ grVar <- 'EnhNavn'
 
 #------------------------------ Andeler flere var --------------------------
 
-valgtVar <- 'Alder'	#Må velge... NegHend, PT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner, 
+valgtVar <- 'NegHend'	#Må velge... NegHend, PT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner, 
             #MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, 
             #PT05OrientertBrukerorg, Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, 
             #Norsktalende, B05FullfortUtd, MedBMI, B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, 
             #B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
 
-outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
+outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald )
