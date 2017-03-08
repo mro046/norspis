@@ -226,12 +226,10 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
             grtxt <- c('Fysisk mishandl.', 'Psykisk mishandl.', 'Overgrep', 'Mobbing')
             ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
             ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
-            #dummydata <- RegData[, variable]
-            #dummydata <- matrix(NA, dim(RegData)[1],length(variable))
             RegData[ ,variable] <- NA
+            #RegData[,variable] <- 
             RegData[ ,variable][ind01] <- 0
             RegData[ ,variable][ind1] <- 1
-            #cbind(RegData[1:20,variable[1]], Sjekk[1:20, variable[1]])
             #Beregne direkte:
 			#apply(RegData[,variable], MARGIN=2, FUN=function(x) sum(x %in% 0:1))
             tittel <- 'Negative hendelser'

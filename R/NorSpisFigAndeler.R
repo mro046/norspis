@@ -90,15 +90,14 @@ medSml=NorSpisUtvalg$medSml
 # som 0.
 
       Andeler <- list(Hoved = 0, Rest =0)
-      N <- list(Hoved = 0, Rest =0)
-      Ngr <- list(Hoved = 0, Rest =0)
+      N <- list(Hoved = 0, Rest =0)   #Nevner
+      Ngr <- list(Hoved = 0, Rest =0) #Teller 
       ind <- NorSpisUtvalg$ind
       variable <- NorSpisVarSpes$variable
       
       Ngr$Hoved <- switch(as.character(flerevar), 
                           '0' = table(RegData$VariabelGr[ind$Hoved]),
                           #'1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
-                          #''1' = apply(RegData[ind$Hoved,variable], MARGIN=2, 
                           '1' = apply(RegData[ind$Hoved,variable], MARGIN=2, 
                                       FUN=function(x) sum(x == 1, na.rm=T)))
       #N$ gjelder selv om totalutvalget er ulikt for de ulike variablene i flerevar
@@ -125,6 +124,15 @@ medSml=NorSpisUtvalg$medSml
             Andeler$Rest <- 100*Ngr$Rest/N$Rest
       }
       
+      if(flerevar==1) {
+            Nfig$Hoved <- ifelse(min(N$Hoved)==max(N$Hoved),
+                                 min(N$Hoved[1]), 
+                                 paste0(min(N$Hoved),'-',max(N$Hoved)))
+            Nfig$Rest <- ifelse(min(N$Rest)==max(N$Rest),
+                                min(N$Rest[1]), 
+                                paste0(min(N$Rest),'-',max(N$Rest)))
+      } else {
+            Nfig <- N}
       
       grtxt2 <- paste0('(', sprintf('%.1f',Andeler$Hoved), '%)')
       yAkseTxt='Andel pasienter (%)'
@@ -199,11 +207,6 @@ fargeRest <- farger[3]
 antGr <- length(grtxt)
 lwdRest <- 1	#tykkelse på linja som repr. landet
 cexleg <- 1	#Størrelse på legendtekst
-if(flerevar==1) {
-      Nfig$Hoved <- paste0(min(N$Hoved),'-',max(N$Hoved))
-      Nfig$Rest <- paste0(min(N$Rest),'-',max(N$Rest))
-} else {
-      Nfig <- N}
                
 #Horisontale søyler
 if (retn == 'H') {
