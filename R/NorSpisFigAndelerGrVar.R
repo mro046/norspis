@@ -71,9 +71,9 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
        tittel <- 'Diabetes'
        sortAvtagende <- FALSE
  
-      if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
-            RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
-            RegData$Variabel <-      
+ #     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+  #          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
+   #         RegData$Variabel <-      
 
 
 #VentetidOverXMnd <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y.%m.%d"),

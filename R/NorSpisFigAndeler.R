@@ -92,6 +92,7 @@ medSml=NorSpisUtvalg$medSml
       Andeler <- list(Hoved = 0, Rest =0)
       N <- list(Hoved = 0, Rest =0)   #Nevner
       Ngr <- list(Hoved = 0, Rest =0) #Teller 
+      Nfig <- list(Hoved = 0, Rest =0) #figurtekst: N i legend
       ind <- NorSpisUtvalg$ind
       variable <- NorSpisVarSpes$variable
       
