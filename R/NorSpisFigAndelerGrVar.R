@@ -60,11 +60,29 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
             tittel <- 'Pasienter under 18 år'
       }
 
-      if (valgtVar=='diabetes') { #ikke klargjort
-       RegData$Variabel <- RegData$Dod30
-       tittel <- 'Opphold der pasienten døde innen 30 dager etter innleggelse'
+      if (valgtVar=='BehDodUnderBeh') {	
+            RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
+            RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
+            tittel <- 'Mortalitet'
+      }
+      
+      if (valgtVar=='DiagVDiabetes') {
+       RegData$Variabel <- RegData$DiagVDiabetes
+       tittel <- 'Diabetes'
        sortAvtagende <- FALSE
- }
+ 
+      if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+            RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
+            RegData$Variabel <-      
+
+
+#VentetidOverXMnd <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y.%m.%d"),
+#strptime(RegData$RegHenvMottattDato, format = "%Y.%m.%d"),units="weeks")
+
+                  
+                  
+                  
+}
 
 	  
 #------- Gjøre utvalg

@@ -1,11 +1,10 @@
-
 #library(rapbase)
 
 
 #-------------------------Hente data-------------------------------
 rm(list=ls())
-library(norspis)
 
+library(norspis)
 NorSpisForlop <- read.table('C:/Users/spa-ressp-2/NorSpisTestData/ForlopsOversikt2017-02-01.csv', sep=';',
                             header=T, encoding = 'UTF-8')
 NorSpisEnkeltledd <- read.table('C:/Users/spa-ressp-2/NorSpisTestData/EnkeltLeddNum2017-02-01.csv', sep=';', 
@@ -71,20 +70,21 @@ for (valgtVar in variable) {
                         reshID=reshID, outfile=outfile, minald=minald, maxald=maxald)
 }
 
- 
-
 #-------------------- Teste andeler per enhet (evt. annen grupperingsvariabel) --------------------------
-valgtVar <- 'alder_u18'
-grVar <- 'SykehusNavn'             #variabel til figuren andeler per enhet (tenk "valgtvar2")
+valgtVar <- 'DiagVDiabetes'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
+grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
-#source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')
 
-source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
+setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
+source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')
+
 
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
                        grVar=grVar, outfile=outfile, 
                        minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
+
+
 
 #------------------Teste gjennomsnitt per enhet
 
@@ -93,7 +93,7 @@ grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
 #source funksjonen hvis den (ved en feil) ikke kommer inn når man bygger pakken
-getwd()
+#getwd()
 setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
 
 source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
@@ -139,19 +139,6 @@ for (valgtVar in variable) {
       NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                           minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)      
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
