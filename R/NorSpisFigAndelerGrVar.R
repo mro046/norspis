@@ -29,7 +29,7 @@
 #' @export
 NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, 
                             minald=0, maxald=130, grVar='', erMann='', hentData=0, preprosess=1, 
-                            outfile='', lagFig=1)                                               #SpmLena: lagFig? Settes lik 0 lenger ned...
+                            outfile='', lagFig=1)                                   
       
       #aar=0,InnMaate=99,grType=99, 
                               

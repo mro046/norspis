@@ -46,7 +46,10 @@ enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av la
 outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 
-#--------------------Teste NorSpisFigAndeler
+
+#TESTE
+
+#---TESTE 1 NorSpisFigAndeler
 
 valgtVar <- 'Alder'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
 #MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
@@ -73,8 +76,12 @@ for (valgtVar in variable) {
                         reshID=reshID, outfile=outfile, minald=minald, maxald=maxald)
 }
 
-#-------------------- Teste NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) --------------------------
-valgtVar <- 'DiagVDiabetes'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
+
+
+
+#---TESTE 2 NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) 
+
+valgtVar <- 'VentetidOver2Uker'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes, VentetidOver2Uker
 grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
@@ -89,9 +96,9 @@ NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, 
 
 
 
-#------------------Teste FigGjsnGrVar(gjennomsnitt per enhet)
+#---TESTE 3 FigGjsnGrVar(gjennomsnitt per enhet)
 
-valgtVar <- 'AldersGjsn' #AldersGjsn, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
+valgtVar <- 'AlderGjsn' #AlderGjsn, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
@@ -144,6 +151,31 @@ for (valgtVar in variable) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#GAMMELT...KAN SIKKERT SLETTES:
 
 
 #------------------------------ Andel, per enhet --------------------------

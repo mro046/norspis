@@ -50,7 +50,7 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
 
       
 #--------FigGjsnGrVar: Tilrettelegging av variabler til FigGjsnGrVar
-if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging heter alder. Ikke testet enda...
+if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging heter alder.
       #Alle skal ha alder
       #Legeskjema.
       RegData <- RegData[which(RegData[ ,'Alder'] >0), ]
@@ -194,13 +194,16 @@ if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
 }
       
 
-#     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
-#          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
-#         RegData$Variabel <-      
+#avsluttet her24.03.17 - fungerer ikke 
+if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+                                   strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+      RegData$Variabel[which(RegData$Ventetid>2)] <- 1 
       
-#VentetidOverXMnd <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y.%m.%d"),
-#strptime(RegData$RegHenvMottattDato, format = "%Y.%m.%d"),units="weeks")
-      
+      tittel <- 'Ventetid over 2 uker'
+}
+
+  
 
       
       
