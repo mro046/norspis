@@ -205,42 +205,65 @@ if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
 
   
 
-      
-      
-      
-      
-      
-      
-      
-      
-      
-#     
-#     
-#     
 #--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
+
+if (valgtVar=='Alder') {
+gr <- c(0,seq(10,50,10),150)
+RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
+#grtxt <- c('0-11', '11-12', '13-14', '15-16', '17-18', '19-20', '21-25', '26-30', '31-35', '36-40', '41-45', '46-50', '51-60, '61+')
+grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+xAkseTxt <- 'Aldersgruppe'
+tittel <- 'Aldersfordeling'
+
+}
       
-if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
+if (valgtVar  %in% c('MedBMI','MedIsoBMIBGS','MedIsoBMICDC')) {
+      gr <- c(0,seq(10,30,2.5),150)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
+      xAkseTxt <- switch(valgtVar, 
+                         MedBMI = 'BMI',
+                         MedIsoBMIBGS = 'iso-BMI (BGS)',
+                         MedIsoBMICDC = 'iso-BMI (CDC)')
+      tittel <- switch(valgtVar, 
+                       MedBMI = 'BMI-fordeling',
+                       MedIsoBMIBGS = 'Fordeling iso-BMI (basert på BGS-normdata)',
+                       MedIsoBMICDC = 'Fordeling iso-BMI (basert på CDC-normdata)')
+}
+      
+#if (valgtVar=='MedBMI') {
+#      gr <- c(0, 18.5, 25, 30, 1000)
+#      #RegData$VariabelGr <- -1
+#      ind <- which(RegData$MedBMI>0)
+#      RegData <- RegData[ind, ]
+#      #RegData$VariabelGr[ind] <- RegData$MedBMI[ind]
+#      RegData$VariabelGr <- cut(RegData$MedBMI, breaks=gr, include.lowest=TRUE, right=FALSE)
+#      # RegData$VariabelGr[ind] <- cut(RegData[ind ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+#      # RegData$VariabelGr <- cut(RegData[,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+#      # grtxt <- c('', '<18,5', levels(RegData$VariabelGr)[3:(length(gr)-2)],'30+')
+#      grtxt <- c( '<18,5', '18,5-25', '25-30','30+')
+#      grtxt2 <- c('Undervekt', 'Normalvekt', 'Overvekt', 'Fedme')
+#      xAkseTxt <- "Body Mass Index"
+#      tittel <-  'Pasientenes BMI (Body Mass Index)'
+#}
+      
+      
+if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-      gr <- c(0,seq(5,50,5),150)
+      gr <- c(0,seq(5,30,5),150)
       #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
       #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
-      subtxt <- 'Aldersgruppe'
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')	#c(names(AndelLand)[-length(gr)], '90+')
+      xAkseTxt <- 'Aldersgruppe'
       tittel <- switch(valgtVar,
-                       Alder = 'Aldersfordeling',
                        B08StartAldrProbl = 'Alder da problemene startet',
                        B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
 }
 
-      #if (valgtVar=='Alder') {
-#gr <- c(0,seq(5,50,5),150)
-#RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
-#grtxt <- c('0-11', '11-12', '13-14', '15-16', '17-18', '19-20', '21-25', '26-30', '31-35', '36-40', '41-45', '46-50', '51-60, '61+')
-#grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
-#subtxt <- 'Aldersgruppe'
-#tittel <- 'Aldersfordeling'
-#}
+  
+      
+      
 
 if (valgtVar=='Norsktalende') {
       #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
@@ -271,22 +294,6 @@ if (valgtVar %in% c('B04PabegyntUtd', 'B05FullfortUtd')) {
       tittel <- 'Høyeste påbegynte utdanning'
 }
 
-
-if (valgtVar=='MedBMI') {
-  gr <- c(0, 18.5, 25, 30, 1000)
-  #RegData$VariabelGr <- -1
-  ind <- which(RegData$MedBMI>0)
-  RegData <- RegData[ind, ]
-  #RegData$VariabelGr[ind] <- RegData$MedBMI[ind]
-  RegData$VariabelGr <- cut(RegData$MedBMI, breaks=gr, include.lowest=TRUE, right=FALSE)
-  # RegData$VariabelGr[ind] <- cut(RegData[ind ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-  # RegData$VariabelGr <- cut(RegData[,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-  # grtxt <- c('', '<18,5', levels(RegData$VariabelGr)[3:(length(gr)-2)],'30+')
-  grtxt <- c( '<18,5', '18,5-25', '25-30','30+')
-  grtxt2 <- c('Undervekt', 'Normalvekt', 'Overvekt', 'Fedme')
-  subtxt <- "Body Mass Index"
-  tittel <-  'Pasientenes BMI (Body Mass Index)'
-}
 
 if (valgtVar=='B06Hovedaktivitet') {
   # 1=Heltidsarbeid, 2=Deltidsarbeid, 3=På arbeidsmarkedstiltak, 4=Vernepliktig, 5=Skoleelev/lærling, 6=Student, 7=Sykemeldt, 8=Ufør, 9=Annen
@@ -503,11 +510,6 @@ if (valgtVar=='B01Sivilstatus') {
 #PO06Organisert	PO07Tilfredsstillende	PO08Tilgjengelighet	PO09Utbytte	PO10Pasientsikkerhet
 
 
-
- 
-
-      
-      
       
 UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, retn=retn, #KImaal=KImaal, 
                tittel=tittel, variable= variable, flerevar=flerevar)  #, sortAvtagende=sortAvtagende

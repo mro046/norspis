@@ -5,8 +5,10 @@
 #'
 #' #' Argumentet \emph{valgtVar} har følgende valgmuligheter:
 #'    \itemize{
-#'     \item Alder: Aldersfordeling, 5-årige grupper
-#'     \item BMI: Pasientenes BMI (Body Mass Index)
+#'     \item Alder: Aldersfordeling, 10-årige grupper
+#'     \item MedBMI: Pasientenes BMI (Body Mass Index)
+#'     \item MedIsoBMIBGS
+#'     \item MedIsoBMICDC
 #'     \item Norsktalende: Snakker pasienten norsk
 #'     \item Utdanning: Utdanningsnivå
 #'     \item 
@@ -181,7 +183,7 @@ FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()
 	title(tittel)	#, line=-6)
-	legend('topleft',utvalgTxt, bty='n', cex=0.9, text.col=farger[1])
+	legend('topleft',utvalgTxt, bty='n', cex=0.1, text.col=farger[1])
 	text(0.5, 0.6, 'For få registreringer', cex=1.2)
 	if ( outfile != '') {dev.off()}
 
