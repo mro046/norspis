@@ -6,9 +6,12 @@
 #' #' Argumentet \emph{valgtVar} har følgende valgmuligheter:
 #'    \itemize{
 #'     \item Alder: Aldersfordeling, 10-årige grupper
-#'     \item MedBMI: Pasientenes BMI (Body Mass Index)
-#'     \item MedIsoBMIBGS
-#'     \item MedIsoBMICDC
+#'     \item MedBMISlutt: Pasientenes BMI ved slutt av behandling
+#'     \item MedBMIStart: Pasientenes BMI ved innkomst til behandling
+#'     \item MedIsoBMIBGSSlutt: Pasientenes iso-BMI (basert på BGS-normdata) ved slutten av behandlingen
+#'     \item MedIsoBMIBGSStart: Pasientenes iso-BMI (basert på BGS-normdata) ved innkomst 
+#'     \item MedIsoBMICDCSlutt: Pasientenes iso-BMI (basert på CDC-normdata) ved slutten av behandlingen
+#'     \item MedIsoBMICDCStart: Pasientenes iso-BMI (basert på CDC-normdata) ved innkomst 
 #'     \item Norsktalende: Snakker pasienten norsk
 #'     \item Utdanning: Utdanningsnivå
 #'     \item 

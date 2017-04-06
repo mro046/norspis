@@ -216,8 +216,11 @@ xAkseTxt <- 'Aldersgruppe'
 tittel <- 'Aldersfordeling'
 
 }
-      
-if (valgtVar  %in% c('MedBMI','MedIsoBMIBGS','MedIsoBMICDC')) {
+
+
+if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {
+      RegData <- RegData[which(RegData$RegRegtype >= 1 & RegData$RegRegtype <=4), ] #velger kun startregistreringer og utredninger (1=Utredning voksen, 2=Utredning ungdom/barn, 3=Startregistrering voksen, 4=Startregistrering ungdom/barn)
+      valgtVar <- sub("Start", "", valgtVar) #fjerner "Start" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
       gr <- c(0,seq(10,30,2.5),150)
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
@@ -226,11 +229,27 @@ if (valgtVar  %in% c('MedBMI','MedIsoBMIBGS','MedIsoBMICDC')) {
                          MedIsoBMIBGS = 'iso-BMI (BGS)',
                          MedIsoBMICDC = 'iso-BMI (CDC)')
       tittel <- switch(valgtVar, 
-                       MedBMI = 'BMI-fordeling',
-                       MedIsoBMIBGS = 'Fordeling iso-BMI (basert på BGS-normdata)',
-                       MedIsoBMICDC = 'Fordeling iso-BMI (basert på CDC-normdata)')
+                       MedBMI = 'BMI-fordeling ved innkomst',
+                       MedIsoBMIBGS = 'Fordeling iso-BMI ved innkomst (normdata: Bergen Growth Study (BGS))',
+                       MedIsoBMICDC = 'Fordeling iso-BMI ved innkomst (normdata: Centers for Disease Control and Prevention (CDC))')
 }
-      
+
+if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {
+      RegData <- RegData[which(RegData$RegRegtype == 5 | RegData$RegRegtype ==6 | RegData$RegRegtype ==98 | RegData$RegRegtype ==99), ] #velger kun sluttregistreringer og avbrudd (5=Sluttregistrering voksen, 6=Sluttregistrering ungdom/barn, 98=Avbrutt behandling voksen, 99=Avbrutt behandling ungdom/barn).Merk: Kan streng tatt fjerne 98 og 99 her siden BMI ikke måles ved avbrudd
+      valgtVar <- sub("Slutt", "", valgtVar) #fjerner "Slut" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
+      gr <- c(0,seq(10,30,2.5),150)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
+      xAkseTxt <- switch(valgtVar, 
+                         MedBMI = 'BMI',
+                         MedIsoBMIBGS = 'iso-BMI (BGS)',
+                         MedIsoBMICDC = 'iso-BMI (CDC)')
+      tittel <- switch(valgtVar, 
+                       MedBMI = 'BMI-fordeling ved utskriving',
+                       MedIsoBMIBGS = 'Fordeling iso-BMI ved utskriving (normdata: Bergen Growth Study (BGS))',
+                       MedIsoBMICDC = 'Fordeling iso-BMI ved utskriving (normdata: Centers for Disease Control and Prevention (CDC))')
+}
+           
 #if (valgtVar=='MedBMI') {
 #      gr <- c(0, 18.5, 25, 30, 1000)
 #      #RegData$VariabelGr <- -1

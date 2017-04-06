@@ -51,26 +51,20 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 #---TESTE 1 NorSpisFigAndeler
 
-valgtVar <- 'MedIsoBMICDC'
+valgtVar <- 'B12cAldrForsdiazepiner' #må velge
 
-
-#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, 
-#MedBenzodiazepiner,MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg,
-#PT05OrientertBrukerorg,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, NegHend, Norsktalende, 
-#B05FullfortUtd, MedBMI,B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl,
-#B19Overgrep, B20Mobbing, 
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
 
       #--------------------teste flere/alle variabler
 variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
-               "B07Hovedinntekt", "B08StartAldrProbl", "B12cAldrForsdiazepiner", "MedBMI",       
-               "MedNevroleptika", "NegHend", "Norsktalende", "PT01OnsteBeh", "B12TidlBehSF", 
-               "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",   
-               "BehUtfallsvurdSamlet", "MedAntidepressiva", ,"MedBenzoketInvolv","MedBMI",
-               "MedIsoBMIBGS","MedIsoBMICDC", "PT02BleInvolv",
-               "PT03Utfallsvurd", "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")                #sortert alfabetisk
+               "B07Hovedinntekt", "B08StartAldrProbl", #"B12cAldrForsdiazepiner",
+               "B12TidlBehSF","B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",   
+               "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner","MedBMISlutt","MedBMIStart",
+               "MedNevroleptika", "NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
+               "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
+               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")                #sortert alfabetisk
 
 
 for (valgtVar in variable) {
