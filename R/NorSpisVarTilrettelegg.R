@@ -249,7 +249,8 @@ if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {
                        MedIsoBMIBGS = 'Fordeling iso-BMI ved utskriving (normdata: Bergen Growth Study (BGS))',
                        MedIsoBMICDC = 'Fordeling iso-BMI ved utskriving (normdata: Centers for Disease Control and Prevention (CDC))')
 }
-           
+      
+      
 #if (valgtVar=='MedBMI') {
 #      gr <- c(0, 18.5, 25, 30, 1000)
 #      #RegData$VariabelGr <- -1
@@ -265,6 +266,20 @@ if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {
 #      xAkseTxt <- "Body Mass Index"
 #      tittel <-  'Pasientenes BMI (Body Mass Index)'
 #}
+
+      
+#PÅBEGYNT IKKE FERDIG... 
+if (valgtVar=='VentetidKat') {
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+                                   strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+      RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
+      gr <- c(0,seq(2,16,2),150)
+      RegData$VariabelGr <- cut(RegData$Ventetid, breaks=gr, include.lowest= TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '16+')
+      xAkseTxt <- 'Uker'
+      tittel <- 'Ventetid'
+}
+      
       
       
 if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {
@@ -287,7 +302,7 @@ if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {
 if (valgtVar=='Norsktalende') {
       #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
       grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent')
-      indDum <- which(as.character(RegData$Norsktalende) %in% grtxt[-4])
+      indDum <- which(as.character(RegData$Norsktalende) %in% grtxt[-1])
       RegData$VariabelGr[indDum] <- RegData$Norsktalende[indDum]
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9))
       tittel <- 'Norsktalende'

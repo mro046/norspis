@@ -51,7 +51,7 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 #---TESTE 1 NorSpisFigAndeler
 
-valgtVar <- 'B12cAldrForsdiazepiner' #må velge
+valgtVar <- 'VentetidKat' #må velge
 
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,

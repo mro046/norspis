@@ -14,6 +14,7 @@
 #'     \item MedIsoBMICDCStart: Pasientenes iso-BMI (basert på CDC-normdata) ved innkomst 
 #'     \item Norsktalende: Snakker pasienten norsk
 #'     \item Utdanning: Utdanningsnivå
+#'     \item VentetidKat: Ventetid, 2-ukers grupper 
 #'     \item 
 #'    }
 #'
