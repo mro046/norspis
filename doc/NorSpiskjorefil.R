@@ -51,20 +51,21 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 #---TESTE 1 NorSpisFigAndeler
 
-valgtVar <- 'VentetidKat' #må velge
+valgtVar <- 'B25Avhengighet' #må velge
 
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
 
       #--------------------teste flere/alle variabler
-variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
-               "B07Hovedinntekt", "B08StartAldrProbl", #"B12cAldrForsdiazepiner",
-               "B12TidlBehSF","B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",   
+variable <- c( "Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+               "B07Hovedinntekt", "B08StartAldrProbl",'B11FamilieSF', "B12TidlBehSF",'B12cAldrForsteBeh',
+               "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing", "B21SelvskadTidl",
+               "B22SelvskadSisteAr", "B23SelvmordFTidl", "B24SelvmordFSisteAr",    
                "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner","MedBMISlutt","MedBMIStart",
-               "MedNevroleptika", "NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
+               "MedNevroleptika", "B25Avhengighet","NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
                "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
-               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")                #sortert alfabetisk
+               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )                #sortert alfabetisk
 
 
 for (valgtVar in variable) {
@@ -79,7 +80,7 @@ for (valgtVar in variable) {
 
 #---TESTE 2 NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) 
 
-valgtVar <- 'VentetidOver2Uker'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes, VentetidOver2Uker
+valgtVar <- 'B12cAldrForsteBeh'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes, VentetidOver2Uker
 grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
