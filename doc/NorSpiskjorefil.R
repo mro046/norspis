@@ -51,7 +51,7 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 #---TESTE 1 NorSpisFigAndeler
 
-valgtVar <- 'B25Avhengighet' #må velge
+valgtVar <- 'H04KognitiveProbl' #må velge
 
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
@@ -61,11 +61,13 @@ NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoT
 variable <- c( "Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
                "B07Hovedinntekt", "B08StartAldrProbl",'B11FamilieSF', "B12TidlBehSF",'B12cAldrForsteBeh',
                "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing", "B21SelvskadTidl",
-               "B22SelvskadSisteAr", "B23SelvmordFTidl", "B24SelvmordFSisteAr",    
+               "B22SelvskadSisteAr", "B23SelvmordFTidl", "B24SelvmordFSisteAr", "B25Avhengighet",    
                "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner","MedBMISlutt","MedBMIStart",
                "MedNevroleptika", "B25Avhengighet","NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
                "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
-               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )                #sortert alfabetisk
+               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )              
+            #sortert alfabetisk
+#fikse og legge inn over: DiagVSF, alle HoNOS- og HoNOSCA-leddene
 
 
 for (valgtVar in variable) {

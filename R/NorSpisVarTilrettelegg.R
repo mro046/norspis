@@ -451,7 +451,62 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
                        B25Avhengighet = 'Misbruk/avhengighet')
 }
       
+if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA04Rusmisbruk', 'HCA05SkoleSprak',
+    'HCA06FysiskProblem', 'HCA07Hallusinasjoner', 'HCA08SomatiskSymp', 'HCA09EmosjonelleSymp','HCA10JevnaldrProbl', 
+    'HCA11Egenomsorg', 'HCA12FamilieProbl', 'HCASkoleframmote', 'HCA14ProblKunnskap', 'HCA15Mangelinfo', 'H01Atferd',
+    'H02Selvskade','H03Rusmisbruk', 'H04KognitiveProbl','H05FysiskeProbl', 'H06Hallusinasjoner','H07Stemningsleie',
+    'H08AndreProbl','H09ForhAndre','H10ADLProbl','H11BoligProbl','H12YrkeProbl')) {
+      retn <- 'H'
+      grtxt <- c('Ingen problem', 'Lite problem som ikke krever tiltak', 'Mildt problem, men klart tilstede',
+            'Moderat alvorlig problem', 'Alvorlig til svært alvorlig problem', 'Ukjent')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData[ ,valgtVar] %in% c(0:4,9))
+      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:4,9))
+      tittel <- switch(valgtVar,
+                       HCA01Atferd = 'HONOSCA: 1. Problemer med forstyrrende, antisosial eller aggressiv atferd',
+                       HCA02Aktivitetsniva = 'HONOSCA: 2.Problemer med høyt aktivitetsnivå, oppmerksomhet eller konsentrasjon',
+                       HCA03Selvskade = 'HONOSCA: 3.Selvskade som ikke skyldes uhell',
+                       HCA04Rusmisbruk = 'HONOSCA: 4.Problemer med alkohol, stoff eller løsemiddelmisbruk',
+                       HCA05SkoleSprak = 'HONOSCA: 5.Problemer med skole- eller språkferdigheter',
+                       HCA06FysiskProblem = 'HONOSCA: 6. Problemer pga fysisk sykdom eller funksjonshemning',
+                       HCA07Hallusinasjoner = 'HONOSCA: 7.Problemer knyttet til hallusinasjoner, vrangforestillinger eller unormale persepsjoner',
+                       HCA08SomatiskSymp = 'HONOSCA: 8. Problemer med somatiske symptomer uten kjent organisk grunnlag',
+                       HCA09EmosjonelleSymp = 'HONOSCA: ',
+                       HCA10JevnaldrProbl = 'HONOSCA: 10. Problemer med forhold til jevnaldrende',
+                       HCA11Egenomsorg = 'HONOSCA: 11.Problemer med egenomsorg og uavhengighet',
+                       HCA12FamilieProbl = 'HONOSCA: 12.Problemer med familieliv og forhold til andre',
+                       HCASkoleframmote = 'HONOSCA: 13.Dårlig skoleframmøte',
+                       HCA14ProblKunnskap = 'HONOSCA: 14.Problemer med kunnskap eller forståelse av egenarten av barnets/ungdommens vanskeligheter (i løpet av de siste to uker)',
+                       HCA15Mangelinfo = 'HONOSCA: 15.Problemer med mangel på informasjon om tilbud eller behandling av barnets/ungdommens vanskeligheter',
+                       H01Atferd = 'HoNOS: 1.Overaktiv, aggressiv, forstyrrende eller agitert atferd',
+                       H02Selvskade = 'HoNOS: 2.Selvskade som ikke skyldes uhell',
+                       H03Rusmisbruk = 'HoNOS: 3.Problemdrikking eller bruk av rusmiddel',
+                       H04KognitiveProbl = 'HoNOS: 4.Kognitive problemer',
+                       H05FysiskeProbl = 'HoNOS: 5.Problemer med fysisk sykdom eller funksjonshemming',
+                       H06Hallusinasjoner = 'HoNOS: 6.Problemer forbundet med hallusinasjoner og vrangforestillinger',
+                       H07Stemningsleie = 'HoNOS: 7.Problem med senket stemningsleie',
+                       H08AndreProbl = 'HoNOS: 8.Andre mentale eller atferdsmessige problem',
+                       H09ForhAndre = 'HoNOS: 9.Problemer med forhold til andre',
+                       H10ADLProbl = 'HoNOS: 10. Problemer med dagliglivets aktiviteter',
+                       H11BoligProbl = 'HoNOS: 11. Problemer med boligforhold',
+                       H12YrkeProbl = 'HoNOS: 12. Problemer med yrke og aktiviteter')
+}
 
+
+
+if (valgtVar == 'H08aVelgTypeProbl') {
+            retn <- 'H'
+            grtxt <- c('Fobi', 'Angst', 'Tvangslidelse', 'Mentalt stress/spenninger', 'Dissosiativ', 'Somatoform',	
+                       'Spiseproblemer', 'Søvnvansker', 'Seksuelt problem', 'Annet problem (Spesifiser)')
+            RegData$VariabelGr <- 999
+            indDum <- which(RegData[ ,valgtVar] %in% c(1:9,99))
+            RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+            RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:9,99))
+            tittel <- 'HoNOS: 8a Velg type problem'
+}
+      
+      
 if (valgtVar=='Norsktalende') {
       #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
       grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent')
