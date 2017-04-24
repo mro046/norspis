@@ -51,7 +51,7 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 #---TESTE 1 NorSpisFigAndeler
 
-valgtVar <- 'H04KognitiveProbl' #må velge
+valgtVar <- 'Alder' #må velge
 
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
@@ -67,7 +67,10 @@ variable <- c( "Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05F
                "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
                "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )              
             #sortert alfabetisk
-#fikse og legge inn over: DiagVSF, alle HoNOS- og HoNOSCA-leddene
+#fikse og legge inn over: DiagVSF, ... HCA01Atferd
+
+
+
 
 
 for (valgtVar in variable) {
@@ -80,9 +83,17 @@ for (valgtVar in variable) {
 
 
 
-#---TESTE 2 NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) 
 
-valgtVar <- 'B12cAldrForsteBeh'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes, VentetidOver2Uker
+
+#---TESTE 2 
+#NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) 
+#---
+
+
+
+
+
+valgtVar <- 'VentetidOver2Uker'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes, VentetidOver2Uker
 grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
@@ -97,9 +108,15 @@ NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, 
 
 
 
-#---TESTE 3 FigGjsnGrVar(gjennomsnitt per enhet)
 
-valgtVar <- 'AlderGjsn' #AlderGjsn, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
+
+
+#---TESTE 3 
+#---FigGjsnGrVar(gjennomsnitt per enhet)
+#----
+
+
+valgtVar <- 'RAND36SosialFunk' #AlderGjsn, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 

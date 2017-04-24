@@ -176,15 +176,16 @@ if (valgtVar %in% c('RAND36FysFunk',
 #--------FigAndelerGrVar: (Tilrettelegging av variabel som) brukes i figurtypen FigAndelerGrVar:
       
 if (valgtVar=='alder_u18') {	#brukes i: NorspisFigAndelerGrVar
-      RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
+      #RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
       RegData$Variabel[which(RegData$Alder<18)] <- 1 
       tittel <- 'Pasienter under 18 år'
 }
       
 if (valgtVar=='BehDodUnderBeh') {	#brukes i: NorspisFigAndelerGrVar
-      RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
-      RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
-      tittel <- 'Mortalitet'
+      #RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
+      #RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
+      RegData$Variabel <- RegData$BehDodUnderBeh
+      tittel <- 'Dødsfall under behandling'
 }      
       
 if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
@@ -194,16 +195,16 @@ if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
 }
       
 
-#avsluttet her24.03.17 - fungerer ikke 
 if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
       RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+      RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
+      RegData$Variabel <- 99
       RegData$Variabel[which(RegData$Ventetid>2)] <- 1 
-      
       tittel <- 'Ventetid over 2 uker'
 }
 
-  
+      
 
 #--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
 

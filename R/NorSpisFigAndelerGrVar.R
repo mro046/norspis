@@ -9,14 +9,10 @@
 #' For andre "valgtVar" viser figuren andel av den valgte variabelen for hver enhet.
 #' Argumentet \emph{valgtVar} har følgende valgmuligheter:
 #'    \itemize{
-#'     \item alder_u18: Pasienter under 18 år 
-#'     \item alder_over80: Pasienter over 80 år (>=80)
-#'     \item dod30d: Pasienter som dør innen 30 dager etter innleggelse
-#'     \item dodeIntensiv: Pasienter som dør på intensivavdelinga. 
-#'     \item innMaate: Hastegrad inn på intensiv (Elektivt, Akutt medisinsk, Akutt kirurgisk)
-#'		Dette valget viser en annen figurtype.
-#'     \item respStotte: Pasienter som har fått respiratorstøtte
-#'     \item reinn: Andel reinnlagte (kun hvor dette er registrert, dvs. fjerner ukjente)
+#'     \item alder_u18: Pasienter under 18 år
+#'     \item BehDodUnderBeh: Andel pasienter som døde i behandling
+#'     \item DiagVDiabetes: Andel pasienter med diabetes
+#'     \item VentetidOver2Uker: Andel med ventetid over 2 uker, beregnet fra dato for mottatt henvisning til hendelsesdato.
 #'    }
 #' Funksjonen benytter funksjonene: NorSpisRegDataSQL, NorSpisPreprosess, NorSpisVarTilrettelegg, NorSpisUtvalg
 #' og NIRFigSoyler
