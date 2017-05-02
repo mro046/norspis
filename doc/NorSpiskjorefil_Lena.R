@@ -27,7 +27,7 @@ RegData <- NorSpisData
 #------------------------Definere parametre
 
 setwd('C:/ResultattjenesteGIT/norspis/')
-
+library(norspis)
 # Inndata til funksjon:
 reshID <- 'TESTNO'  	#Må sendes med til funksjon
 minald <- 0	#alder, fra og med
@@ -61,8 +61,18 @@ variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
                "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner", "MedBMI",        
                "MedNevroleptika", "Norsktalende", "PT01OnsketInvolv", "PT02BleInvolv", 
                "PT03Utfallsvurd", "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")
+variableNY <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+               "B07Hovedinntekt", "B08StartAldrProbl",'B11FamilieSF', "B12TidlBehSF",'B12cAldrForsteBeh',
+               "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing", "B21SelvskadTidl",
+               "B22SelvskadSisteAr", "B23SelvmordFTidl", "B24SelvmordFSisteAr", "B25Avhengighet",    
+               "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner","MedBMISlutt","MedBMIStart",
+               "MedNevroleptika", "B25Avhengighet","NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
+               "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
+               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )              
 
- for (valgtVar in variable) {
+variableNYE <- setdiff(variableNY,variable)
+      
+ for (valgtVar in variableNYE) {
 	outfile <- paste0(valgtVar, '_ford.png')
 	NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil,
 		reshID=reshID, outfile=outfile, minald=minald, maxald=maxald)

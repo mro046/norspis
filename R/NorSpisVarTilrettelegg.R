@@ -227,7 +227,7 @@ if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
                        Alder = 'Aldersfordeling',
                        B08StartAldrProbl = 'Alder da problemene startet',
                        B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
-
+}
 if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
       RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
@@ -341,7 +341,7 @@ if (valgtVar=='B03Bosituasjon') {
       #RegData$VariabelGr <- 99
       indDum <- which(RegData$B03Bosituasjon %in% c(1:6,9))
       RegData$VariabelGr[indDum] <- RegData$B03Bosituasjon[indDum]
-      #RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9))
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9)) #Komm. 2.mai -17: Denne var ikke med. Derfor feilmld.
       #xAkseTxt <- 'Bosituasjon'
       tittel <- 'Bosituasjon'
 }
