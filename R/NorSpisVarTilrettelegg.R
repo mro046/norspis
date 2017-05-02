@@ -198,14 +198,12 @@ if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
 #          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
 #         RegData$Variabel <-      
       
-#VentetidOverXMnd <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y.%m.%d"),
-#strptime(RegData$RegHenvMottattDato, format = "%Y.%m.%d"),units="weeks")
+#Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+ #                            strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")
       
 
       
-      
-      
-      
+     
       
       
       
