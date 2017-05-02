@@ -19,6 +19,20 @@
 #'     \item SCL90TFobi: Fobiskår SCL-90-R
 #'     \item SCL90TParanoia: Paranoiaskår SCL-90-R
 #'     \item SCL90TPsykotisk: Psykotisismeskår SCL-90-R
+#'     \item EDEQ60GlobalScore
+#'     \item EDEQ60Restriksjon
+#'     \item EDEQ60Kroppsform
+#'     \item EDEQ60Spising
+#'     \item EDEQ60Vekt
+#'     \item RAND36FysFunk
+#'     \item RAND36RollebegFys
+#'     \item RAND36RollebegEmo
+#'     \item RAND36Tretthet
+#'     \item RAND36MentalHelse
+#'     \item RAND36SosialFunk
+#'     \item RAND36Smerte
+#'     \item RAND36GenHelse
+#'     \item RAND36EndringHelse
 #'    }
 #'
 #' @inheritParams NorSpisFigAndeler
