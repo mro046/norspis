@@ -32,6 +32,7 @@ NorSpisPreprosess <- function(RegData=RegData)	#, reshID=reshID)
 	#RegData$InnDato <- strptime(RegData$DateAdmittedIntensive, format="%Y-%m-%d") # %H:%M:%S" )  #"%d.%m.%Y"	"%Y-%m-%d"
 	#RegData$Aar <- 1900 + strptime(RegData$DateAdmittedIntensive, format="%Y")$year
 	
+	
   return(invisible(RegData))
 }
 

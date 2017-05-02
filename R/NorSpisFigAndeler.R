@@ -1,15 +1,77 @@
-#' Søylediagram, horisontalt eller vertikalt, som viser andeler av valgt variabel.
-#'
-#' Søylediagrammet viser fordelinga til den valgte variabelen. Søylene er horisontale eller vertikale
+#' Søylediagrammet viser andelsfordelinga til den valgte variabelen. Søylene er horisontale eller vertikale
 #' avhengig av hvor stor plass kategorinavnet til søyla tar.
 #'
 #' #' Argumentet \emph{valgtVar} har følgende valgmuligheter:
 #'    \itemize{
-#'     \item Alder: Aldersfordeling, 5-årige grupper
-#'     \item BMI: Pasientenes BMI (Body Mass Index)
+#'     \item Alder: Aldersfordeling, 10-årige grupper
+#'     \item B02EgneBarn
+#'     \item B03Bosituasjon
+#'     \item B04PabegyntUtd
+#'     \item B05FullfortUtd
+#'     \item B06Hovedaktivitet
+#'     \item B07Hovedinntekt
+#'     \item B08StartAldrProbl
+#'     \item B11FamilieSF
+#'     \item B12TidlBehSF
+#'     \item B12cAldrForsteBeh
+#'     \item B17FysMishandl
+#'     \item B18PsykMishandl
+#'     \item B19Overgrep
+#'     \item B20Mobbing
+#'     \item B21SelvskadTidl
+#'     \item B22SelvskadSisteAr
+#'     \item B23SelvmordFTidl
+#'     \item B24SelvmordFSisteAr
+#'     \item B25Avhengighet
+#'     \item BehUtfallsvurdSamlet
+#'     \item BehVidereBeh
+#'     \item HCA01Atferd
+#'     \item HCA02Aktivitetsniva
+#'     \item HCA03Selvskade
+#'     \item HCA04Rusmisbruk
+#'     \item HCA05SkoleSprak
+#'     \item HCA06FysiskProblem
+#'     \item HCA07Hallusinasjoner
+#'     \item HCA08SomatiskSymp
+#'     \item HCA09EmosjonelleSymp
+#'     \item HCA10JevnaldrProbl 
+#'     \item HCA11Egenomsorg
+#'     \item HCA12FamilieProbl
+#'     \item HCASkoleframmote
+#'     \item HCA14ProblKunnskap
+#'     \item HCA15Mangelinfo
+#'     \item H01Atferd
+#'     \item H02Selvskade
+#'     \item H03Rusmisbruk
+#'     \item H04KognitiveProbl
+#'     \item H05FysiskeProbl
+#'     \item H06Hallusinasjoner
+#'     \item H07Stemningsleie
+#'     \item H08AndreProbl
+#'     \item H09ForhAndre
+#'     \item H10ADLProbl
+#'     \item H11BoligProbl
+#'     \item H12YrkeProbl
+#'     \item MedAntidepressiva
+#'     \item MedBenzodiazepiner
+#'     \item MedBMISlutt: Pasientenes BMI ved slutt av behandling
+#'     \item MedBMIStart: Pasientenes BMI ved innkomst til behandling
+#'     \item MedIsoBMIBGSSlutt: Pasientenes iso-BMI (basert på BGS-normdata) ved slutten av behandlingen
+#'     \item MedIsoBMIBGSStart: Pasientenes iso-BMI (basert på BGS-normdata) ved innkomst 
+#'     \item MedIsoBMICDCSlutt: Pasientenes iso-BMI (basert på CDC-normdata) ved slutten av behandlingen
+#'     \item MedIsoBMICDCStart: Pasientenes iso-BMI (basert på CDC-normdata) ved innkomst 
+#'     \item MedNevroleptika
+#'     \item NegHend
 #'     \item Norsktalende: Snakker pasienten norsk
+#'     \item PT01OnsketInvolv
+#'     \item PT02BleInvolv
+#'     \item PT03Utfallsvurd
+#'     \item PT04KontaktBrukerorg
+#'     \item PT05OrientertBrukerorg
+#'     \item RegHenvInstans
 #'     \item Utdanning: Utdanningsnivå
-#'     \item 
+#'     \item TidSykBehandling
+#'     \item VentetidKat: Ventetid, 2-ukers grupper 
 #'    }
 #'
 #'
@@ -181,7 +243,7 @@ FigTypUt <- figtype(outfile)
 farger <- FigTypUt$farger
 	plot.new()
 	title(tittel)	#, line=-6)
-	legend('topleft',utvalgTxt, bty='n', cex=0.9, text.col=farger[1])
+	legend('topleft',utvalgTxt, bty='n', cex=0.1, text.col=farger[1])
 	text(0.5, 0.6, 'For få registreringer', cex=1.2)
 	if ( outfile != '') {dev.off()}
 

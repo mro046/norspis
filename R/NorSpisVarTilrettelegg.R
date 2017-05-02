@@ -50,7 +50,7 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
 
       
 #--------FigGjsnGrVar: Tilrettelegging av variabler til FigGjsnGrVar
-if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging heter alder. Ikke testet enda...
+if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging heter alder.
       #Alle skal ha alder
       #Legeskjema.
       RegData <- RegData[which(RegData[ ,'Alder'] >0), ]
@@ -176,15 +176,16 @@ if (valgtVar %in% c('RAND36FysFunk',
 #--------FigAndelerGrVar: (Tilrettelegging av variabel som) brukes i figurtypen FigAndelerGrVar:
       
 if (valgtVar=='alder_u18') {	#brukes i: NorspisFigAndelerGrVar
-      RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
+      #RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
       RegData$Variabel[which(RegData$Alder<18)] <- 1 
       tittel <- 'Pasienter under 18 år'
 }
       
 if (valgtVar=='BehDodUnderBeh') {	#brukes i: NorspisFigAndelerGrVar
-      RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
-      RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
-      tittel <- 'Mortalitet'
+      #RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
+      #RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
+      RegData$Variabel <- RegData$BehDodUnderBeh
+      tittel <- 'Dødsfall under behandling'
 }      
       
 if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
@@ -194,6 +195,7 @@ if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
 }
       
 
+<<<<<<< HEAD
 #     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
 #          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
 #         RegData$Variabel <-      
@@ -226,36 +228,139 @@ if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
                        Alder = 'Aldersfordeling',
                        B08StartAldrProbl = 'Alder da problemene startet',
                        B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
+=======
+if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+                                   strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+      RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
+      RegData$Variabel <- 99
+      RegData$Variabel[which(RegData$Ventetid>2)] <- 1 
+      tittel <- 'Ventetid over 2 uker'
 }
 
-      #if (valgtVar=='Alder') {
-#gr <- c(0,seq(5,50,5),150)
-#RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
+      
+
+#--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
+
+if (valgtVar=='Alder') {
+gr <- c(0,seq(10,50,10),150)
+RegData$VariabelGr <- cut(RegData$Alder, breaks=gr, include.lowest=TRUE, right=FALSE)
 #grtxt <- c('0-11', '11-12', '13-14', '15-16', '17-18', '19-20', '21-25', '26-30', '31-35', '36-40', '41-45', '46-50', '51-60, '61+')
-#grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
-#subtxt <- 'Aldersgruppe'
-#tittel <- 'Aldersfordeling'
+grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+xAkseTxt <- 'Aldersgruppe'
+tittel <- 'Aldersfordeling'
+
+}
+
+
+if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {
+      RegData <- RegData[which(RegData$RegRegtype >= 1 & RegData$RegRegtype <=4), ] #velger kun startregistreringer og utredninger (1=Utredning voksen, 2=Utredning ungdom/barn, 3=Startregistrering voksen, 4=Startregistrering ungdom/barn)
+      valgtVar <- sub("Start", "", valgtVar) #fjerner "Start" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
+      gr <- c(0,seq(10,30,2.5),150)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
+      xAkseTxt <- switch(valgtVar, 
+                         MedBMI = 'BMI',
+                         MedIsoBMIBGS = 'iso-BMI (BGS)',
+                         MedIsoBMICDC = 'iso-BMI (CDC)')
+      tittel <- switch(valgtVar, 
+                       MedBMI = 'BMI-fordeling ved innkomst',
+                       MedIsoBMIBGS = 'Fordeling iso-BMI ved innkomst (normdata: Bergen Growth Study (BGS))',
+                       MedIsoBMICDC = 'Fordeling iso-BMI ved innkomst (normdata: Centers for Disease Control and Prevention (CDC))')
+}
+
+if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {
+      RegData <- RegData[which(RegData$RegRegtype == 5 | RegData$RegRegtype ==6 | RegData$RegRegtype ==98 | RegData$RegRegtype ==99), ] #velger kun sluttregistreringer og avbrudd (5=Sluttregistrering voksen, 6=Sluttregistrering ungdom/barn, 98=Avbrutt behandling voksen, 99=Avbrutt behandling ungdom/barn).Merk: Kan streng tatt fjerne 98 og 99 her siden BMI ikke måles ved avbrudd
+      valgtVar <- sub("Slutt", "", valgtVar) #fjerner "Slut" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
+      gr <- c(0,seq(10,30,2.5),150)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
+      xAkseTxt <- switch(valgtVar, 
+                         MedBMI = 'BMI',
+                         MedIsoBMIBGS = 'iso-BMI (BGS)',
+                         MedIsoBMICDC = 'iso-BMI (CDC)')
+      tittel <- switch(valgtVar, 
+                       MedBMI = 'BMI-fordeling ved utskriving',
+                       MedIsoBMIBGS = 'Fordeling iso-BMI ved utskriving (normdata: Bergen Growth Study (BGS))',
+                       MedIsoBMICDC = 'Fordeling iso-BMI ved utskriving (normdata: Centers for Disease Control and Prevention (CDC))')
+}
+      
+      
+#if (valgtVar=='MedBMI') {
+#      gr <- c(0, 18.5, 25, 30, 1000)
+#      #RegData$VariabelGr <- -1
+#      ind <- which(RegData$MedBMI>0)
+#      RegData <- RegData[ind, ]
+#      #RegData$VariabelGr[ind] <- RegData$MedBMI[ind]
+#      RegData$VariabelGr <- cut(RegData$MedBMI, breaks=gr, include.lowest=TRUE, right=FALSE)
+#      # RegData$VariabelGr[ind] <- cut(RegData[ind ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+#      # RegData$VariabelGr <- cut(RegData[,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+#      # grtxt <- c('', '<18,5', levels(RegData$VariabelGr)[3:(length(gr)-2)],'30+')
+#      grtxt <- c( '<18,5', '18,5-25', '25-30','30+')
+#      grtxt2 <- c('Undervekt', 'Normalvekt', 'Overvekt', 'Fedme')
+#      xAkseTxt <- "Body Mass Index"
+#      tittel <-  'Pasientenes BMI (Body Mass Index)'
 #}
 
-if (valgtVar=='Norsktalende') {
-      #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
-      grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent')
-      indDum <- which(as.character(RegData$Norsktalende) %in% grtxt[-4])
-      RegData$VariabelGr[indDum] <- RegData$Norsktalende[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9))
-      tittel <- 'Norsktalende'
+      
+if (valgtVar=='VentetidKat') {
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+                                   strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+      RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
+      gr <- c(0,seq(2,16,2),150)
+      RegData$VariabelGr <- cut(RegData$Ventetid, breaks=gr, include.lowest= TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '16+')
+      xAkseTxt <- 'Uker'
+      tittel <- 'Ventetid'
+>>>>>>> 9508d7dbf19b27b7ebaa36588994c4826ae45709
 }
 
+if (valgtVar=='RegHenvInstans') { #1 Pasienten selv, 2 Fastlege/primærlege, 3	Øvrig primærhelsetjenste, 4 Spesialisthelsetjenesten,
+      # 5	Barnehage / skolesektor/PPT, 6 Sosialtjeneste / barnevern, 7 Politi/fengsel/rettsvesen, 
+      # 8 Rehabiliteringsinstitusjon/sykehjem, 9Privatpraktiserende spesialister, 99 Annet
+      retn <- 'H'
+      RegData$VariabelGr <- RegData$RegHenvInstans
+      grtxt <- c('Pasienten selv', 'Fastlege/primærlege', 'Øvrig primærhelsetjeneste', 'Spesialisthelsetjenesten', 
+                 'Barnehage/skolesektor/PPT', 'Sosialtjeneste/barnevern', 'Politi/fengsel/rettsvesen', 'Annet')
+      xAkseTxt <- 'Henvisende instans'
+      tittel <- 'Henvisende instans'
+}
+
+if (valgtVar=='B02EgneBarn') {
+      gr <- c(0:5,15)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+      grtxt <- c(0:4, '5+')	#c(names(AndelLand)[-length(gr)], '90+')
+      xAkseTxt <- 'Barn'
+      tittel <- 'Antall egne barn'
+}      
+
+if (valgtVar=='B03Bosituasjon') {
+      #Alternativer: 1	Hos en av foreldrene, 2 Hos begge foreldre, 3 Bor alene, 4  Med partner, 
+      #5 Med partner og barn, 6 Uten partner med barn, 9 Annen
+      retn <- 'H'
+      grtxt <- c ('Hos en av foreldrene', 'Hos begge foreldre', 'Bor alene', 'Med partner', 
+                  'Med partner og barn', 'Uten partner med barn', 'Annen')
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$B03Bosituasjon %in% c(1:6,9))
+      RegData$VariabelGr[indDum] <- RegData$B03Bosituasjon[indDum]
+      #RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9))
+      #xAkseTxt <- 'Bosituasjon'
+      tittel <- 'Bosituasjon'
+}
+
+      
+      
+
 if (valgtVar %in% c('B04PabegyntUtd', 'B05FullfortUtd')) {
-  #OBS - se over/korrigere kategoriene
+      #OBS - se over/korrigere kategoriene
       retn <- 'H'
       grtxt <- switch(valgtVar, 
                       B04PabegyntUtd=c('Grunnskole','Videregående skole (1-3 år)',
                                        'Høgskole eller universitet, \nmindre enn 4 år', 
                                        'Høgskole eller universitet, \n4 år eller mer','Ukjent'),
-                 B05FullfortUtd=c('Ikke fullført grunnskole','Grunnskole','Videregående skole (1-3 år)',
-                                  'Høgskole eller universitet, \nmindre enn 4 år', 
-                                  'Høgskole eller universitet, \n4 år eller mer','Ukjent'))
+                      B05FullfortUtd=c('Ikke fullført grunnskole','Grunnskole','Videregående skole (1-3 år)',
+                                       'Høgskole eller universitet, \nmindre enn 4 år', 
+                                       'Høgskole eller universitet, \n4 år eller mer','Ukjent'))
       verdier <- switch(valgtVar,
                         B04PabegyntUtd=c(1:4,9),
                         B05FullfortUtd=c(1:5,9))
@@ -265,138 +370,211 @@ if (valgtVar %in% c('B04PabegyntUtd', 'B05FullfortUtd')) {
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = verdier)
       tittel <- 'Høyeste påbegynte utdanning'
 }
-
-
-if (valgtVar=='MedBMI') {
-  gr <- c(0, 18.5, 25, 30, 1000)
-  #RegData$VariabelGr <- -1
-  ind <- which(RegData$MedBMI>0)
-  RegData <- RegData[ind, ]
-  #RegData$VariabelGr[ind] <- RegData$MedBMI[ind]
-  RegData$VariabelGr <- cut(RegData$MedBMI, breaks=gr, include.lowest=TRUE, right=FALSE)
-  # RegData$VariabelGr[ind] <- cut(RegData[ind ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-  # RegData$VariabelGr <- cut(RegData[,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-  # grtxt <- c('', '<18,5', levels(RegData$VariabelGr)[3:(length(gr)-2)],'30+')
-  grtxt <- c( '<18,5', '18,5-25', '25-30','30+')
-  grtxt2 <- c('Undervekt', 'Normalvekt', 'Overvekt', 'Fedme')
-  subtxt <- "Body Mass Index"
-  tittel <-  'Pasientenes BMI (Body Mass Index)'
-}
-
+      
+      
 if (valgtVar=='B06Hovedaktivitet') {
-  # 1=Heltidsarbeid, 2=Deltidsarbeid, 3=På arbeidsmarkedstiltak, 4=Vernepliktig, 5=Skoleelev/lærling, 6=Student, 7=Sykemeldt, 8=Ufør, 9=Annen
-  retn <- 'H'
-  grtxt <- c('Heltidsarbeid', 'Deltidsarbeid', 'På arbeidsmarkedstiltak', 'Vernepliktig', 'Skoleelev/lærling', 'Student', 'Sykemeldt', 'Ufør', 'Annen', 'Ikke registrert')
-  RegData$VariabelGr <- 99
-  indDum <- which(RegData$B06Hovedaktivitet %in% c(1:9))
-  RegData$VariabelGr[indDum] <- RegData$B06Hovedaktivitet[indDum]
-  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:9,99))
-  tittel <- 'Hovedaktivitet'
+      # 1=Heltidsarbeid, 2=Deltidsarbeid, 3=På arbeidsmarkedstiltak, 4=Vernepliktig, 5=Skoleelev/lærling, 6=Student, 7=Sykemeldt, 8=Ufør, 9=Annen
+      retn <- 'H'
+      grtxt <- c('Heltidsarbeid', 'Deltidsarbeid', 'På arbeidsmarkedstiltak', 'Vernepliktig', 'Skoleelev/lærling', 'Student', 'Sykemeldt', 'Ufør', 'Annen', 'Ikke registrert')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData$B06Hovedaktivitet %in% c(1:9))
+      RegData$VariabelGr[indDum] <- RegData$B06Hovedaktivitet[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:9,99))
+      tittel <- 'Hovedaktivitet'
 }
-
+      
 if (valgtVar=='B07Hovedinntekt') {
-  retn <- 'H'
-  grtxt <- c('Arbeidsinntekt', 'Sykepenger/trygd/pensjon', 'Blir forsørget', 'Sosialhjelp', 'Stipend/lån', 'Kursstønad/lønn i arbeidsmarkedstiltak', 'Andre inntekter', 'Ikke registrert')
-  RegData$VariabelGr <- 99
-  indDum <- which(RegData$B07Hovedinntekt %in% c(1:6))
-  RegData$VariabelGr[indDum] <- RegData$B07Hovedinntekt[indDum]
-  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9,99))
-  tittel <- 'Pasientenes hovedinntekt'
+      retn <- 'H'
+      grtxt <- c('Arbeidsinntekt', 'Sykepenger/trygd/pensjon', 'Blir forsørget', 'Sosialhjelp', 'Stipend/lån', 'Kursstønad/lønn i arbeidsmarkedstiltak', 'Andre inntekter', 'Ikke registrert')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData$B07Hovedinntekt %in% c(1:6))
+      RegData$VariabelGr[indDum] <- RegData$B07Hovedinntekt[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9,99))
+      tittel <- 'Pasientenes hovedinntekt'
+}
+      
+      #if (valgtVar=='B08StartAldrProbl') {
+      #  retn <- 'H'
+      #  grtxt <- c('Arbeidsinntekt', 'Sykepenger/trygd/pensjon', 'Blir forsørget', 'Sosialhjelp', 'Stipend/lån', 'Kursstønad/lønn i arbeidsmarkedstiltak', 'Andre inntekter', 'Ikke registrert')
+      #  RegData$VariabelGr <- 99
+      #  indDum <- which(RegData$B07Hovedinntekt %in% c(1:6))
+      #  RegData$VariabelGr[indDum] <- RegData$B07Hovedinntekt[indDum]
+      #  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9,99))
+      #  tittel <- 'Pasientenes alder da problemene startet'
+      #}
+      
+
+if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {
+      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
+      gr <- c(0,seq(5,30,5),150)
+      #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
+      #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')	#c(names(AndelLand)[-length(gr)], '90+')
+      xAkseTxt <- 'Aldersgruppe'
+      tittel <- switch(valgtVar,
+                       B08StartAldrProbl = 'Alder da problemene startet',
+                       B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
 }
 
-#if (valgtVar=='B08StartAldrProbl') {
-#  retn <- 'H'
-#  grtxt <- c('Arbeidsinntekt', 'Sykepenger/trygd/pensjon', 'Blir forsørget', 'Sosialhjelp', 'Stipend/lån', 'Kursstønad/lønn i arbeidsmarkedstiltak', 'Andre inntekter', 'Ikke registrert')
-#  RegData$VariabelGr <- 99
-#  indDum <- which(RegData$B07Hovedinntekt %in% c(1:6))
-#  RegData$VariabelGr[indDum] <- RegData$B07Hovedinntekt[indDum]
-#  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9,99))
-#  tittel <- 'Pasientenes alder da problemene startet'
-#}
+if (valgtVar=='TidSykBehandling'){
+      RegData$TidSykBehandling<-RegData$B12dArTilBehstart*12+RegData$B12dMndTilBehstart #lager variabel som gir år + måneder fra sykdom til behandlingsstart
+      gr <- c(0,6,12,18,24,30,36,500)
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '36+')
+      xAkseTxt <-'Måneder'
+      tittel <- 'Tid fra sykdomsdebut til behandlingsstart' 
+}
 
 if (valgtVar=='B11FamilieSF') {
-  retn <- 'H'
-  grtxt <- c('Nei', 'Ja', 'Vet ikke')
-  RegData$VariabelGr <- 99
-  indDum <- which(RegData$B11FamilieSF %in% c(0,1,9))
-  RegData$VariabelGr[indDum] <- RegData$B11FamilieSF[indDum]
-  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9,99))
-  tittel <- 'Spiseforstyrrelse hos andre i familien?'
+      retn <- 'V'
+      grtxt <- c('Nei', 'Ja', 'Vet ikke')
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$B11FamilieSF %in% c(0,1,9))
+      RegData$VariabelGr[indDum] <- RegData$B11FamilieSF[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9))
+      tittel <- 'Spiseforstyrrelse hos andre i familien?'
 }
 
 if (valgtVar=='B12TidlBehSF') {
-  grtxt <- c('Nei', 'Ja', 'Ukjent')
-  RegData$VariabelGr <- 99
-  indDum <- which(RegData$B12TidlBehSF %in% c(0,1))
-  RegData$VariabelGr[indDum] <- RegData$B12TidlBehSF[indDum]
-  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
-  tittel <- 'Tidligere behandling for spiseforstyrrelser?'
+      grtxt <- c('Nei', 'Ja', 'Ukjent')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData$B12TidlBehSF %in% c(0,1))
+      RegData$VariabelGr[indDum] <- RegData$B12TidlBehSF[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
+      tittel <- 'Tidligere behandling for spiseforstyrrelser?'
 }
-
-
-#if (valgtVar=='B12dArTilBehstart') {
-
-#B12dMndTilBehstart OG B12dMndTilBehstart
-
-#if (valgtVar=='B17FysMishandl') {
-#  retn <- 'H'
-#  grtxt <- c('Nei', 'Ja', 'Ukjent')
-#  RegData$VariabelGr <- 99
-#  indDum <- which(RegData$B17FysMishandl %in% c(0,1,9))
-#  RegData$VariabelGr[indDum] <- RegData$B17FysMishandl[indDum]
-#  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
-#  tittel <- 'Negative hendelse: Tidligere fysisk mishandling'
-#}
-
-#if B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing -> 0,1,2,3,4 negative hendelser
-#alle negative hendelsene i én figur
-
-
-
+      
+      
+      #if (valgtVar=='B12dArTilBehstart') {
+      
+      #B12dMndTilBehstart OG B12dMndTilBehstart
+      
+      #if (valgtVar=='B17FysMishandl') {
+      #  retn <- 'H'
+      #  grtxt <- c('Nei', 'Ja', 'Ukjent')
+      #  RegData$VariabelGr <- 99
+      #  indDum <- which(RegData$B17FysMishandl %in% c(0,1,9))
+      #  RegData$VariabelGr[indDum] <- RegData$B17FysMishandl[indDum]
+      #  RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
+      #  tittel <- 'Negative hendelse: Tidligere fysisk mishandling'
+      #}
+      
+      #if B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing -> 0,1,2,3,4 negative hendelser
+      #alle negative hendelsene i én figur
+      
+      
+      
 if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
                     'B21SelvskadTidl', 'B22SelvskadSisteAr', 'B23SelvmordFTidl', 'B24SelvmordFSisteAr', 
                     'B25Avhengighet')) {
-  retn <- 'H'
-#  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-  grtxt <- c('Nei', 'Ja', 'Ukjent', 'Ikke reg.')
+      retn <- 'V'
+      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
+      grtxt <- c('Nei', 'Ja', 'Ukjent', 'Ikke reg.')
       RegData$VariabelGr <- 99
       indDum <- which(RegData[ ,valgtVar] %in% c(0,1,9))
       RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9,99))
       tittel <- switch(valgtVar,
-                   B17FysMishandl = 'Negativ hendelse: Tidligere fysisk mishandling',
-                   B18PsykMishandl = 'Negativ hendelse: Tidligere psykisk mishandling',
-                   B19Overgrep = 'Negativ hendelse: Tidligere misbruk/overgrep',
-                   B20Mobbing = 'Negativ hendelse: Tidligere mobbing',
-                   B21SelvskadTidl = 'Selvskading tidligere',
-                   B22SelvskadSisteAr = 'Selvskading siste år',
-                   B23SelvmordFTidl = 'Selvmordsforsøk tidligere',
-                   B24SelvmordFSisteAr = 'Selvmordsforsøk siste år',
-                   B25Avhengighet = 'Misbruk/avhengighet')
+                       B17FysMishandl = 'Negativ hendelse: Tidligere fysisk mishandling',
+                       B18PsykMishandl = 'Negativ hendelse: Tidligere psykisk mishandling',
+                       B19Overgrep = 'Negativ hendelse: Tidligere misbruk/overgrep',
+                       B20Mobbing = 'Negativ hendelse: Tidligere mobbing',
+                       B21SelvskadTidl = 'Selvskading tidligere',
+                       B22SelvskadSisteAr = 'Selvskading siste år',
+                       B23SelvmordFTidl = 'Selvmordsforsøk tidligere',
+                       B24SelvmordFSisteAr = 'Selvmordsforsøk siste år',
+                       B25Avhengighet = 'Misbruk/avhengighet')
+}
+      
+if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA04Rusmisbruk', 'HCA05SkoleSprak',
+    'HCA06FysiskProblem', 'HCA07Hallusinasjoner', 'HCA08SomatiskSymp', 'HCA09EmosjonelleSymp','HCA10JevnaldrProbl', 
+    'HCA11Egenomsorg', 'HCA12FamilieProbl', 'HCASkoleframmote', 'HCA14ProblKunnskap', 'HCA15Mangelinfo', 'H01Atferd',
+    'H02Selvskade','H03Rusmisbruk', 'H04KognitiveProbl','H05FysiskeProbl', 'H06Hallusinasjoner','H07Stemningsleie',
+    'H08AndreProbl','H09ForhAndre','H10ADLProbl','H11BoligProbl','H12YrkeProbl')) {
+      retn <- 'H'
+      grtxt <- c('Ingen problem', 'Lite problem som ikke krever tiltak', 'Mildt problem, men klart tilstede',
+            'Moderat alvorlig problem', 'Alvorlig til svært alvorlig problem', 'Ukjent')
+      RegData$VariabelGr <- 99
+      indDum <- which(RegData[ ,valgtVar] %in% c(0:4,9))
+      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:4,9))
+      tittel <- switch(valgtVar,
+                       HCA01Atferd = 'HONOSCA: 1. Problemer med forstyrrende, antisosial eller aggressiv atferd',
+                       HCA02Aktivitetsniva = 'HONOSCA: 2.Problemer med høyt aktivitetsnivå, oppmerksomhet eller konsentrasjon',
+                       HCA03Selvskade = 'HONOSCA: 3.Selvskade som ikke skyldes uhell',
+                       HCA04Rusmisbruk = 'HONOSCA: 4.Problemer med alkohol, stoff eller løsemiddelmisbruk',
+                       HCA05SkoleSprak = 'HONOSCA: 5.Problemer med skole- eller språkferdigheter',
+                       HCA06FysiskProblem = 'HONOSCA: 6. Problemer pga fysisk sykdom eller funksjonshemning',
+                       HCA07Hallusinasjoner = 'HONOSCA: 7.Problemer knyttet til hallusinasjoner, vrangforestillinger eller unormale persepsjoner',
+                       HCA08SomatiskSymp = 'HONOSCA: 8. Problemer med somatiske symptomer uten kjent organisk grunnlag',
+                       HCA09EmosjonelleSymp = 'HONOSCA: ',
+                       HCA10JevnaldrProbl = 'HONOSCA: 10. Problemer med forhold til jevnaldrende',
+                       HCA11Egenomsorg = 'HONOSCA: 11.Problemer med egenomsorg og uavhengighet',
+                       HCA12FamilieProbl = 'HONOSCA: 12.Problemer med familieliv og forhold til andre',
+                       HCASkoleframmote = 'HONOSCA: 13.Dårlig skoleframmøte',
+                       HCA14ProblKunnskap = 'HONOSCA: 14.Problemer med kunnskap eller forståelse av egenarten av barnets/ungdommens vanskeligheter (i løpet av de siste to uker)',
+                       HCA15Mangelinfo = 'HONOSCA: 15.Problemer med mangel på informasjon om tilbud eller behandling av barnets/ungdommens vanskeligheter',
+                       H01Atferd = 'HoNOS: 1.Overaktiv, aggressiv, forstyrrende eller agitert atferd',
+                       H02Selvskade = 'HoNOS: 2.Selvskade som ikke skyldes uhell',
+                       H03Rusmisbruk = 'HoNOS: 3.Problemdrikking eller bruk av rusmiddel',
+                       H04KognitiveProbl = 'HoNOS: 4.Kognitive problemer',
+                       H05FysiskeProbl = 'HoNOS: 5.Problemer med fysisk sykdom eller funksjonshemming',
+                       H06Hallusinasjoner = 'HoNOS: 6.Problemer forbundet med hallusinasjoner og vrangforestillinger',
+                       H07Stemningsleie = 'HoNOS: 7.Problem med senket stemningsleie',
+                       H08AndreProbl = 'HoNOS: 8.Andre mentale eller atferdsmessige problem',
+                       H09ForhAndre = 'HoNOS: 9.Problemer med forhold til andre',
+                       H10ADLProbl = 'HoNOS: 10. Problemer med dagliglivets aktiviteter',
+                       H11BoligProbl = 'HoNOS: 11. Problemer med boligforhold',
+                       H12YrkeProbl = 'HoNOS: 12. Problemer med yrke og aktiviteter')
 }
 
-      
-      if (valgtVar == 'NegHend' ) {
-            #For flerevar=1 må vi omdefinere variablene slik at alle gyldige registreringer 
-            #(dvs. alle registreringer som skal telles med) er 0 eller 1. De som har oppfylt spørsmålet
-            # er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
-            # som i kategorier av typen "Ukjent" kodes disse som NA, mens hvis de skal være med kodes de
-            # som 0.
-            #Vi kan velge å sende tilbake alle variable som indikatorvariable, dvs. med 0,1,NA
-            #Eller vi kan gjøre beregninga her og sende tilbake teller og nevner for den sammensatte variabelen
-            flerevar <- 1
-            variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
-            #Sjekk <- RegData[,variable]
+
+
+if (valgtVar == 'H08aVelgTypeProbl') {
             retn <- 'H'
-            grtxt <- c('Fysisk mishandl.', 'Psykisk mishandl.', 'Overgrep', 'Mobbing')
-            ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
-            ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
-            RegData[ ,variable] <- NA
-            #RegData[,variable] <- 
-            RegData[ ,variable][ind01] <- 0
-            RegData[ ,variable][ind1] <- 1
-            #Beregne direkte:
-			#apply(RegData[,variable], MARGIN=2, FUN=function(x) sum(x %in% 0:1))
+            grtxt <- c('Fobi', 'Angst', 'Tvangslidelse', 'Mentalt stress/spenninger', 'Dissosiativ', 'Somatoform',	
+                       'Spiseproblemer', 'Søvnvansker', 'Seksuelt problem', 'Annet problem (Spesifiser)')
+            RegData$VariabelGr <- 999
+            indDum <- which(RegData[ ,valgtVar] %in% c(1:9,99))
+            RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+            RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:9,99))
+            tittel <- 'HoNOS: 8a Velg type problem'
+}
+      
+      
+if (valgtVar=='Norsktalende') {
+      #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
+      grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent')
+      indDum <- which(as.character(RegData$Norsktalende) %in% grtxt[-1])
+      RegData$VariabelGr[indDum] <- RegData$Norsktalende[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9))
+      tittel <- 'Norsktalende'
+}
+
+
+
+if (valgtVar == 'NegHend' ) {
+      #For flerevar=1 må vi omdefinere variablene slik at alle gyldige registreringer 
+      #(dvs. alle registreringer som skal telles med) er 0 eller 1. De som har oppfylt spørsmålet
+      # er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
+      # som i kategorier av typen "Ukjent" kodes disse som NA, mens hvis de skal være med kodes de
+      # som 0.
+      #Vi kan velge å sende tilbake alle variable som indikatorvariable, dvs. med 0,1,NA
+      #Eller vi kan gjøre beregninga her og sende tilbake teller og nevner for den sammensatte variabelen
+      flerevar <- 1
+      variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+      #Sjekk <- RegData[,variable]
+      retn <- 'H'
+      grtxt <- c('Fysisk mishandl.', 'Psykisk mishandl.', 'Overgrep', 'Mobbing')
+      ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
+      ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
+      RegData[ ,variable] <- NA
+      #RegData[,variable] <- 
+      RegData[ ,variable][ind01] <- 0
+      RegData[ ,variable][ind1] <- 1
+      #Beregne direkte:
+		#apply(RegData[,variable], MARGIN=2, FUN=function(x) sum(x %in% 0:1))
             tittel <- 'Negative hendelser'
       }
       
@@ -498,11 +676,6 @@ if (valgtVar=='B01Sivilstatus') {
 #PO06Organisert	PO07Tilfredsstillende	PO08Tilgjengelighet	PO09Utbytte	PO10Pasientsikkerhet
 
 
-
- 
-
-      
-      
       
 UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, retn=retn, #KImaal=KImaal, 
                tittel=tittel, variable= variable, flerevar=flerevar)  #, sortAvtagende=sortAvtagende
