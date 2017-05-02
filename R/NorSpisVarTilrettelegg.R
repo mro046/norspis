@@ -195,7 +195,6 @@ if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
 }
       
 
-<<<<<<< HEAD
 #     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
 #          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
 #         RegData$Variabel <-      
@@ -228,7 +227,7 @@ if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
                        Alder = 'Aldersfordeling',
                        B08StartAldrProbl = 'Alder da problemene startet',
                        B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
-=======
+
 if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
       RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
@@ -312,7 +311,6 @@ if (valgtVar=='VentetidKat') {
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '16+')
       xAkseTxt <- 'Uker'
       tittel <- 'Ventetid'
->>>>>>> 9508d7dbf19b27b7ebaa36588994c4826ae45709
 }
 
 if (valgtVar=='RegHenvInstans') { #1 Pasienten selv, 2 Fastlege/primærlege, 3	Øvrig primærhelsetjenste, 4 Spesialisthelsetjenesten,
