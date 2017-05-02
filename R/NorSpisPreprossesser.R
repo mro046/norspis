@@ -11,8 +11,8 @@
 NorSpisPreprosess <- function(RegData=RegData)	#, reshID=reshID)
 {
   #Kun ferdigstilte registreringer:
-  # Rapporteket får kun levert ferdigstilte registreringer fra MRS/NHN.
-      #RegData <- RegData[which(RegData$BasisRegStatus==1), ]
+  # Rapporteket skal få kun levert ferdigstilte registreringer fra MRS/NHN. Men dette stemmer ikke alltid.
+      #RegData <- RegData[which(RegData$BasisRegStatus==1), ] #HUSK Å TA INN NÅR GÅR I PROD!!!
   #Kjønn
 #  RegData$ErMann <- NULL
 

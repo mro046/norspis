@@ -195,6 +195,39 @@ if (valgtVar=='DiagVDiabetes') {    #brukes i: NorspisFigAndelerGrVar
 }
       
 
+#     if (valgtVar=='VentetidOverXMnd') { #variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+#          RegData$VentetidOverXMnd <- RegData$RegHenvMottattDato -
+#         RegData$Variabel <-      
+      
+#Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+ #                            strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")
+      
+
+      
+     
+      
+      
+      
+      
+      
+#     
+#     
+#     
+#--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
+      
+if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
+      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
+      gr <- c(0,seq(5,50,5),150)
+      #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
+      #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+      subtxt <- 'Aldersgruppe'
+      tittel <- switch(valgtVar,
+                       Alder = 'Aldersfordeling',
+                       B08StartAldrProbl = 'Alder da problemene startet',
+                       B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
+
 if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
       RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 

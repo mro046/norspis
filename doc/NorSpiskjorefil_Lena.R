@@ -34,7 +34,7 @@ minald <- 0	#alder, fra og med
 maxald <- 130	#alder, til og med
 erMann <- ''
 datoFra <- '2013-01-01'	 # min og max dato i utvalget vises alltid i figuren.
-datoTil <- '2016-12-31'
+datoTil <- '2017-12-31'
 preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
@@ -89,5 +89,39 @@ outfile <- paste0(valgtVar, 'GjMed.png')
 NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                     minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
 
+variable <- c("EDEQ60GlobalScore",
+              "EDEQ60Restriksjon",
+              "EDEQ60Kroppsform",
+              "EDEQ60Spising",
+              "EDEQ60Vekt",
+              "EDEQ60GlobalScore",
+              "EDEQ60Restriksjon",
+              "EDEQ60Kroppsform",
+              "EDEQ60Spising",
+              "EDEQ60Vekt",
+              "RAND36FysFunk", 
+              "RAND36RollebegFys", 
+              "RAND36RollebegEmo", 
+              "RAND36Tretthet", 
+              "RAND36MentalHelse", 
+              "RAND36SosialFunk", 
+              "RAND36Smerte", 
+              "RAND36GenHelse", 
+              "RAND36EndringHelse",
+              "SCL90TGSI",
+              "SCL90TSomatisering",
+              "SCL90TTvang",
+              "SCL90TSensitivitet",
+              "SCL90TDepresjon",
+              "SCL90TAngst",
+              "SCL90TFiendlighet",
+              "SCL90TFobi",
+              "SCL90TParanoia",
+              "SCL90TPsykotisk")                       #ikke sortert alfabetisk enda
 
+for (valgtVar in variable) {
+      outfile <- paste0(valgtVar, '_gjsn.png')
+      NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
+                          minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)      
+}
 
