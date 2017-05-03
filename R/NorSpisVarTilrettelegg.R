@@ -228,6 +228,8 @@ if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {
                        B08StartAldrProbl = 'Alder da problemene startet',
                        B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
 
+}    
+
 if (valgtVar=='VentetidOver2Uker') { #brukes i: NorspisFigAndelerGrVar
       RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
@@ -681,3 +683,4 @@ UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, retn=retn, #KIma
 return(invisible(UtData)) 
       
 }
+      
