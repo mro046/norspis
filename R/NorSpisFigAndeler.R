@@ -160,7 +160,7 @@ medSml=NorSpisUtvalg$medSml
       
       Ngr$Hoved <- switch(as.character(flerevar), 
                           '0' = table(RegData$VariabelGr[ind$Hoved]),
-                          #'1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
+                          # '1' = colSums(sapply(RegData[ind$Hoved ,variable], as.numeric), na.rm=T))
                           '1' = apply(RegData[ind$Hoved,variable], MARGIN=2, 
                                       FUN=function(x) sum(x == 1, na.rm=T)))
       #N$ gjelder selv om totalutvalget er ulikt for de ulike variablene i flerevar
@@ -176,7 +176,7 @@ medSml=NorSpisUtvalg$medSml
       if (NorSpisUtvalg$medSml==1) {
             Ngr$Rest <- switch(as.character(flerevar), 
                                '0' = table(RegData$VariabelGr[ind$Rest]),
-                               #'1' = colSums(sapply(RegData[ind$Rest ,variable], as.numeric), na.rm=T))
+                              # '1' = colSums(sapply(RegData[ind$Rest ,variable], as.numeric), na.rm=T))
                                '1' = apply(RegData[ind$Rest,variable], MARGIN=2, 
                                            FUN=function(x) sum(x == 1, na.rm=T)))
             N$Rest <- switch(as.character(flerevar), 
