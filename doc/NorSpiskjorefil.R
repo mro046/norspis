@@ -28,7 +28,8 @@ RegData <- NorSpisData
 setwd('C:/Users/spa-ressp-2/Documents/norspis/')
 
 
-#------------------------Definere parametre (som sendes inn til funksjonen)
+#------------------------Definere parametre
+# Inndata til funksjon:
 reshID <- 'TESTNO'  	#Må sendes med til funksjon
 minald <- 0	#alder, fra og med
 maxald <- 130	#alder, til og med
@@ -39,7 +40,10 @@ preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-
+valgtVar <- 'B08StartAldrProbl'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
+#MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
+#Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI,
+#B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
 
 
 
@@ -47,30 +51,82 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 
 
-#TESTE
 
-#---TESTE 1 NorSpisFigAndeler
 
-valgtVar <- 'Alder' #må velge
 
+#1--------------------Teste NorSpisFigAndeler
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
 
+
       #--------------------teste flere/alle variabler
-variable <- c( "Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
-               "B07Hovedinntekt", "B08StartAldrProbl",'B11FamilieSF', "B12TidlBehSF",'B12cAldrForsteBeh',
-               "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing", "B21SelvskadTidl",
-               "B22SelvskadSisteAr", "B23SelvmordFTidl", "B24SelvmordFSisteAr", "B25Avhengighet",    
-               "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner","MedBMISlutt","MedBMIStart",
-               "MedNevroleptika", "B25Avhengighet","NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
-               "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
-               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )              
-            #sortert alfabetisk
-#fikse og legge inn over: DiagVSF, ... HCA01Atferd
 
 
-
+variable <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+              "B07Hovedinntekt",
+              "B08StartAldrProbl",
+              "B11FamilieSF",
+              "B12TidlBehSF",
+              "B12cAldrForsteBeh",
+              "B17FysMishandl",
+              "B18PsykMishandl",
+              "B19Overgrep",
+              "B20Mobbing",
+              "B21SelvskadTidl",
+              "B22SelvskadSisteAr",
+              "B23SelvmordFTidl",
+              "B24SelvmordFSisteAr",
+              "B25Avhengighet",
+              "BehUtfallsvurdSamlet",
+              "BehVidereBeh",
+              "HCA01Atferd",
+              "HCA02Aktivitetsniva",
+              "HCA03Selvskade",
+              "HCA04Rusmisbruk",
+              "HCA05SkoleSprak",
+              "HCA06FysiskProblem",
+              "HCA07Hallusinasjoner",
+              "HCA08SomatiskSymp",
+              "HCA09EmosjonelleSymp",
+              "HCA10JevnaldrProbl", 
+              "HCA11Egenomsorg",
+              "HCA12FamilieProbl",
+              "HCASkoleframmote",
+              "HCA14ProblKunnskap",
+              "HCA15Mangelinfo",
+              "H01Atferd",
+              "H02Selvskade",
+              "H03Rusmisbruk",
+              "H04KognitiveProbl",
+              "H05FysiskeProbl",
+              "H06Hallusinasjoner",
+              "H07Stemningsleie",
+              "H08AndreProbl",
+              "H09ForhAndre",
+              "H10ADLProbl",
+              "H11BoligProbl",
+              "H12YrkeProbl",
+              "MedAntidepressiva",
+              "MedBenzodiazepiner",
+              "MedBMISlutt",
+              "MedBMIStart",
+              "MedIsoBMIBGSSlutt",
+              "MedIsoBMIBGSStart", 
+              "MedIsoBMICDCSlutt",
+              "MedIsoBMICDCStart",
+              "MedNevroleptika",
+              "NegHend",
+              "Norsktalende",
+              "PT01OnsketInvolv",
+              "PT02BleInvolv",
+              "PT03Utfallsvurd",
+              "PT04KontaktBrukerorg",
+              "PT05OrientertBrukerorg",
+              "RegHenvInstans",
+              "Utdanning",
+              "TidSykBehandling",
+              "VentetidKat")                            #sortert alfabetisk
 
 
 for (valgtVar in variable) {
@@ -85,15 +141,9 @@ for (valgtVar in variable) {
 
 
 
-#---TESTE 2 
-#NorSpisFigAndelerGrVar (andeler per enhet (evt. annen grupperingsvariabel)) 
-#---
 
-
-
-
-
-valgtVar <- 'VentetidOver2Uker'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes, VentetidOver2Uker
+#2-------------------- Teste andeler per enhet (evt. annen grupperingsvariabel) --------------------------
+valgtVar <- 'DiagVDiabetes'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
 grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
@@ -108,15 +158,9 @@ NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, 
 
 
 
+#------------------Teste gjennomsnitt per enhet
 
-
-
-#---TESTE 3 
-#---FigGjsnGrVar(gjennomsnitt per enhet)
-#----
-
-
-valgtVar <- 'RAND36SosialFunk' #AlderGjsn, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
+valgtVar <- 'SCL90TDepresjon' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
@@ -176,24 +220,6 @@ for (valgtVar in variable) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#GAMMELT...KAN SIKKERT SLETTES:
 
 
 #------------------------------ Andel, per enhet --------------------------
