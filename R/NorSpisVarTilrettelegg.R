@@ -46,6 +46,7 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
       flerevar <- 0
       sortAvtagende <- T
       variable <- 'Ingen'
+      deltittel <- ''
       
 
       
@@ -495,7 +496,7 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
     'H02Selvskade','H03Rusmisbruk', 'H04KognitiveProbl','H05FysiskeProbl', 'H06Hallusinasjoner','H07Stemningsleie',
     'H08AndreProbl','H09ForhAndre','H10ADLProbl','H11BoligProbl','H12YrkeProbl')) {
       retn <- 'H'
-      grtxt <- c('Ingen problem', 'Lite problem som ikke krever tiltak', 'Mildt problem, men klart tilstede',
+      grtxt <- c('Ingen problem', 'Lite problem som ikke \n krever tiltak', 'Mildt problem, \n men klart tilstede',
             'Moderat alvorlig problem', 'Alvorlig til svært alvorlig problem', 'Ukjent')
       RegData$VariabelGr <- 99
       indDum <- which(RegData[ ,valgtVar] %in% c(0:4,9))
@@ -503,7 +504,7 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:4,9))
       tittel <- switch(valgtVar,
                        HCA01Atferd = 'HONOSCA: 1. Problemer med forstyrrende, antisosial eller aggressiv atferd',
-                       HCA02Aktivitetsniva = 'HONOSCA: 2.Problemer med høyt aktivitetsnivå, oppmerksomhet eller konsentrasjon',
+                       HCA02Aktivitetsniva = c('HONOSCA: 2.Problemer med høyt aktivitetsnivå,', 'oppmerksomhet eller konsentrasjon'),
                        HCA03Selvskade = 'HONOSCA: 3.Selvskade som ikke skyldes uhell',
                        HCA04Rusmisbruk = 'HONOSCA: 4.Problemer med alkohol, stoff eller løsemiddelmisbruk',
                        HCA05SkoleSprak = 'HONOSCA: 5.Problemer med skole- eller språkferdigheter',
@@ -680,7 +681,7 @@ if (valgtVar=='B01Sivilstatus') {
 
       
 UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, retn=retn, #KImaal=KImaal, 
-               tittel=tittel, variable= variable, flerevar=flerevar)  #, sortAvtagende=sortAvtagende
+               tittel=tittel, deltittel=deltittel, variable= variable, flerevar=flerevar)  #, sortAvtagende=sortAvtagende
 #RegData inneholder nå variablene 'Variabel' og 'VariabelGr'
 return(invisible(UtData)) 
       

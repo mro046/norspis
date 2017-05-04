@@ -69,7 +69,6 @@
 #'     \item PT04KontaktBrukerorg
 #'     \item PT05OrientertBrukerorg
 #'     \item RegHenvInstans
-#'     \item Utdanning: Utdanningsnivå
 #'     \item TidSykBehandling
 #'     \item VentetidKat: Ventetid, 2-ukers grupper 
 #'    }

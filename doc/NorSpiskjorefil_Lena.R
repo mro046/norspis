@@ -37,40 +37,98 @@ datoFra <- '2013-01-01'	 # min og max dato i utvalget vises alltid i figuren.
 datoTil <- '2017-12-31'
 preprosess <- 1
 hentData <- 0
-enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
+enhetsUtvalg <- 0 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
 grVar <- 'EnhNavn'
 
 #------------------------------ Andeler flere var --------------------------
 
-valgtVar <- 'NegHend'	#Må velge... NegHend, PT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner, 
+valgtVar <- 'B03Bosituasjon'	#Må velge... NegHend, PT03Utfallsvurd,BehUtfallsvurdSamlet, MedBenzodiazepiner, 
             #MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, 
             #PT05OrientertBrukerorg, Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, 
             #Norsktalende, B05FullfortUtd, MedBMI, B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, 
             #B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
 
-outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
+outfile <- '' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald )
 
  
-variable <- c( "Alder", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
-               "B07Hovedinntekt", "B08StartAldrProbl", "B12cAldrForsteBeh", "B12TidlBehSF",  
-               "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing",    
-               "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner", "MedBMI",        
-               "MedNevroleptika", "Norsktalende", "PT01OnsketInvolv", "PT02BleInvolv", 
-               "PT03Utfallsvurd", "PT04KontaktBrukerorg", "PT05OrientertBrukerorg")
-variableNY <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+variable <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
                "B07Hovedinntekt", "B08StartAldrProbl",'B11FamilieSF', "B12TidlBehSF",'B12cAldrForsteBeh',
                "B17FysMishandl", "B18PsykMishandl", "B19Overgrep", "B20Mobbing", "B21SelvskadTidl",
                "B22SelvskadSisteAr", "B23SelvmordFTidl", "B24SelvmordFSisteAr", "B25Avhengighet",    
                "BehUtfallsvurdSamlet", "MedAntidepressiva", "MedBenzodiazepiner","MedBMISlutt","MedBMIStart",
                "MedNevroleptika", "B25Avhengighet","NegHend", "Norsktalende", "MedIsoBMIBGSSlutt", "MedIsoBMIBGSStart", 
                "MedIsoBMICDCSlutt", "MedIsoBMICDCStart","PT01OnsketInvolv","PT02BleInvolv","PT03Utfallsvurd", 
-               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )              
+               "PT04KontaktBrukerorg", "PT05OrientertBrukerorg", "RegHenvInstans", "TidSykBehandling","VentetidKat" )
+variableNY <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+              "B07Hovedinntekt",
+              "B08StartAldrProbl",
+              "B11FamilieSF",
+              "B12TidlBehSF",
+              "B12cAldrForsteBeh",
+              "B17FysMishandl",
+              "B18PsykMishandl",
+              "B19Overgrep",
+              "B20Mobbing",
+              "B21SelvskadTidl",
+              "B22SelvskadSisteAr",
+              "B23SelvmordFTidl",
+              "B24SelvmordFSisteAr",
+              "B25Avhengighet",
+              "BehUtfallsvurdSamlet",
+              "BehVidereBeh",
+              "HCA01Atferd",
+              "HCA02Aktivitetsniva",
+              "HCA03Selvskade",
+              "HCA04Rusmisbruk",
+              "HCA05SkoleSprak",
+              "HCA06FysiskProblem",
+              "HCA07Hallusinasjoner",
+              "HCA08SomatiskSymp",
+              "HCA09EmosjonelleSymp",
+              "HCA10JevnaldrProbl", 
+              "HCA11Egenomsorg",
+              "HCA12FamilieProbl",
+              "HCASkoleframmote",
+              "HCA14ProblKunnskap",
+              "HCA15Mangelinfo",
+              "H01Atferd",
+              "H02Selvskade",
+              "H03Rusmisbruk",
+              "H04KognitiveProbl",
+              "H05FysiskeProbl",
+              "H06Hallusinasjoner",
+              "H07Stemningsleie",
+              "H08AndreProbl",
+              "H09ForhAndre",
+              "H10ADLProbl",
+              "H11BoligProbl",
+              "H12YrkeProbl",
+              "MedAntidepressiva",
+              "MedBenzodiazepiner",
+              "MedBMISlutt",
+              "MedBMIStart",
+              "MedIsoBMIBGSSlutt",
+              "MedIsoBMIBGSStart", 
+              "MedIsoBMICDCSlutt",
+              "MedIsoBMICDCStart",
+              "MedNevroleptika",
+              "NegHend",
+              "Norsktalende",
+              "PT01OnsketInvolv",
+              "PT02BleInvolv",
+              "PT03Utfallsvurd",
+              "PT04KontaktBrukerorg",
+              "PT05OrientertBrukerorg",
+              "RegHenvInstans",
+              "TidSykBehandling",
+              "VentetidKat")                  
 
-variableNYE <- setdiff(variableNY,variable)
+variableNYE <- c("TidSykBehandling",
+                 "VentetidKat") #setdiff(variableNY,variable)
       
  for (valgtVar in variableNYE) {
 	outfile <- paste0(valgtVar, '_ford.png')
@@ -85,7 +143,12 @@ outfile <- paste0(valgtVar, '_ford.png')#Navn angis av Jasper
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
                   grVar=grVar, outfile=outfile, 
                   minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
-
+variable <- c('alder_u18','BehDodUnderBeh', 'DiagVDiabetes', 'VentetidOver2Uker')
+for (valgtVar in variable) {
+      outfile <- paste0(valgtVar, '_andGrVar.png')
+      NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
+                             grVar=grVar, outfile=outfile, minald=minald, maxald=maxald)
+}
 
 #------------------------------ Gjennomsnitt/median per enhet (evt. annen grupperingsvariabel) --------------------------
 
@@ -128,6 +191,7 @@ variable <- c("EDEQ60GlobalScore",
               "SCL90TFobi",
               "SCL90TParanoia",
               "SCL90TPsykotisk")                       #ikke sortert alfabetisk enda
+
 
 for (valgtVar in variable) {
       outfile <- paste0(valgtVar, '_gjsn.png')

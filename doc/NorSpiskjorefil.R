@@ -128,6 +128,7 @@ variable <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05Fu
               "TidSykBehandling",
               "VentetidKat")                            #sortert alfabetisk
 
+variableNYE <- setdiff(variableNY,variable) #Send til Lena når lagt til nye valgtVar
 
 for (valgtVar in variable) {
       outfile <- paste0(valgtVar, '_ford.png')
