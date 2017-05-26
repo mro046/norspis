@@ -47,6 +47,7 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
       sortAvtagende <- T
       variable <- 'Ingen'
       deltittel <- ''
+      RegData$Variabel <- 0
       
 
       
