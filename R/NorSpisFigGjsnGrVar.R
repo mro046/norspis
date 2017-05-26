@@ -14,7 +14,7 @@
 #' @export
 
 NorSpisFigGjsnGrVar <- function(RegData, valgtVar, valgtMaal='Gjsn', datoFra='2012-04-01', datoTil='2050-12-31',
-                         minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1, grVar='')
+                         minald=0, maxald=130, erMann='', outfile='', hentData=0, preprosess=1, grVar='EnhNavn')
       
                         # reshID ,        
                         #spmLena: skal "lagFig=1" inn (i NorSpisFigAndelerGrVar er den med, men ikke i NakkeFikAndelerGrVar)?
