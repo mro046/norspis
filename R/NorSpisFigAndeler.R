@@ -90,10 +90,7 @@
 #' @param enhetsUtvalg Sammenlikning eller ikke: 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #' @param valgtVar Hvilken variabel som skal visualiseres. Se \strong{Details} for oversikt.
 #'
-#' 
-#'
 #' @return En figur med søylediagram (fordeling) av ønsket variabel
-#'
 #' @export
 
 NorSpisFigAndeler  <- function(RegData, valgtVar, datoFra='2016-01-01', datoTil='3000-12-31',
@@ -179,8 +176,7 @@ medSml=NorSpisUtvalg$medSml
                                '1' = apply(RegData[ind$Rest,variable], MARGIN=2, 
                                            FUN=function(x) sum(x == 1, na.rm=T)))
             N$Rest <- switch(as.character(flerevar), 
-                             '0' = sum(Ngr$Rest),	#length(ind$Rest)- Kan inneholde NA
-                             #'1' = length(ind$Rest)
+                             '0' = sum(Ngr$Rest),	
                              '1' = apply(RegData[ind$Rest,variable], MARGIN=2, 
                                    FUN=function(x) sum(x %in% 0:1, na.rm=T)))
             Andeler$Rest <- 100*Ngr$Rest/N$Rest
