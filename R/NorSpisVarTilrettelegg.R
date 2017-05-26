@@ -177,7 +177,7 @@ if (valgtVar %in% c('RAND36FysFunk',
 #--------FigAndelerGrVar: (Tilrettelegging av variabel som) brukes i figurtypen FigAndelerGrVar:
       
 if (valgtVar=='alder_u18') {	#brukes i: NorspisFigAndelerGrVar
-      #RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
+      RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
       RegData$Variabel[which(RegData$Alder<18)] <- 1 
       tittel <- 'Pasienter under 18 år'
 }
