@@ -35,7 +35,7 @@ NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0,
 #------ Hente data      
        #NB: Tomme grVar fjernes så vurder om dette kan være standard...
       if (hentData == 1) {		
-            RegData <- NorSpisRegDataSQL(datoFra, datoTil)
+            RegData <- NorSpisELAlleScorData(datoFra=datoFra, datoTil=datoTil)
       }
 
 #------ Preprosessere data

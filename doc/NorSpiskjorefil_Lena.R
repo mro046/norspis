@@ -144,7 +144,7 @@ variableNYE <- c("TidSykBehandling",
 #------------------------------ Andeler per enhet (evt. annen grupperingsvariabel) --------------------------
 
 valgtVar <- 'alder_u18'
-outfile <- paste0(valgtVar, '_ford.png')#Navn angis av Jasper
+outfile <- paste0(valgtVar, '_AndEnh.png')#Navn angis av Jasper
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
                   grVar=grVar, outfile=outfile, 
                   minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
