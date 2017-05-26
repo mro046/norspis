@@ -23,12 +23,9 @@
 #' @return Søylediagram med AggVerdier av valgt variabel for hvert sykehus
 #'
 #' @export
-NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, 
-                            minald=0, maxald=130, grVar='EnhNavn', erMann='', hentData=0, preprosess=1, 
-                            outfile='', lagFig=1)                                   
-      
-      #aar=0,InnMaate=99,grType=99, 
-                              
+NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, minald=0, maxald=130, 
+                                   grVar='EnhNavn', erMann='', hentData=0, preprosess=1, outfile='', lagFig=1)                                   
+
 
 {
 
@@ -140,8 +137,7 @@ utvalgTxt <- NorSpisUtvalg$utvalgTxt
 #---------------------------------------FRA FIGANDELER, FigGjsnGrVar og FigAndelGrVar--------------------------
 #Hvis for få observasjoner..
 
-if (dim(RegData)[1] < 10 |                                                                            # "|" = "or"
-		(grVar=='' & length(which(RegData$ReshId == reshID))<5 & enhetsUtvalg %in% c(1,3))) {
+if (dim(RegData)[1] < 10 ) {
 
 #-----------Figur---------------------------------------
       FigTypUt <-figtype(outfile)  #FigTypUt <- figtype(outfile)
