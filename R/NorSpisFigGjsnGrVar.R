@@ -42,7 +42,7 @@ xaksetxt <- NorSpisVarSpes$tittel
 
 #------- Gjøre utvalg
       NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
-                                     erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)  #SpmLena: Trenger vi alle disse innparamentrene (kokt fra NorSpisFigAndlerGrVar. 
+                                     erMann=erMann, reshID=reshID)  #SpmLena: Trenger vi alle disse innparamentrene (kokt fra NorSpisFigAndlerGrVar. 
                                                                                                 #NakkeUtvalg (nedenfor har færre parametre))
                                                                                                 #NakkeUtvalg <- NakkeLibUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, minald=minald, maxald=maxald, erMann=erMann)	#, tidlOp=tidlOp
       RegData <- NorSpisUtvalg$RegData
