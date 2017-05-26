@@ -24,7 +24,7 @@
 #'
 #' @export
 NorSpisFigAndelerGrVar <- function(RegData, valgtVar, datoFra=0, datoTil=0, 
-                            minald=0, maxald=130, grVar='', erMann='', hentData=0, preprosess=1, 
+                            minald=0, maxald=130, grVar='EnhNavn', erMann='', hentData=0, preprosess=1, 
                             outfile='', lagFig=1)                                   
       
       #aar=0,InnMaate=99,grType=99, 
@@ -52,8 +52,8 @@ RegData <- NorSpisVarSpes$RegData
 tittel <- NorSpisVarSpes$tittel
 	  
 #------- Gjøre utvalg
-NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, maxald=maxald, 
-                                      erMann=erMann, enhetsUtvalg=enhetsUtvalg, reshID=reshID)
+NorSpisUtvalg <- NorSpisUtvalg(RegData=RegData, datoFra=datoFra, datoTil=datoTil, aar=aar, minald=minald, 
+                               maxald=maxald, erMann=erMann, reshID=reshID)
             
 RegData <- NorSpisUtvalg$RegData
 utvalgTxt <- NorSpisUtvalg$utvalgTxt
