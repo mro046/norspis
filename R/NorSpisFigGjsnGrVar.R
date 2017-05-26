@@ -25,7 +25,7 @@ NorSpisFigGjsnGrVar <- function(RegData, valgtVar, valgtMaal='Gjsn', datoFra='20
 
 #------ Hente data
       if (hentData == 1) {
-            RegData <- NorSpisRegDataSQL(datoFra, datoTil) #RegData <- NakkeRegDataSQL()	#RegData <- NakkeLoadRegDataMinimal()
+            RegData <- NorSpisELAlleScorData(datoFra, datoTil) #RegData <- NakkeRegDataSQL()	#RegData <- NakkeLoadRegDataMinimal()
       }
       
 #------ Preprosessere data

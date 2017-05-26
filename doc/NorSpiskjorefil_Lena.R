@@ -157,17 +157,18 @@ for (valgtVar in variable) {
 
 #------------------------------ Gjennomsnitt/median per enhet (evt. annen grupperingsvariabel) --------------------------
 
-grVar <- 'SykehusNavn'
+grVar <- 'EnhNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
-valgtVar <- 'Alder' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, 
+valgtVar <- 'EDEQ60GlobalScore' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, 
       #SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
-outfile <- paste0(valgtVar, 'GjMed.png')
+outfile <- '' #paste0(valgtVar, 'GjMed.png')
 
 #source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
 NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                     minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
 
-variable <- c("EDEQ60GlobalScore",
+variable <- c("AlderGjsn",
+      "EDEQ60GlobalScore",
               "EDEQ60Kroppsform",
               "EDEQ60Restriksjon",
               "EDEQ60Spising",
