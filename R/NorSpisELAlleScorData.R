@@ -13,7 +13,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
   dbType <- "mysql"
 
   query <- paste0('SELECT  
-      Alder, 
+      PasientAlder, 
 B01Sivilstatus,
 B02EgneBarn, 
 B03Bosituasjon, 
