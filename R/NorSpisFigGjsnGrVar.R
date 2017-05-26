@@ -4,37 +4,6 @@
 #' for hvert sykehus og kan ta inn ulike numeriske variable.
 #' Funksjonen er delvis skrevet for å kunne brukes til andre grupperingsvariable enn sykehus
 #'
-#' Argumentet \emph{valgtVar} har følgende valgmuligheter:
-#'    \itemize{
-#'     \item AlderGjsn: Alder
-#'     \item B08StartAldrProbl: Alder ved start av problematikk
-#'     \item B12cAldrForsteBeh: Alder ved start av første behandling
-#'     \item SCL90TGSI: Globalskåre SCL-90-R
-#'     \item SCL90TSomatisering: Somatiseringsskår SCL-90-R
-#'     \item SCL90TTvang: Tvangsskår SCL-90-R
-#'     \item SCL90TSensitivitet: Sensitivitetsskår SCL-90-R
-#'     \item SCL90TDepresjon: Depresjonsskår SCL-90-R
-#'     \item SCL90TAngst: AngstskårSCL-90-R
-#'     \item SCL90TFiendlighet: Fiendlighetsskår SCL-90-R
-#'     \item SCL90TFobi: Fobiskår SCL-90-R
-#'     \item SCL90TParanoia: Paranoiaskår SCL-90-R
-#'     \item SCL90TPsykotisk: Psykotisismeskår SCL-90-R
-#'     \item EDEQ60GlobalScore
-#'     \item EDEQ60Restriksjon
-#'     \item EDEQ60Kroppsform
-#'     \item EDEQ60Spising
-#'     \item EDEQ60Vekt
-#'     \item RAND36FysFunk
-#'     \item RAND36RollebegFys
-#'     \item RAND36RollebegEmo
-#'     \item RAND36Tretthet
-#'     \item RAND36MentalHelse
-#'     \item RAND36SosialFunk
-#'     \item RAND36Smerte
-#'     \item RAND36GenHelse
-#'     \item RAND36EndringHelse
-#'    }
-#'
 #' @inheritParams NorSpisFigAndeler
 #' @param valgtMaal Sentralmål 'Med' gir median, alt annet gir gjennomsnitt
 #' @param valgtVar Variabelen det skal vises resultat for.
