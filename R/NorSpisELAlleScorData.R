@@ -113,6 +113,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
    RegHendelsesdato,
    RegHenvMottattDato,
    RegHenvInstans,
+   RegRegtype,
    SCL90TAngst,
    SCL90TDepresjon,
    SCL90TFiendlighet,
