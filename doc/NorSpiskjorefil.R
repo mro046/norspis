@@ -40,7 +40,7 @@ preprosess <- 1
 hentData <- 0
 enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
 #					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-valgtVar <- 'B08StartAldrProbl'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
+valgtVar <- 'Alder'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
 #MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
 #Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI,
 #B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
@@ -48,8 +48,6 @@ valgtVar <- 'B08StartAldrProbl'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsv
 
 
 outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
-
-
 
 
 
@@ -144,7 +142,7 @@ for (valgtVar in variable) {
 
 
 #2-------------------- Teste andeler per enhet (evt. annen grupperingsvariabel) --------------------------
-valgtVar <- 'DiagVDiabetes'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
+valgtVar <- 'VentetidOver2Uker'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
 grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
 
 #outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
@@ -161,7 +159,7 @@ NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, 
 
 #------------------Teste gjennomsnitt per enhet
 
-valgtVar <- 'SCL90TDepresjon' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang,
+valgtVar <- '' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang, VentetidOver2Uker
 grVar <- 'SykehusNavn'
 valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
 
@@ -175,7 +173,8 @@ NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMa
 
 
       #--------------------teste flere
-variable <- c("EDEQ60GlobalScore",
+variable <- c("AlderGjsn",
+              "EDEQ60GlobalScore",
               "EDEQ60Kroppsform",
               "EDEQ60Restriksjon",
               "EDEQ60Spising",
@@ -219,7 +218,7 @@ for (valgtVar in variable) {
 
 
 
-#------------------------------ Andel, per enhet --------------------------
+#------------------------------ Andel, per enhet (AndelerGrVar)--------------------------
 #-----------------------------------------------------------------------------------
 rm(list=ls())
 NorSpisEnkeltledd <- read.table('C:/Users/spa-ressp-2/Documents/norspis/data/EnkeltLedd2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8') #,
@@ -239,7 +238,7 @@ erMann <- ''			#kjønn, 1-menn, 0-kvinner, standard: '' (alt annet enn 0 og 1), 
 tittel=1
 enhetsUtvalg <- 1	#1-Eget sykehus mot resten (standard), 0-Hele landet, 2-Eget sykehus
 
-valgtVar <- ''	#Må velge... 
+valgtVar <- 'VentetidOVer2Uker'	#Må velge... 
 
 outfile <- '' #paste(valgtVar, '_ShusSyn.png', sep='')	#Navn angis av Jasper
 
