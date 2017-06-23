@@ -14,10 +14,7 @@ NorSpisAlleScorer <- read.table('C:/Users/spa-ressp-2/NorSpisTestData/AlleScorer
 
 #-------------------------Merge data-------------------------------
 ForlAlleSc <- merge(NorSpisForlop, NorSpisAlleScorer, suffixes = c('','X'), by = "ForlopsID", all = FALSE)
-
-
 NorSpisData <- merge(ForlAlleSc, NorSpisEnkeltledd, suffixes = c('','X'), by = "ForlopsID", all = FALSE)
-
 #NorSpisData <- merge(NorSpisForlop, suffixes = c('','X'), by = c("ForlopsID" ), NorSpisEnkeltledd, 
 #                     all = FALSE)  #by.x = "ForlopsID", by.y = "ForlopsID",#"SykehusNavn", "AvdRESH"
 
@@ -27,41 +24,73 @@ RegData <- NorSpisData
 #------------------------setwd-----------------------------------
 setwd('C:/Users/spa-ressp-2/Documents/norspis/')
 
-
 #------------------------Definere parametre
 # Inndata til funksjon:
 reshID <- 'TESTNO'  	#Må sendes med til funksjon
 minald <- 0	#alder, fra og med
-maxald <- 130	#alder, til og med
+maxald <- 200	#alder, til og med
 erMann <- ''
 datoFra <- '2013-01-01'	 # min og max dato i utvalget vises alltid i figuren.
-datoTil <- '2016-12-31'
+datoTil <- '2017-12-31'
 preprosess <- 1
 hentData <- 0
-enhetsUtvalg <- 1 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
-#					6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
-valgtVar <- 'Alder'	#Må velge... Alder, PT03Utfallsvurd,BehUtfallsvurdSamlet, BehVidereBeh, MedBenzodiazepiner,
-#MedAntidepressiva,MedNevroleptika, PT01OnsketInvolv,PT02BleInvolv, PT04KontaktBrukerorg, PT05OrientertBrukerorg, 
-#Alder,B08StartAldrProbl, B12dAldrForsteBeh, B04PabegyntUtd, Norsktalende, B05FullfortUtd, MedBMI,
-#B06Hovedaktivitet, B07Hovedinntekt, B12TidlBehSF, B17FysMishandl, B18PsykMishandl, B19Overgrep, B20Mobbing, 
+#? tittel=1  
+enhetsUtvalg <- 0 #		enhetsUtvalg - 0-hele landet, 1-egen enhet mot resten av landet, 2-egen enhet
+                  #		6–egen enhet mot egen region, 7–egen region, 8–egen region mot resten
 
+outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper #tom=lagres ikke men kommer opp på skjermen
 
-
-outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
-
-
+#I--------------------teste enkeltvariabler
 
 
 #1--------------------Teste NorSpisFigAndeler
 
+valgtVar <- 'B01Sivilstatus'	#Må velge... 
+
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
 
+#2-------------------- TESTE FIGURER HVOR ET MÅL (gjsn, median, andeler) ER GRUPPERT PÅ BEHANDLINGSENHETER (evt. annnen grupperingsvariabel)
 
-      #--------------------teste flere/alle variabler
+grVar <- 'SykehusNavn'             #sette variablen man ønsker å gruppere på
 
 
-variable <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05FullfortUtd", "B06Hovedaktivitet",
+#2.1------------------ Teste NorSpisFigAndelerGrVar (andeler per enhet)
+
+#setwd('C:/Users/spa-ressp-2/Documents/norspis/R')           # "#source" NorSpisFigAndelerGrVar, hvis det er behov for det
+#source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')      # "#source" NorSpisFigAndelerGrVar, hvis det er behov for det
+
+valgtVar <- 'alder_u18'
+
+NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
+                       grVar=grVar, outfile=outfile, 
+                       minald=minald, maxald=maxald) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
+
+#2.2------------------ Teste NorSpisFigGjsnGrVar (andeler per enhet)
+
+valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
+
+#source funksjonen hvis den (ved en feil) ikke kommer inn når man bygger pakken
+#getwd()
+#setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
+#source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
+
+valgtVar <- 'VentetidOver2Uker'
+
+NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
+                    minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
+
+#II--------------------teste flere/alle variabler
+
+
+#1--------------------Teste FLERE for NorSpisFigAndeler
+variableNY <- c("Alder",
+              "B01Sivilstatus",
+              "B02EgneBarn", 
+              "B03Bosituasjon",
+              "B04PabegyntUtd", 
+              "B05FullfortUtd", 
+              "B06Hovedaktivitet",
               "B07Hovedinntekt",
               "B08StartAldrProbl",
               "B11FamilieSF",
@@ -122,11 +151,12 @@ variable <- c("Alder", "B02EgneBarn", "B03Bosituasjon", "B04PabegyntUtd", "B05Fu
               "PT04KontaktBrukerorg",
               "PT05OrientertBrukerorg",
               "RegHenvInstans",
-              "Utdanning",
               "TidSykBehandling",
               "VentetidKat")                            #sortert alfabetisk
 
-variableNYE <- setdiff(variableNY,variable) #Send til Lena når lagt til nye valgtVar
+#Hvis legger til nye variable, sende nye til Lena: 
+#variableNYE <- setdiff(variableNY,variable) #Send til Lena når lagt til nye valgtVar
+
 
 for (valgtVar in variable) {
       outfile <- paste0(valgtVar, '_ford.png')
@@ -135,45 +165,26 @@ for (valgtVar in variable) {
                         reshID=reshID, outfile=outfile, minald=minald, maxald=maxald)
 }
 
+#2.1--------------------Teste FLERE for NorSpisFigAndelerGrVar andeler per enhet (evt. annen grupperingsvariabel) --------------------------
+for (valgtVar in variable) {
+      outfile <- paste(valgtVar, '.png', sep='')
+      NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
+      grVar=grVar, outfile=outfile, 
+      minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
+}
 
+for (valgtVar in variable) {
+      outfile <- paste(valgtVar, '.png', sep='')
+      FigAndelerGrVar(RegData=NakkeData, datoFra=datoFra, valgtVar=valgtVar,
+                      datoTil=datoTil, minald=minald, maxald=maxald, erMann=erMann,
+                      reshID=reshID, libkat=libkat, outfile=outfile)
+}
 
+#2.2--------------------Teste FLERE for NorSpisFigGjsnGrVar (gjennomsnitt per enhet)
 
-
-
-
-#2-------------------- Teste andeler per enhet (evt. annen grupperingsvariabel) --------------------------
-valgtVar <- 'VentetidOver2Uker'             #valg: alder_u18, BehDodUnderBeh, DiagVDiabetes 
-grVar <- 'SykehusNavn'             #variablen man ønsker å gruppere på
-
-#outfile <- paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper
-
-setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
-source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')
-
-
-NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
-                       grVar=grVar, outfile=outfile, 
-                       minald=minald, maxald=maxald ) #reshID=reshID, enhetsUtvalg=enhetsUtvalg, 
-
-
-
-#------------------Teste gjennomsnitt per enhet
-
-valgtVar <- '' #Alder, B08StartAldrProbl, B12cAldrForsteBeh, SCL90TDepresjon, SCL90TGSI, SCL90TSensitivitet, SCL90TSomatisering, SCL90TTvang, VentetidOver2Uker
-grVar <- 'SykehusNavn'
-valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen. 
-
-#source funksjonen hvis den (ved en feil) ikke kommer inn når man bygger pakken
-#getwd()
-setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
-
-source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
-NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
-                    minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)
-
-
-      #--------------------teste flere
 variable <- c("AlderGjsn",
+              "B08StartAldrProbl",
+              "B12cAldrForsteBeh", 
               "EDEQ60GlobalScore",
               "EDEQ60Kroppsform",
               "EDEQ60Restriksjon",
@@ -197,8 +208,8 @@ variable <- c("AlderGjsn",
               "SCL90TPsykotisk",
               "SCL90TSensitivitet",
               "SCL90TSomatisering",
-              "SCL90TTvang")                       #ikke sortert alfabetisk enda
-#Sortert
+              "SCL90TTvang")                       #  sortert alfabetisk
+
 
 for (valgtVar in variable) {
       outfile <- paste0(valgtVar, '_ford.png')
@@ -207,52 +218,3 @@ for (valgtVar in variable) {
       NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                           minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)      
 }
-
-
-
-
-
-
-
-
-
-
-
-#------------------------------ Andel, per enhet (AndelerGrVar)--------------------------
-#-----------------------------------------------------------------------------------
-rm(list=ls())
-NorSpisEnkeltledd <- read.table('C:/Users/spa-ressp-2/Documents/norspis/data/EnkeltLedd2017-02-01.csv', sep=';', header=T, encoding = 'UTF-8') #,
-NorSpisForlop <- read.table('C:/Users/spa-ressp-2/Documents/norspis/data/ForlopsOversikt2016-08-16.csv', sep=';', header=T, encoding = 'UTF-8')
-NorSpisData <- merge(NorSpisForlop, suffixes = c('','X'), by = c("ForlopsID" ), NorSpisEnkeltledd, all = FALSE)  #by.x = "ForlopsID", by.y = "ForlopsID",
-#"SykehusNavn", "AvdRESH"
-RegData <- NorSpisData
-#LENA setwd("C:/ResultattjenesteGIT/Nakke/")
-
-# Inndata til funksjon:
-reshID <- 13 #De tre med flest reg:
-minald <- 0	#alder, fra og med
-maxald <- 130	#alder, til og med
-datoFra <- '2012-01-01'	 # min og max dato i utvalget vises alltid i figuren.
-datoTil <- '2015-12-31'
-erMann <- ''			#kjønn, 1-menn, 0-kvinner, standard: '' (alt annet enn 0 og 1), dvs. begge
-tittel=1
-enhetsUtvalg <- 1	#1-Eget sykehus mot resten (standard), 0-Hele landet, 2-Eget sykehus
-
-valgtVar <- 'VentetidOVer2Uker'	#Må velge... 
-
-outfile <- '' #paste(valgtVar, '_ShusSyn.png', sep='')	#Navn angis av Jasper
-
-
-NorSpisFigAndelerGrVar(RegData=RegData, datoFra=datoFra, valgtVar=valgtVar,
-                datoTil=datoTil, minald=minald, maxald=maxald, #erMann=erMann,
-                reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile) #Mads:Påse at riktige innparametre...(sammenlign med de variablene funksjonen bygger på (se filaNorSpisFigAndelerGrVar.R)).  
-
-##Teste variables
-#variable <- c('Alder','Utdanning')
-
-#for (valgtVar in variable) {
-#      outfile <- paste(valgtVar, '.png', sep='')
-#      FigAndelerGrVar(RegData=NakkeData, datoFra=datoFra, valgtVar=valgtVar,
-#                      datoTil=datoTil, minald=minald, maxald=maxald, erMann=erMann,
-#                      reshID=reshID, libkat=libkat, outfile=outfile)
-#}

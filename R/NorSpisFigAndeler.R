@@ -4,6 +4,7 @@
 #' #' Argumentet \emph{valgtVar} har følgende valgmuligheter:
 #'    \itemize{
 #'     \item Alder: Aldersfordeling, 10-årige grupper
+#'     \item B01Sivilstatus
 #'     \item B02EgneBarn
 #'     \item B03Bosituasjon
 #'     \item B04PabegyntUtd

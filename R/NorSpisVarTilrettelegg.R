@@ -80,7 +80,6 @@ if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {        
 }          
 
 
-      
 if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging heter alder. #BRUKES I: GjsnGrVar 
       RegData <- RegData[which(RegData[ ,'Alder'] >0), ]
       RegData$Variabel <- RegData[ ,'Alder']
@@ -95,10 +94,24 @@ if (valgtVar=='alder_u18') {	                                                   
 }
       
 if (valgtVar=='B01Sivilstatus') {                                                         #BRUKES I: Andeler
-      grtxt <- c('Enslig','Samboer','Gift','Skilt','Enke/enkemann','Annen')
-      RegData$VariabelGr <- factor(RegData$B01Sivilstatus, levels = c(1:5,9))
+      retn <- 'H'
+      grtxt <- c('Enslig','Samboer','Gift','Skilt','Enke/\nenkemann','Annen')
+      
+      #sortere bort ugyldige rader
+      koder <- c(1:5,9)
+      indDum <- which(RegData$B01Sivilstatus %in% koder)#
+      RegData <- RegData[indDum,] #velger de gyldige radene/fjerner de ugyldige 
+      
+      RegData$VariabelGr <- factor(RegData$B01Sivilstatus, levels = koder)
       tittel <- 'Sivilstatus'
 }   
+
+#enkelt (men feil?) kodesnutt for B01Sivilstatus:      
+#if (valgtVar=='B01Sivilstatus') {                                                         #BRUKES I: Andeler
+#      grtxt <- c('Enslig','Samboer','Gift','Skilt','Enke/\nenkemann','Annen')
+#      RegData$VariabelGr <- factor(RegData$B01Sivilstatus, levels = koder)
+#      tittel <- 'Sivilstatus'
+#}   
 
 if (valgtVar=='B02EgneBarn') {                                                                  #BRUKES I: Andeler
       gr <- c(0:5,15)
@@ -129,7 +142,6 @@ if (valgtVar=='B03Bosituasjon') {                                               
       #forsikrer oss om at kategorier som kan være tomme 
       #(e.g. ingen bodde alene, kategori 3) likevel kommer med i 
       #figur. 
-            
       #Lage tittelen til diagrammet
       #xAkseTxt <- 'Bosituasjon'
       tittel <- 'Bosituasjon'
@@ -341,7 +353,8 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
                     'HCA06FysiskProblem', 'HCA07Hallusinasjoner', 'HCA08SomatiskSymp', 'HCA09EmosjonelleSymp','HCA10JevnaldrProbl', 
                     'HCA11Egenomsorg', 'HCA12FamilieProbl', 'HCASkoleframmote', 'HCA14ProblKunnskap', 'HCA15Mangelinfo', 'H01Atferd',
                     'H02Selvskade','H03Rusmisbruk', 'H04KognitiveProbl','H05FysiskeProbl', 'H06Hallusinasjoner','H07Stemningsleie',
-                    'H08AndreProbl','H09ForhAndre','H10ADLProbl','H11BoligProbl','H12YrkeProbl')) {             #BRUKES I: Andeler
+                    'H08AndreProbl','H09ForhAndre','H10ADLProbl','H11BoligProbl','H12YrkeProbl')) {             
+                                                                                                #BRUKES I: Andeler
       retn <- 'H'
       grtxt <- c('Ingen problem', 'Lite problem som ikke \n krever tiltak', 'Mildt problem, \n men klart tilstede',
                  'Moderat alvorlig problem', 'Alvorlig til svært alvorlig problem', 'Ukjent')
@@ -558,15 +571,15 @@ if (valgtVar %in% c('RAND36FysFunk',
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- switch(valgtVar, 
-                          RAND36FysFunk = 'skåre: Global skåre, RAND-36',
-                          RAND36RollebegFys = 'skåre: Rollefungering (fysisk), RAND-36',
-                          RAND36RollebegEmo = 'skåre: Rollefungering (emosjonelt), RAND-36',
-                          RAND36Tretthet = 'skåre: Vitalitet, RAND-36',
-                          RAND36MentalHelse = 'skåre: Mental helse, RAND-36',
-                          RAND36SosialFunk = 'skåre: Sosial fungering, RAND-36',
-                          RAND36Smerte = 'skåre: Smerte, RAND-36',
-                          RAND36GenHelse = 'skåre: Generell helse, RAND-36',
-                          RAND36EndringHelse ='skåre: Endring i helse, RAND-36')
+                         RAND36FysFunk = 'skåre: Global skåre, RAND-36',
+                         RAND36RollebegFys = 'skåre: Rollefungering (fysisk), RAND-36',
+                         RAND36RollebegEmo = 'skåre: Rollefungering (emosjonelt), RAND-36',
+                         RAND36Tretthet = 'skåre: Vitalitet, RAND-36',
+                         RAND36MentalHelse = 'skåre: Mental helse, RAND-36',
+                         RAND36SosialFunk = 'skåre: Sosial fungering, RAND-36',
+                         RAND36Smerte = 'skåre: Smerte, RAND-36',
+                         RAND36GenHelse = 'skåre: Generell helse, RAND-36',
+                         RAND36EndringHelse ='skåre: Endring i helse, RAND-36')
       xaksetxt <- switch(valgtVar, 
                          RAND36FysFunk = 'Global skåre',
                          RAND36RollebegFys = 'Rollefungering (fysisk)',
@@ -616,7 +629,7 @@ if (valgtVar %in% c('SCL90TGSI',
                          SCL90TPsykotisk = 'Psykotisisme (T-skår; mean=50, std=10)')
 }                                                                                          
       
-if (valgtVar=='TidSykBehandling'){                                                              #BRUKES I: Andeler
+if (valgtVar=='TidSykBehandling'){                                                              #BRUKES I: Andeler            #Kvalitetsindikator("hvor godt/tidlig fanger man opp de syke?"). Interessant med tidsserie og sammenligning mellom enheter.)
       RegData$TidSykBehandling<-RegData$B12dArTilBehstart*12+RegData$B12dMndTilBehstart #lager variabel som gir år + måneder fra sykdom til behandlingsstart
       gr <- c(0,6,12,18,24,30,36,500)
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
@@ -624,7 +637,7 @@ if (valgtVar=='TidSykBehandling'){                                              
       xAkseTxt <-'Måneder'
       tittel <- 'Tid fra sykdomsdebut til behandlingsstart' 
 }
-       
+
 if (valgtVar=='VentetidOver2Uker') {                                                            #BRUKES I: AndelerGrVar       #Kvalitetsindikator
       RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
@@ -635,7 +648,7 @@ if (valgtVar=='VentetidOver2Uker') {                                            
 }
 
 if (valgtVar=='VentetidKat') {
-      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),     #BRUKES I:
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
       RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
       gr <- c(0,seq(2,16,2),150)
@@ -646,28 +659,9 @@ if (valgtVar=='VentetidKat') {
 }
 
       
-#      
-# 
-#--------FigAndelerGrVar: (Tilrettelegging av variabel som) brukes i figurtypen FigAndelerGrVar:
-      
-#     
-#     
-#--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
-      
-
-
 
       
       
-
-#--------FigAndeler: (Tilrettelegging av variabel som) brukes i figurtypen FigAndeler:
-
-
-      
-
-      
-
-
       
 
 UtData <- list(RegData=RegData, grtxt=grtxt, xAkseTxt=xAkseTxt, retn=retn, #KImaal=KImaal, 
