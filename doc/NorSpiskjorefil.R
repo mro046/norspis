@@ -45,7 +45,7 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper #tom=lag
 
 #1--------------------Teste NorSpisFigAndeler
 
-valgtVar <- 'B01Sivilstatus'	#Må velge... 
+valgtVar <- 'RegHenvInstans'	#Må velge... 
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)

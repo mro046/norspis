@@ -94,15 +94,16 @@ if (valgtVar=='alder_u18') {	                                                   
 }
       
 if (valgtVar=='B01Sivilstatus') {                                                         #BRUKES I: Andeler
-      retn <- 'H'
-      grtxt <- c('Enslig','Samboer','Gift','Skilt','Enke/\nenkemann','Annen')
-      
+      retn <- 'V'
+      grtxt <- c('Enslig','Samboer','Gift','Skilt','Enke/\nenkemann','Annen') 
+    
       #sortere bort ugyldige rader
       koder <- c(1:5,9)
       indDum <- which(RegData$B01Sivilstatus %in% koder)#
       RegData <- RegData[indDum,] #velger de gyldige radene/fjerner de ugyldige 
       
       RegData$VariabelGr <- factor(RegData$B01Sivilstatus, levels = koder)
+      xAkseTxt <- 'Sivilstatus'
       tittel <- 'Sivilstatus'
 }   
 
@@ -114,10 +115,17 @@ if (valgtVar=='B01Sivilstatus') {                                               
 #}   
 
 if (valgtVar=='B02EgneBarn') {                                                                  #BRUKES I: Andeler
+      
+      #sortere bort ugyldige rader
+      koder <- c(0:15)
+      indDum <- which(RegData$B02EgneBarn %in% koder)#
+      RegData <- RegData[indDum,] #velger de gyldige radene/
+      
+      grtxt <- c(0:4, '5+')	#c(names(AndelLand)[-length(gr)], '90+')
       gr <- c(0:5,15)
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-      grtxt <- c(0:4, '5+')	#c(names(AndelLand)[-length(gr)], '90+')
-      xAkseTxt <- 'Barn'
+      
+      xAkseTxt <- 'Antall barn'
       tittel <- 'Antall egne barn'
 }      
       
@@ -549,14 +557,21 @@ if (valgtVar=='PT03Utfallsvurd') {                                              
 if (valgtVar=='RegHenvInstans') { #1 Pasienten selv, 2 Fastlege/primærlege, 3	Øvrig primærhelsetjenste, 4 Spesialisthelsetjenesten,
       # 5	Barnehage / skolesektor/PPT, 6 Sosialtjeneste / barnevern, 7 Politi/fengsel/rettsvesen, 
       # 8 Rehabiliteringsinstitusjon/sykehjem, 9Privatpraktiserende spesialister, 99 Annet
+                                                                                     #BRUKES I: Andeler
+                                                                                     # MANGLER: (Rettet 28.06 slik at tom kat. kommer med, men...) kategoriene kommer ikke i den rekkefølgen de bør(slik de er listet i spørreskjemaene)
       retn <- 'H'
-      RegData$VariabelGr <- RegData$RegHenvInstans
+
+      #sortere bort ugyldige rader
+      koder <- c(1:9,99)
+      indDum <- which(RegData$RegHenvInstans %in% koder)
+      RegData <- RegData[indDum,]
+      
+      RegData$VariabelGr <- factor(RegData$RegHenvInstans,levels=koder)
       grtxt <- c('Pasienten selv', 'Fastlege/primærlege', 'Øvrig primærhelsetjeneste', 'Spesialisthelsetjenesten', 
                  'Barnehage/skolesektor/PPT', 'Sosialtjeneste/barnevern', 'Politi/fengsel/rettsvesen', 'Annet')
       xAkseTxt <- 'Henvisende instans'
       tittel <- 'Henvisende instans'
 }
-      
       
 if (valgtVar %in% c('RAND36FysFunk', 
                     'RAND36RollebegFys', 
