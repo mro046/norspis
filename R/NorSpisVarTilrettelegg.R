@@ -165,34 +165,47 @@ if (valgtVar %in% c('B04PabegyntUtd', 'B05FullfortUtd')) {                      
                       B05FullfortUtd=c('Ikke fullført grunnskole','Grunnskole','Videregående skole (1-3 år)',
                                        'Høgskole eller universitet, \nmindre enn 4 år', 
                                        'Høgskole eller universitet, \n4 år eller mer','Ukjent'))
-      verdier <- switch(valgtVar,
+
+      #Velge kun gyldige rader:
+      koder <- switch(valgtVar,
                         B04PabegyntUtd=c(1:4,9),
                         B05FullfortUtd=c(1:5,9))
-      indDum <- which(RegData[ ,valgtVar] %in% verdier)
+      indDum <- which(RegData[ ,valgtVar] %in% koder)
       RegData <- RegData[indDum, ]
+      
       RegData$VariabelGr <- RegData[ ,valgtVar]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = verdier)
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- 'Høyeste påbegynte utdanning'
 }
 
+      
 if (valgtVar=='B06Hovedaktivitet') {                                                            #BRUKES I: Andeler
       # 1=Heltidsarbeid, 2=Deltidsarbeid, 3=På arbeidsmarkedstiltak, 4=Vernepliktig, 5=Skoleelev/lærling, 6=Student, 7=Sykemeldt, 8=Ufør, 9=Annen
       retn <- 'H'
-      grtxt <- c('Heltidsarbeid', 'Deltidsarbeid', 'På arbeidsmarkedstiltak', 'Vernepliktig', 'Skoleelev/lærling', 'Student', 'Sykemeldt', 'Ufør', 'Annen', 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$B06Hovedaktivitet %in% c(1:9))
-      RegData$VariabelGr[indDum] <- RegData$B06Hovedaktivitet[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:9,99))
+      grtxt <- c('Heltidsarbeid', 'Deltidsarbeid', 'På arbeidsmarkedstiltak', 'Vernepliktig', 'Skoleelev/lærling', 'Student', 'Sykemeldt', 'Ufør', 'Annen')
+      
+      #Velge kun gyldige rader:
+      koder <- c(1:9)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$B06Hovedaktivitet %in% koder)
+      RegData <- RegData[indDum, ] 
+      
+      RegData$VariabelGr<- RegData$B06Hovedaktivitet #RegData$VariabelGr[indDum] <- RegData$B06Hovedaktivitet[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- 'Hovedaktivitet'
 }
       
 if (valgtVar=='B07Hovedinntekt') {                                                               #BRUKES I: Andeler
       retn <- 'H'
-      grtxt <- c('Arbeidsinntekt', 'Sykepenger/trygd/pensjon', 'Blir forsørget', 'Sosialhjelp', 'Stipend/lån', 'Kursstønad/lønn i arbeidsmarkedstiltak', 'Andre inntekter', 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$B07Hovedinntekt %in% c(1:6))
-      RegData$VariabelGr[indDum] <- RegData$B07Hovedinntekt[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9,99))
+      grtxt <- c('Arbeidsinntekt', 'Sykepenger/trygd/pensjon', 'Blir forsørget', 'Sosialhjelp', 'Stipend/lån', 'Kursstønad/\nlønn i arbeidsmarkedstiltak', 'Andre inntekter')
+      
+      #Velge kun gyldige rader:
+      koder <- c(1:6,9)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$B07Hovedinntekt %in% koder)
+      
+      RegData$VariabelGr <- RegData$B07Hovedinntekt #RegData$VariabelGr[indDum] <- RegData$B07Hovedinntekt[indDum]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6,9))
       tittel <- 'Pasientenes hovedinntekt'
 }
       
@@ -554,25 +567,6 @@ if (valgtVar=='PT03Utfallsvurd') {                                              
       tittel <- 'Pasienttilfredshet: "Hvordan vurderer du utfallet av mottatt behandling?"'
 }
       
-if (valgtVar=='RegHenvInstans') { #1 Pasienten selv, 2 Fastlege/primærlege, 3	Øvrig primærhelsetjenste, 4 Spesialisthelsetjenesten,
-      # 5	Barnehage / skolesektor/PPT, 6 Sosialtjeneste / barnevern, 7 Politi/fengsel/rettsvesen, 
-      # 8 Rehabiliteringsinstitusjon/sykehjem, 9Privatpraktiserende spesialister, 99 Annet
-                                                                                     #BRUKES I: Andeler
-                                                                                     # MANGLER: (Rettet 28.06 slik at tom kat. kommer med, men...) kategoriene kommer ikke i den rekkefølgen de bør(slik de er listet i spørreskjemaene)
-      retn <- 'H'
-
-      #sortere bort ugyldige rader
-      koder <- c(1:9,99)
-      indDum <- which(RegData$RegHenvInstans %in% koder)
-      RegData <- RegData[indDum,]
-      
-      RegData$VariabelGr <- factor(RegData$RegHenvInstans,levels=koder)
-      grtxt <- c('Pasienten selv', 'Fastlege/primærlege', 'Øvrig primærhelsetjeneste', 'Spesialisthelsetjenesten', 
-                 'Barnehage/skolesektor/PPT', 'Sosialtjeneste/barnevern', 'Politi/fengsel/rettsvesen', 'Annet')
-      xAkseTxt <- 'Henvisende instans'
-      tittel <- 'Henvisende instans'
-}
-      
 if (valgtVar %in% c('RAND36FysFunk', 
                     'RAND36RollebegFys', 
                     'RAND36RollebegEmo', 
@@ -586,15 +580,15 @@ if (valgtVar %in% c('RAND36FysFunk',
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- switch(valgtVar, 
-                         RAND36FysFunk = 'skåre: Global skåre, RAND-36',
-                         RAND36RollebegFys = 'skåre: Rollefungering (fysisk), RAND-36',
-                         RAND36RollebegEmo = 'skåre: Rollefungering (emosjonelt), RAND-36',
-                         RAND36Tretthet = 'skåre: Vitalitet, RAND-36',
-                         RAND36MentalHelse = 'skåre: Mental helse, RAND-36',
-                         RAND36SosialFunk = 'skåre: Sosial fungering, RAND-36',
-                         RAND36Smerte = 'skåre: Smerte, RAND-36',
-                         RAND36GenHelse = 'skåre: Generell helse, RAND-36',
-                         RAND36EndringHelse ='skåre: Endring i helse, RAND-36')
+                          RAND36FysFunk = 'skåre: Global skåre, RAND-36',
+                          RAND36RollebegFys = 'skåre: Rollefungering (fysisk), RAND-36',
+                          RAND36RollebegEmo = 'skåre: Rollefungering (emosjonelt), RAND-36',
+                          RAND36Tretthet = 'skåre: Vitalitet, RAND-36',
+                          RAND36MentalHelse = 'skåre: Mental helse, RAND-36',
+                          RAND36SosialFunk = 'skåre: Sosial fungering, RAND-36',
+                          RAND36Smerte = 'skåre: Smerte, RAND-36',
+                          RAND36GenHelse = 'skåre: Generell helse, RAND-36',
+                          RAND36EndringHelse ='skåre: Endring i helse, RAND-36')
       xaksetxt <- switch(valgtVar, 
                          RAND36FysFunk = 'Global skåre',
                          RAND36RollebegFys = 'Rollefungering (fysisk)',
@@ -606,7 +600,28 @@ if (valgtVar %in% c('RAND36FysFunk',
                          RAND36GenHelse = 'Generell helse',
                          RAND36EndringHelse ='Endring i helse')
 }
-                       
+      
+if (valgtVar=='RegHenvInstans') { #1 Pasienten selv, 2 Fastlege/primærlege, 3	Øvrig primærhelsetjenste, 4 Spesialisthelsetjenesten,
+      # 5	Barnehage / skolesektor/PPT, 6 Sosialtjeneste / barnevern, 7 Politi/fengsel/rettsvesen, 
+      # 8 Rehabiliteringsinstitusjon/sykehjem, 9Privatpraktiserende spesialister, 99 Annet
+                                                                                     #BRUKES I: Andeler
+                                                                                     # MANGLER: (Rettet 28.06 slik at tom kat. kommer med, men...) kategoriene kommer ikke i den rekkefølgen de bør(slik de er listet i spørreskjemaene)
+      retn <- 'H'
+      grtxt <- c('Pasienten selv', 'Fastlege/primærlege', 'Øvrig primærhelsetjeneste', 'Spesialisthelsetjenesten', 
+                 'Barnehage/skolesektor/PPT', 'Sosialtjeneste/barnevern', 'Politi/fengsel/rettsvesen', 'Rehabiliteringsinstitusjon/\nsykehjem', 'Privatpraktiserende \nspesialister', 'Annet')
+      
+      #sortere bort ugyldige rader:
+      koder <- c(1:9,99)
+      indDum <- which(RegData$RegHenvInstans %in% koder)
+      RegData <- RegData[indDum,]
+
+      RegData$VariabelGr <- RegData$RegHenvInstans      
+      RegData$VariabelGr <- factor(RegData$RegHenvInstans,levels=koder)
+      
+      xAkseTxt <- 'Henvisende instans'
+      tittel <- 'Henvisende instans'
+}
+      
 if (valgtVar %in% c('SCL90TGSI',
                     'SCL90TSomatisering', 
                     'SCL90TTvang',
