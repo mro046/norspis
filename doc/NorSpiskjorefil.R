@@ -45,7 +45,9 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper #tom=lag
 
 #1--------------------Teste NorSpisFigAndeler
 
-valgtVar <- 'B07Hovedinntekt'	#Må velge... B03Bosituasjon
+valgtVar <- 'VentetidKat'	#Må velge... B03Bosituasjon'B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
+#'B21SelvskadTidl', 'B22SelvskadSisteAr', 'B23SelvmordFTidl', 'B24SelvmordFSisteAr', 
+#'B25Avhengighet
 
 NorSpisFigAndeler(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
 	reshID=reshID, enhetsUtvalg=enhetsUtvalg, outfile=outfile, minald=minald, maxald=maxald)
@@ -60,7 +62,7 @@ grVar <- 'SykehusNavn'             #sette variablen man ønsker å gruppere på
 #setwd('C:/Users/spa-ressp-2/Documents/norspis/R')           # "#source" NorSpisFigAndelerGrVar, hvis det er behov for det
 #source('NorSpisFigAndelerGrVar.R', encoding = 'UTF-8')      # "#source" NorSpisFigAndelerGrVar, hvis det er behov for det
 
-valgtVar <- 'alder_u18'
+valgtVar <- 'VentetidKat'
 
 NorSpisFigAndelerGrVar(RegData=NorSpisData, datoFra=datoFra, valgtVar=valgtVar, datoTil=datoTil, #erMann=erMann,
                        grVar=grVar, outfile=outfile, 
@@ -75,7 +77,7 @@ valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen.
 #setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
 #source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
 
-valgtVar <- 'VentetidOver2Uker'
+valgtVar <- 'VentetidKat'
 
 NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                     minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)

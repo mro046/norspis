@@ -220,10 +220,13 @@ if (valgtVar=='B07Hovedinntekt') {                                              
 #}
 
 if (valgtVar =='B08StartAldrProbl'){                                                      #BRUKES I: GjsnGrVar; 
+      #Velge gyldige observasjoner:
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- 'alder ved start av problematikk'
       xaksetxt <- 'Alder (år)'
+    
 }
       
 if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {                                 #BRUKES I: Andeler
@@ -242,21 +245,34 @@ if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {                
 if (valgtVar=='B11FamilieSF') {                                                                  #BRUKES I: Andeler
       retn <- 'V'
       grtxt <- c('Nei', 'Ja', 'Vet ikke')
+      
+      #Velge kun gyldige rader:
+      koder <- c(0,1,9)
       #RegData$VariabelGr <- 99
-      indDum <- which(RegData$B11FamilieSF %in% c(0,1,9))
-      RegData$VariabelGr[indDum] <- RegData$B11FamilieSF[indDum]
+      indDum <- which(RegData$B11FamilieSF %in% koder)
+      RegData <- RegData[indDum, ]#RegData$VariabelGr[indDum] <- RegData$B11FamilieSF[indDum]
+      
+      RegData$VariabelGr <- RegData$B11FamilieSF
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9))
       tittel <- 'Spiseforstyrrelse hos andre i familien?'
 }
       
 if (valgtVar=='B12TidlBehSF') {                                                                  #BRUKES I: Andeler
-      grtxt <- c('Nei', 'Ja', 'Ukjent')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$B12TidlBehSF %in% c(0,1))
-      RegData$VariabelGr[indDum] <- RegData$B12TidlBehSF[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
+      grtxt <- c('Nei', 'Ja')
+      
+      #Velge kun gyldige rader:
+      koder <- c(0,1)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$B12TidlBehSF %in% koder)
+      RegData <- RegData[indDum, ]#RegData$VariabelGr[indDum] <- RegData$B12TidlBehSF[indDum]
+      
+      RegData$VariabelGr <- RegData$B12TidlBehSF
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1))
       tittel <- 'Tidligere behandling for spiseforstyrrelser?'
 }
+      
+      
+      
       
 #if (valgtVar=='B12dArTilBehstart') {
 
@@ -277,22 +293,31 @@ if (valgtVar=='B12TidlBehSF') {                                                 
       
       
 if (valgtVar =='B12cAldrForsteBeh'){                                                      #BRUKES I: GjsnGrVar; 
+      #Velge gyldige observasjoner:
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- 'alder ved første behandling'
       xaksetxt <- 'Alder (år)'
 }
+      
+      
 
 if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
                     'B21SelvskadTidl', 'B22SelvskadSisteAr', 'B23SelvmordFTidl', 'B24SelvmordFSisteAr', 
                     'B25Avhengighet')) {                                                        #BRUKES I: Andeler
       retn <- 'V'
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-      grtxt <- c('Nei', 'Ja', 'Ukjent', 'Ikke reg.')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData[ ,valgtVar] %in% c(0,1,9))
-      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9,99))
+      grtxt <- c('Nei', 'Ja', 'Ukjent')
+      
+      #Velge kun gyldige rader:
+      koder <- c(0,1,9)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData[ ,valgtVar] %in% koder)
+      RegData <- RegData[indDum, ]#RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+      
+      RegData$VariabelGr <- RegData[ ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,9))
       tittel <- switch(valgtVar,
                        B17FysMishandl = 'Negativ hendelse: Tidligere fysisk mishandling',
                        B18PsykMishandl = 'Negativ hendelse: Tidligere psykisk mishandling',
@@ -302,50 +327,80 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
                        B22SelvskadSisteAr = 'Selvskading siste år',
                        B23SelvmordFTidl = 'Selvmordsforsøk tidligere',
                        B24SelvmordFSisteAr = 'Selvmordsforsøk siste år',
-                       B25Avhengighet = 'Misbruk/avhengighet')
+                       B25Avhengighet = 'Misbruk/avhengighet (alkohol, rusmidler, medikamenter)')
 }
- 
+      
 if (valgtVar=='BehDodUnderBeh') {	                                                      #BRUKES I: AndelerGrVar
+      #Velge bort ugyldige (NA) observasjoner
+      koder <- c(0,1)
+      RegData <- RegData[which(RegData[ ,valgtVar] %in% koder), ]
       #RegData <- RegData[which(RegData$BehDodUnderBeh>=0), ]    #tar bort eventuelle verdier som er <0
-      #RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1 
+      #RegData$Variabel[which(RegData$BehDodUnderBeh==1)] <- 1
+      
       RegData$Variabel <- RegData$BehDodUnderBeh
       tittel <- 'Dødsfall under behandling'
 }      
 
 
 if (valgtVar=='BehUtfallsvurdSamlet') {                                                          #BRUKES I: Andeler
-      grtxt <- c('Ikke noe problem lenger', 'Klar bedring', 'Noe bedring', 'Uendret', 'Forverring', 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$BehUtfallsvurdSamlet %in% c(1:5))
-      RegData$VariabelGr[indDum] <- RegData$BehUtfallsvurdSamlet[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:5, 99))
+      grtxt <- c('Ikke noe\n problem lenger', 'Klar bedring', 'Noe bedring', 'Uendret', 'Forverring', 'Ikke aktuelt')
+      
+      #Velge kun gyldige rader:
+      koder <- c(1:6)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$BehUtfallsvurdSamlet %in% koder)
+      RegData <- RegData[indDum, ]#RegData$VariabelGr[indDum] <- RegData$BehUtfallsvurdSamlet[indDum]
+      
+      RegData$VariabelGr <- RegData$BehUtfallsvurdSamlet
+      
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:6))
       tittel <- 'Behandlers samlede utfallsvurdering'
 }
       
 if (valgtVar=='BehVidereBeh') {                                                                  #BRUKES I: Andeler
-      grtxt <- c('Nei', 'Ja', 'Ikke registrert')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData$BehVidereBeh %in% c(0,1))
-      RegData$VariabelGr[indDum] <- RegData$BehVidereBeh[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
+      grtxt <- c('Nei', 'Ja')
+      
+      #Velge kun gyldige rader:
+      koder <- c(0,1)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData$BehVidereBeh %in% koder)
+      RegData <- RegData [indDum, ]
+      
+      RegData$VariabelGr <- RegData$BehVidereBeh
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- 'Videre behandling annen instans?'
 }
             
 if (valgtVar=='DiagVDiabetes') {                                                          #BRUKES I: AndelerGrVar
+      #Velge bort ugyldige (NA) observasjoner
+      koder <- c(0,1)
+      RegData <- RegData[which(RegData$DiagVDiabetes %in% koder), ]
+      
       RegData$Variabel <- RegData$DiagVDiabetes
       tittel <- 'Diabetes'
       sortAvtagende <- FALSE
 }
+      
+      
+      
 
 if (valgtVar=='DiagVSF') {                                                                       #BRUKES I: Andeler
-      grtxt <- c('F500', 'F509')
+      grtxt <- c('F500', 'F501', 'F502', 'F505', 'F509', 'Andre')  #FIKSE FIGUR: Mangler mulighet for at nye diagnosekoder kan komme til å bli brukt. Se e-post fra Lena 15.02.2017 for hvordan dette er løst i NGER 
+      
+      #Velge bortugyldige rader
+      koder <- c('F500', 'F501', 'F502', 'F505', 'F509', 'Z004')
+      indDum <- which(RegData$DiagVSF %in% koder)
+      RegData <- RegData[indDum, ]
+      
+      
       RegData$DiagVSF <- as.character(RegData$DiagVSF)
-      RegData$VariabelGr <- 'Andre Diag'
-      indDum <- which(RegData$DiagVSF %in% grtxt)
-      RegData$VariabelGr[indDum] <- RegData$DiagVSF[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(grtxt, 'Andre Diag'))
-      tittel <- 'Pasienttilfredshet: "Hvordan vurderer du utfallet av mottatt behandling?"'
+      
+      RegData$VariabelGr <-RegData$DiagVSF
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
+      tittel <- 'Spiseforstyrrelsesdiagnose ICD-10'
 }
+      
+      
       
 if (valgtVar %in% c('EDEQ60GlobalScore',
                     'EDEQ60Restriksjon', 
@@ -353,7 +408,9 @@ if (valgtVar %in% c('EDEQ60GlobalScore',
                     'EDEQ60Spising', 
                     'EDEQ60Vekt'))
 {                                                                                         #BRUKES I: GjsnGrVar;                                                                  
+      #Velge gyldige observasjoner:
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+      
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- switch(valgtVar, 
                           EDEQ60GlobalScore = 'symptomtrykk: Global-skåre, EDE-Q 6.0',
@@ -369,6 +426,7 @@ if (valgtVar %in% c('EDEQ60GlobalScore',
                          EDEQ60Vekt = 'Vekt')
 }
       
+  
 
 if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA04Rusmisbruk', 'HCA05SkoleSprak',
                     'HCA06FysiskProblem', 'HCA07Hallusinasjoner', 'HCA08SomatiskSymp', 'HCA09EmosjonelleSymp','HCA10JevnaldrProbl', 
@@ -378,13 +436,19 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
                                                                                                 #BRUKES I: Andeler
       retn <- 'H'
       grtxt <- c('Ingen problem', 'Lite problem som ikke \n krever tiltak', 'Mildt problem, \n men klart tilstede',
-                 'Moderat alvorlig problem', 'Alvorlig til svært alvorlig problem', 'Ukjent')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData[ ,valgtVar] %in% c(0:4,9))
-      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:4,9))
+                 'Moderat alvorlig problem', 'Alvorlig til svært alvorlig\n problem', 'Ukjent')
+      
+      
+      #Velge kun gyldige rader:
+      koder <- c(0:4,9)
+      #RegData$VariabelGr <- 99
+      indDum <- which(RegData[ ,valgtVar] %in% koder)
+      RegData <- RegData[indDum, ]
+      
+      RegData$VariabelGr <- RegData[ ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- switch(valgtVar,
-                       HCA01Atferd = 'HONOSCA: 1. Problemer med forstyrrende, antisosial eller aggressiv atferd',
+                       HCA01Atferd = 'HONOSCA: 1. Problemer med forstyrrende,\n antisosial eller aggressiv atferd',
                        HCA02Aktivitetsniva = c('HONOSCA: 2.Problemer med høyt aktivitetsnivå,', 'oppmerksomhet eller konsentrasjon'),
                        HCA03Selvskade = 'HONOSCA: 3.Selvskade som ikke skyldes uhell',
                        HCA04Rusmisbruk = 'HONOSCA: 4.Problemer med alkohol, stoff eller løsemiddelmisbruk',
@@ -413,27 +477,38 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
                        H12YrkeProbl = 'HoNOS: 12. Problemer med yrke og aktiviteter')
 }
       
+      
 if (valgtVar == 'H08aVelgTypeProbl') {                                                          #BRUKES I: Andeler
       retn <- 'H'
       grtxt <- c('Fobi', 'Angst', 'Tvangslidelse', 'Mentalt stress/spenninger', 'Dissosiativ', 'Somatoform',	
                  'Spiseproblemer', 'Søvnvansker', 'Seksuelt problem', 'Annet problem (Spesifiser)')
-      RegData$VariabelGr <- 999
-      indDum <- which(RegData[ ,valgtVar] %in% c(1:9,99))
-      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(1:9,99))
+      
+      #Velge kun gyldige rader:
+      koder <- c(1:9,99)
+      indDum <- which(RegData[ ,valgtVar] %in% koder)
+      RegData <- RegData[indDum, ]
+      
+      RegData$VariabelGr <- RegData[ ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- 'HoNOS: 8a Velg type problem'
 }
       
-      
+           
 #if (MedPsykofarmaka == 1) Hvordan legge inn betingelsen?
 if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh')) {
                                                                                                 #BRUKES I: Andeler
+                                                                                                #FORBEDRE: Én søyle med "ja" er nok (trenger ikke egen søyle for "nei"). 
+                                                                                                #FORBEDRE 2: Alle medisinene i én figur.  
       #RegData <- RegData[which(RegData$PasientSkjemaStatus == 1), ] #LENA? Hjelpeargument?
-      grtxt <- c('Nei', 'Ja','Ukjent')
-      RegData$VariabelGr <- 99
-      indDum <- which(RegData[ ,valgtVar] %in% 0,1)
-      RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0,1,99))
+      grtxt <- c('Nei', 'Ja')
+      
+      #Velge kun gyldige rader:
+      koder <- c(0,1)
+      indDum <- which(RegData[ ,valgtVar] %in% koder)
+      RegData <- RegData[indDum, ]
+      
+      RegData$VariabelGr <- RegData[ ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- switch(valgtVar,
                        MedAntidepressiva = 'Antidepressiva',
                        MedBenzodiazepiner = 'Benzodiazepiner' ,
@@ -458,7 +533,8 @@ if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika'
 #}
       
       
-if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {            #BRUKES I: Andeler   
+if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {            #BRUKES I: Andeler 
+                                                                                          #Merknad: Ikke kjørt den rutinemessige "fjern gyldige rader, deretter sørg for at tomme kategorier kommer med", men ser ut til å fungere likevel
       RegData <- RegData[which(RegData$RegRegtype >= 1 & RegData$RegRegtype <=4), ] #velger kun startregistreringer og utredninger (1=Utredning voksen, 2=Utredning ungdom/barn, 3=Startregistrering voksen, 4=Startregistrering ungdom/barn)
       valgtVar <- sub("Start", "", valgtVar) #fjerner "Start" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
       gr <- c(0,seq(10,30,2.5),150)
@@ -474,7 +550,8 @@ if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {  
                        MedIsoBMICDC = 'Fordeling iso-BMI ved innkomst (normdata: Centers for Disease Control and Prevention (CDC))')
 }
       
-if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {            #BRUKES I: Andeler                 
+if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {            #BRUKES I: Andeler 
+                                                                                          #Merknad: Ikke kjørt den rutinemessige "fjern gyldige rader, deretter sørg for at tomme kategorier kommer med", men ser ut til å fungere likevel
       RegData <- RegData[which(RegData$RegRegtype == 5 | RegData$RegRegtype ==6 | RegData$RegRegtype ==98 | RegData$RegRegtype ==99), ] #velger kun sluttregistreringer og avbrudd (5=Sluttregistrering voksen, 6=Sluttregistrering ungdom/barn, 98=Avbrutt behandling voksen, 99=Avbrutt behandling ungdom/barn).Merk: Kan strengt tatt fjerne 98 og 99 her siden BMI ikke måles ved avbrudd, men beholder de for tydelighetens skyld
       valgtVar <- sub("Slutt", "", valgtVar) #fjerner "Slut" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
       gr <- c(0,seq(10,30,2.5),150)
@@ -491,6 +568,7 @@ if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {  
 }
 
 if (valgtVar == 'NegHend' ) {                                                                    #BRUKES I: Andeler
+                                                                                                #MERK: Ikke kontrollert figurens korrekthet enda. 
       #For flerevar=1 må vi omdefinere variablene slik at alle gyldige registreringer 
       #(dvs. alle registreringer som skal telles med) er 0 eller 1. De som har oppfylt spørsmålet
       # er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
@@ -515,18 +593,26 @@ if (valgtVar == 'NegHend' ) {                                                   
 }
 
 if (valgtVar=='Norsktalende') {                                                                  #BRUKES I: Andeler
+                                                                                                 #REPARERE (hvis vi ønsker denne variabelen): Kan være feil, og må sjekke om prod data har kodet denne numerisk (gamle testdata brukt når laget figur)
       #0=Nei, 1=Ja, 2= Delvis, 9=Ukjent
       grtxt <- c('Nei','Ja', 'Delvis', 'Ukjent')
-      indDum <- which(as.character(RegData$Norsktalende) %in% grtxt[-1])
-      RegData$VariabelGr[indDum] <- RegData$Norsktalende[indDum]
-      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = c(0:2,9))
+      
+      #Velge kun gyldige rader:
+      koder <- c('Nei','Ja', 'Delvis', 'Ukjent')
+      indDum <- which(RegData$Norsktalende %in% koder)
+      RegData <- RegData[indDum, ]
+      
+      RegData$Norsktalende <- as.character(RegData$Norsktalende)
+      
+      RegData$VariabelGr <- RegData$Norsktalende
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- 'Norsktalende'
 }
-      
 
-#STARTET Endre til en figur med Pasienttilfredshet (flerevar=1)      
+      
+     
 if (valgtVar == 'pasienttilfredshet') {                                                          #BRUKES I: Andeler
-      #IKKE KLAR!!
+                                                                                                #IKKE KLAR!! Startet på, men må endre til en figur med Pasienttilfredshet (flerevar=1) 
       #Her har vi ulik N for de ulike variablene. 
       flerevar <- 1 
       variable <- c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
@@ -545,6 +631,7 @@ if (valgtVar == 'pasienttilfredshet') {                                         
 #Endre til en figur med Pasienttilfredshet (flerevar=1)      
 if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
                     'PT05OrientertBrukerorg')) {                                                #BRUKES I: Andeler
+                                                                                                #Merknad: Ikke kjørt den rutinemessige "fjern gyldige rader, deretter sørg for at tomme kategorier kommer med"
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
       grtxt <- c('Nei', 'Ja')
       indDum <- which(RegData[ ,valgtVar] %in% c(0,1))
@@ -559,6 +646,7 @@ if (valgtVar %in% c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg',
 
 
 if (valgtVar=='PT03Utfallsvurd') {                                                   #BRUKES I: Andeler
+                                                                                     #Merknad: Ikke kjørt den rutinemessige "fjern gyldige rader, deretter sørg for at tomme kategorier kommer med"
       grtxt <- c('Ikke noe problem lenger', 'Klar bedring', 'Noe bedring', 'Uendret', 'Forverring')
       # RegData$VariabelGr <- 99
       indDum <- which(RegData$PT03Utfallsvurd %in% c(1:5))
@@ -577,6 +665,7 @@ if (valgtVar %in% c('RAND36FysFunk',
                     'RAND36GenHelse', 
                     'RAND36EndringHelse'))
 {                                                                                         #BRUKES I: GjsnGrVar; 
+                                                                                          #Merknad: Ikke kjørt den rutinemessige "fjern ugyldige rader" først
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- switch(valgtVar, 
@@ -633,6 +722,7 @@ if (valgtVar %in% c('SCL90TGSI',
                     'SCL90TParanoia', 
                     'SCL90TPsykotisk'))                           
 {                                                                                         #BRUKES I: GjsnGrVar; 
+                                                                                          #Merknad: Ikke kjørt den rutinemessige "fjern ugyldige rader" først
       RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
       RegData$Variabel <- RegData[ ,valgtVar]
       deltittel <- switch(valgtVar, 
@@ -660,6 +750,7 @@ if (valgtVar %in% c('SCL90TGSI',
 }                                                                                          
       
 if (valgtVar=='TidSykBehandling'){                                                              #BRUKES I: Andeler            #Kvalitetsindikator("hvor godt/tidlig fanger man opp de syke?"). Interessant med tidsserie og sammenligning mellom enheter.)
+                                                                                                #Merknad: Ikke kjørt den rutinemessige "fjern ugyldige rader" først
       RegData$TidSykBehandling<-RegData$B12dArTilBehstart*12+RegData$B12dMndTilBehstart #lager variabel som gir år + måneder fra sykdom til behandlingsstart
       gr <- c(0,6,12,18,24,30,36,500)
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
@@ -668,17 +759,10 @@ if (valgtVar=='TidSykBehandling'){                                              
       tittel <- 'Tid fra sykdomsdebut til behandlingsstart' 
 }
 
-if (valgtVar=='VentetidOver2Uker') {                                                            #BRUKES I: AndelerGrVar       #Kvalitetsindikator
-      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
-                                   strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
-      RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
-      RegData$Variabel <- 99
-      RegData$Variabel[which(RegData$Ventetid>2)] <- 1 
-      tittel <- 'Ventetid over 2 uker'
-}
-
-if (valgtVar=='VentetidKat') {
-      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),     #BRUKES I:
+if (valgtVar=='VentetidKat') {                                                                  #BRUKES I: Andeler
+                                                                                                #Merknad: Ikke kontrollert korrekthet og ikke kjørt den rutinemessige "fjern ugyldige rader" først
+                                                                                                #Kvalitetsindikatorområdet ventetid?
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),     
                                    strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
       RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
       gr <- c(0,seq(2,16,2),150)
@@ -687,6 +771,17 @@ if (valgtVar=='VentetidKat') {
       xAkseTxt <- 'Uker'
       tittel <- 'Ventetid'
 }
+
+if (valgtVar=='VentetidOver2Uker') {                                                            #BRUKES I: AndelerGrVar       #Kvalitetsindikator
+                                                                                                #Merknad: Ikke kjørt den rutinemessige "fjern ugyldige rader" først
+      RegData$Ventetid <- difftime(strptime(RegData$RegHendelsesdato, format = "%Y-%m-%d"),
+                                   strptime(RegData$RegHenvMottattDato, format = "%Y-%m-%d"),units="weeks")    # tid fra henvisning til start av behandlings eller utredning - variabel kalkulert av Mads: Forskjellem "henvisning mottatt dato" og "hendelsesdato" 
+      RegData$Ventetid <- as.numeric(RegData$Ventetid, units="weeks") #must make the atomic vector Ventetid numeric
+      RegData$Variabel <- 99
+      RegData$Variabel[which(RegData$Ventetid>2)] <- 1 
+      tittel <- 'Ventetid over 2 uker'
+}
+
 
       
 
