@@ -175,7 +175,9 @@ if (valgtVar %in% c('B04PabegyntUtd', 'B05FullfortUtd')) {                      
       
       RegData$VariabelGr <- RegData[ ,valgtVar]
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
-      tittel <- 'Høyeste påbegynte utdanning'
+      tittel <- switch(valgtVar,
+                       B04PabegyntUtd ='Høyeste påbegynte utdanning',
+                       B05FullfortUtd ='Høyeste fullførte utdanning')
 }
 
       
