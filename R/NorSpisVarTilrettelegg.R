@@ -329,7 +329,7 @@ if (valgtVar %in% c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobb
                        B22SelvskadSisteAr = 'Selvskading siste år',
                        B23SelvmordFTidl = 'Selvmordsforsøk tidligere',
                        B24SelvmordFSisteAr = 'Selvmordsforsøk siste år',
-                       B25Avhengighet = 'Misbruk/avhengighet (alkohol, rusmidler, medikamenter)')
+                       B25Avhengighet = 'Misbruk/avhengighet av alkohol, illegale rusmidler eller medikamenter')
 }
       
 if (valgtVar=='BehDodUnderBeh') {	                                                      #BRUKES I: AndelerGrVar
@@ -455,22 +455,22 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
                        HCA03Selvskade = 'HONOSCA: 3.Selvskade som ikke skyldes uhell',
                        HCA04Rusmisbruk = 'HONOSCA: 4.Problemer med alkohol, stoff eller løsemiddelmisbruk',
                        HCA05SkoleSprak = 'HONOSCA: 5.Problemer med skole- eller språkferdigheter',
-                       HCA06FysiskProblem = 'HONOSCA: 6. Problemer pga fysisk sykdom eller funksjonshemning',
-                       HCA07Hallusinasjoner = 'HONOSCA: 7.Problemer knyttet til hallusinasjoner, vrangforestillinger eller unormale persepsjoner',
-                       HCA08SomatiskSymp = 'HONOSCA: 8. Problemer med somatiske symptomer uten kjent organisk grunnlag',
-                       HCA09EmosjonelleSymp = 'HONOSCA: ',
+                       HCA06FysiskProblem = 'HONOSCA: 6. Problemer pga fysisk sykdom eller funksjonshemming',
+                       HCA07Hallusinasjoner = 'HONOSCA: 7.Problemer knyttet til hallusinasjoner, \n vrangforestillinger eller unormale persepsjoner',
+                       HCA08SomatiskSymp = 'HONOSCA: 8. Problemer med somatiske symptomer \n uten kjent organisk grunnlag',
+                       HCA09EmosjonelleSymp = 'HONOSCA: 9. Problemer med emosjonelle \n og relaterte symptomer',
                        HCA10JevnaldrProbl = 'HONOSCA: 10. Problemer med forhold til jevnaldrende',
                        HCA11Egenomsorg = 'HONOSCA: 11.Problemer med egenomsorg og uavhengighet',
                        HCA12FamilieProbl = 'HONOSCA: 12.Problemer med familieliv og forhold til andre',
                        HCASkoleframmote = 'HONOSCA: 13.Dårlig skoleframmøte',
-                       HCA14ProblKunnskap = 'HONOSCA: 14.Problemer med kunnskap eller forståelse av egenarten av barnets/ungdommens vanskeligheter (i løpet av de siste to uker)',
-                       HCA15Mangelinfo = 'HONOSCA: 15.Problemer med mangel på informasjon om tilbud eller behandling av barnets/ungdommens vanskeligheter',
+                       HCA14ProblKunnskap = 'HONOSCA: 14.Problemer med kunnskap eller forståelse av \n egenarten av barnets/ungdommens vanskeligheter ',
+                       HCA15Mangelinfo = 'HONOSCA: 15.Problemer med mangel på informasjon om \n tilbud eller behandling av barnets/ungdommens vanskeligheter',
                        H01Atferd = 'HoNOS: 1.Overaktiv, aggressiv, forstyrrende eller agitert atferd',
                        H02Selvskade = 'HoNOS: 2.Selvskade som ikke skyldes uhell',
                        H03Rusmisbruk = 'HoNOS: 3.Problemdrikking eller bruk av rusmiddel',
                        H04KognitiveProbl = 'HoNOS: 4.Kognitive problemer',
                        H05FysiskeProbl = 'HoNOS: 5.Problemer med fysisk sykdom eller funksjonshemming',
-                       H06Hallusinasjoner = 'HoNOS: 6.Problemer forbundet med hallusinasjoner og vrangforestillinger',
+                       H06Hallusinasjoner = 'HoNOS: 6.Problemer forbundet med \n hallusinasjoner og vrangforestillinger',
                        H07Stemningsleie = 'HoNOS: 7.Problem med senket stemningsleie',
                        H08AndreProbl = 'HoNOS: 8.Andre mentale eller atferdsmessige problem',
                        H09ForhAndre = 'HoNOS: 9.Problemer med forhold til andre',
@@ -499,8 +499,14 @@ if (valgtVar == 'H08aVelgTypeProbl') {                                          
 #if (MedPsykofarmaka == 1) Hvordan legge inn betingelsen?
 if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh')) {
                                                                                                 #BRUKES I: Andeler
-                                                                                                #FORBEDRE: Én søyle med "ja" er nok (trenger ikke egen søyle for "nei"). 
-                                                                                                #FORBEDRE 2: Alle medisinene i én figur.  
+                                                                                                #FORBEDRE 2: Én søyle med "ja" er nok (trenger ikke egen søyle for "nei"). 
+      
+                                                                                                #FORBEDRE 3: Alle medisinene i én figur.  
+      #FORBEDRE 1:teller i disse andelene må være alle pasienter (som har svart enten ja eller nei på spørsmålet foran, dvs. Psykofarmakologisk behandln?g (ja, nei))
+      #først velge RegData med alle som har svart 0 eller 1 på MedPsykofarmaka
+      #for variablen, e.g. MedAntideptressiva har vi da (antagelig) verdiene NA, 0,1
+      #kod da/erstatt NA med verdien 0 
+      
       #RegData <- RegData[which(RegData$PasientSkjemaStatus == 1), ] #LENA? Hjelpeargument?
       grtxt <- c('Nei', 'Ja')
       
@@ -593,6 +599,25 @@ if (valgtVar == 'NegHend' ) {                                                   
       #apply(RegData[,variable], MARGIN=2, FUN=function(x) sum(x %in% 0:1))
       tittel <- 'Negative hendelser'
 }
+      
+#UNDER UTARBEIDING: flere/antall negative hendelser
+
+#if (valgtvar == 'AntallNegHend') {
+#      flerevar <- 1
+#      variable <- c('B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing')
+#      retn <- 'V'
+#      ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
+#      ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
+#      RegData[ ,variable] <- NA
+#     
+#      RegData[ ,variable][ind01] <- 0
+#      RegData[ ,variable][ind1] <- 1
+
+#     grtxt <- c('0','1','2','3','4')
+#      tittel <- 'Antall negative hendelser'
+      
+#}
+      
 
 if (valgtVar=='Norsktalende') {                                                                  #BRUKES I: Andeler
                                                                                                  #REPARERE (hvis vi ønsker denne variabelen): Kan være feil, og må sjekke om prod data har kodet denne numerisk (gamle testdata brukt når laget figur)

@@ -45,7 +45,7 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper #tom=lag
 
 #1--------------------Teste NorSpisFigAndeler
 
-valgtVar <- 'B05FullfortUtd'	#Må velge... B03Bosituasjon'B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
+valgtVar <- 'NegHend'	#Må velge... B03Bosituasjon'B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
 #'B21SelvskadTidl', 'B22SelvskadSisteAr', 'B23SelvmordFTidl', 'B24SelvmordFSisteAr', 
 #'B25Avhengighet
 
