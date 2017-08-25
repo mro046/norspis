@@ -95,7 +95,10 @@ utvalgTxt <- c(paste0(
       }							
       
 
-      UtData <- list(RegData=RegData, utvalgTxt=utvalgTxt, fargepalett=fargepalett, ind=ind, 
+RegData$EnhNavn <- as.factor(RegData$EnhNavn)
+
+      
+UtData <- list(RegData=RegData, utvalgTxt=utvalgTxt, fargepalett=fargepalett, ind=ind, 
                      medSml=medSml, hovedgrTxt=hovedgrTxt,smltxt=smltxt) 
 
 #      ind <- NorSpisUtvalg$ind

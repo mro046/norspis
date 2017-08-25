@@ -494,16 +494,18 @@ if (valgtVar == 'H08aVelgTypeProbl') {                                          
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- 'HoNOS: 8a Velg type problem'
 }
-      
-           
-#if (MedPsykofarmaka == 1) Hvordan legge inn betingelsen?
+
+
 if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh')) {
                                                                                                 #BRUKES I: Andeler
                                                                                                 #FORBEDRE 2: Én søyle med "ja" er nok (trenger ikke egen søyle for "nei"). 
       
                                                                                                 #FORBEDRE 3: Alle medisinene i én figur.  
-      #FORBEDRE 1:teller i disse andelene må være alle pasienter (som har svart enten ja eller nei på spørsmålet foran, dvs. Psykofarmakologisk behandln?g (ja, nei))
-      #først velge RegData med alle som har svart 0 eller 1 på MedPsykofarmaka
+      #FORBEDRET med riktig Teller 25.08.2017, ved å  først velge RegData med kun de som har svart 0 eller 1 på MedPsykofarmaka
+      koder <- c(0,1)
+      indDum1<- which(RegData[ ,'MedPsykofarmaka'] %in% koder)
+      RegData <- RegData[indDum1, ]
+      
       #for variablen, e.g. MedAntideptressiva har vi da (antagelig) verdiene NA, 0,1
       #kod da/erstatt NA med verdien 0 
       
@@ -512,17 +514,58 @@ if (valgtVar %in% c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika'
       
       #Velge kun gyldige rader:
       koder <- c(0,1)
-      indDum <- which(RegData[ ,valgtVar] %in% koder)
-      RegData <- RegData[indDum, ]
+      indDum2 <- which(RegData[ ,valgtVar] %in% koder)
+      RegData <- RegData[indDum2, ]
       
       RegData$VariabelGr <- RegData[ ,valgtVar]
       RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
       tittel <- switch(valgtVar,
-                       MedAntidepressiva = 'Antidepressiva',
-                       MedBenzodiazepiner = 'Benzodiazepiner' ,
-                       MedNevroleptika = 'Nevroleptika',
-                       MedAnnenMedBeh = 'Annen medisinsk behandling')
+                       MedAntidepressiva = 'Psykofarmaka: Antidepressiva',
+                       MedBenzodiazepiner = 'Psykofarmaka: Benzodiazepiner' ,
+                       MedNevroleptika = 'Psykofarmaka: Nevroleptika',
+                       MedAnnenMedBeh = 'Psykofarmaka: Annen medisinsk behandling')
 }
+
+      
+if (valgtVar =='MedPsykofarmaka') {                                                             #BRUKES I: Andeler
+      grtxt <- c('Nei', 'Ja')
+      koder <- c(0,1)
+      indDum <- which(RegData[, valgtVar] %in% koder)
+      RegData <- RegData[indDum, ]
+      RegData$VariabelGr <- RegData[ ,valgtVar]
+      RegData$VariabelGr <- factor(RegData$VariabelGr, levels = koder)
+      tittel <- '"Psykofarmakologisk behandling?"'
+}      
+
+if (valgtVar == 'MedPsykofarmakaAlle' ) {                                                                    #BRUKES I: Andeler
+      #For flerevar=1 må vi omdefinere variablene slik at alle gyldige registreringer 
+      #(dvs. alle registreringer som skal telles med) er 0 eller 1. De som har oppfylt spørsmålet
+      # er 1, mens ugyldige registreringer er NA. Det betyr at hvis vi skal ta bort registreringer
+      # som i kategorier av typen "Ukjent" kodes disse som NA, mens hvis de skal være med kodes de
+      # som 0.
+      # Vi kan velge å sende tilbake alle variable som indikatorvariable, dvs. med 0,1,NA
+      # Eller vi kan gjøre beregninga her og sende tilbake teller og nevner for den sammensatte variabelen
+      koder <- c(0,1)
+      indDum <- which(RegData[, 'MedPsykofarmaka'] %in% koder)
+      RegData <- RegData[indDum, ]
+      flerevar <- 1
+      #Omkorder variabelen MedPsykofarmaka for å bruke den til en søyle for de som ikke har fått noen medikamentell beh.
+      RegData$MedPsykofarmaka <- ifelse(RegData$MedPsykofarmaka ==1, 0, 1)
+      
+      variable <- c('MedAntidepressiva', 'MedBenzodiazepiner', 'MedNevroleptika', 'MedAnnenMedBeh', 'MedPsykofarmaka')
+      #Sjekk <- RegData[,variable]
+      retn <- 'V'
+      grtxt <- c('Antidepressiva', 'Benzodiazepiner', 'Nevroleptika', 'Annen', 'Ingen')
+      ind01 <- which(RegData[ ,variable] < 2, arr.ind = T) #Alle ja/nei
+      ind1 <- which(RegData[ ,variable] == 1, arr.ind=T) #Ja i alle variable
+      RegData[ ,variable] <- NA
+      #RegData[,variable] <- 
+      RegData[ ,variable][ind01] <- 0
+      RegData[ ,variable][ind1] <- 1
+      #Beregne direkte:
+      #apply(RegData[,variable], MARGIN=2, FUN=function(x) sum(x %in% 0:1))
+      tittel <- 'Medikamentell behandling'
+}      
       
 #if (valgtVar=='MedBMI') {                            #? Usikker på bakgrunnen for denne variabelen - sjekk om den eksiterer i datasett - BMI-variabler fremkommer jo under...
 #      gr <- c(0, 18.5, 25, 30, 1000)

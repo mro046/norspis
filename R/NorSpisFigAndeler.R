@@ -53,8 +53,12 @@
 #'     \item H10ADLProbl
 #'     \item H11BoligProbl
 #'     \item H12YrkeProbl
+#'     \item MedPsykofarmaka
+#'     \item MedPsykofarmakaAlle
 #'     \item MedAntidepressiva
 #'     \item MedBenzodiazepiner
+#'     \item MedNevroleptika
+#'     \item MedAnnenMedBeh
 #'     \item MedBMISlutt: Pasientenes BMI ved slutt av behandling
 #'     \item MedBMIStart: Pasientenes BMI ved innkomst til behandling
 #'     \item MedIsoBMIBGSSlutt: Pasientenes iso-BMI (basert på BGS-normdata) ved slutten av behandlingen
