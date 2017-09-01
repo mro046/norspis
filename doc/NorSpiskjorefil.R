@@ -45,7 +45,7 @@ outfile <-'' #paste(valgtVar, '_ford.png', sep='')#Navn angis av Jasper #tom=lag
 
 #1--------------------Teste NorSpisFigAndeler
 
-valgtVar <- 'MedPsykofarmakaAlle'	#Må velge... B03Bosituasjon'B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
+valgtVar <- 'SCL90TGSI'	#Må velge... B03Bosituasjon'B17FysMishandl', 'B18PsykMishandl', 'B19Overgrep', 'B20Mobbing', 
 #'B21SelvskadTidl', 'B22SelvskadSisteAr', 'B23SelvmordFTidl', 'B24SelvmordFSisteAr', 
 #'B25Avhengighet
 
@@ -77,7 +77,7 @@ valgtMaal='Gjsn'   #evt. endre til 'Med' hvis vil ha medianen.
 #setwd('C:/Users/spa-ressp-2/Documents/norspis/R')
 #source('NorSpisFigGjsnGrVar.R', encoding = 'UTF-8')
 
-valgtVar <- 'EDEQ60GlobalScore'
+valgtVar <- 'SCL90TGSI'
 
 NorSpisFigGjsnGrVar(RegData=NorSpisData, valgtVar=valgtVar, grVar=grVar, valgtMaal=valgtMaal, datoFra=datoFra, datoTil=datoTil, 
                     minald=minald, maxald=maxald, erMann=erMann, outfile=outfile)

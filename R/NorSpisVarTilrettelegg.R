@@ -89,7 +89,7 @@ if (valgtVar == 'AlderGjsn') { #endret fra alder fordi annen tiltretteligging he
       
 if (valgtVar=='alder_u18') {	                                                            #BRUKES I: AndelerGrVar
       RegData <- RegData[which(RegData$Alder>=0), ]    #Tar bort alder<0
-      RegData$Variabel[which(RegData$Alder<18)] <- 1 
+      RegData$Variabel[which(RegData$Alder<18)] <- 1
       tittel <- 'Pasienter under 18 år'
 }
       
@@ -428,8 +428,9 @@ if (valgtVar %in% c('EDEQ60GlobalScore',
                          EDEQ60Vekt = 'Vekt')
 }
       
-  
 
+
+      
 if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA04Rusmisbruk', 'HCA05SkoleSprak',
                     'HCA06FysiskProblem', 'HCA07Hallusinasjoner', 'HCA08SomatiskSymp', 'HCA09EmosjonelleSymp','HCA10JevnaldrProbl', 
                     'HCA11Egenomsorg', 'HCA12FamilieProbl', 'HCASkoleframmote', 'HCA14ProblKunnskap', 'HCA15Mangelinfo', 'H01Atferd',
@@ -439,7 +440,6 @@ if (valgtVar %in% c('HCA01Atferd', 'HCA02Aktivitetsniva', 'HCA03Selvskade', 'HCA
       retn <- 'H'
       grtxt <- c('Ingen problem', 'Lite problem som ikke \n krever tiltak', 'Mildt problem, \n men klart tilstede',
                  'Moderat alvorlig problem', 'Alvorlig til svært alvorlig\n problem', 'Ukjent')
-      
       
       #Velge kun gyldige rader:
       koder <- c(0:4,9)
@@ -682,7 +682,7 @@ if (valgtVar=='Norsktalende') {                                                 
       
      
 if (valgtVar == 'pasienttilfredshet') {                                                          #BRUKES I: Andeler
-                                                                                                #IKKE KLAR!! Startet på, men må endre til en figur med Pasienttilfredshet (flerevar=1) 
+                                                                                                #IKKE KLAR. Startet på, men må endre til en figur med Pasienttilfredshet (flerevar=1) 
       #Her har vi ulik N for de ulike variablene. 
       flerevar <- 1 
       variable <- c('PT01OnsketInvolv', 'PT02BleInvolv', 'PT04KontaktBrukerorg', 
@@ -760,6 +760,57 @@ if (valgtVar %in% c('RAND36FysFunk',
                          RAND36EndringHelse ='Endring i helse')
 }
       
+      
+if (valgtVar == 'RCIEDEQ60GlobalScore') {
+      retn <- 'V'
+      grtxt <- c('Reliabel \nforverring', 'Sannsynlig \nforverring', 'Ingen endring', 'Sannsynlig\npositiv endring', 'Reliabel \npositiv endring')
+            
+      RegDataStart <- RegData[which(RegData$RegRegtype >= 3 & RegData$RegRegtype <=4), ] #lager dataramme med kun startregistreringer
+      RegDataSlutt <- RegData[which(RegData$RegRegtype >= 5 & RegData$RegRegtype <=6), ] #lager dataramme med kun slttregistreinger ((5=Sluttregistrering voksen, 6=Sluttregistrering ungdom/barn, 98=Avbrutt behandling voksen, 99=Avbrutt behandling ungdom/barn).)
+      RegData <- merge(RegDataStart, RegDataSlutt, by="PasientID", suffixes = c('','.y'))
+            
+      RegData$edeqtemp <- (RegData$EDEQ60GlobalScore.y - RegData$EDEQ60GlobalScore)/0.7405 #basert på Riksät-syntaks. Endre standard error of diff til norsk.
+      RegData$edeqtemp[RegData$edeqtemp >=1.96] <- 1
+      RegData$edeqtemp[RegData$edeqtemp <1.28 & RegData$edeqtemp >=-1.28] <- 2
+      RegData$edeqtemp[RegData$edeqtemp < 1.96 & RegData$edeqtemp >-1.28] <- 3
+      RegData$edeqtemp[RegData$edeqtemp <= -1.28 & RegData$edeqtemp > -1.96] <- 4
+      RegData$edeqtemp[RegData$edeqtemp <= -1.96] <- 5
+            
+      #sortere bort ugyldige rader
+      koder <- c(1:5)
+      indDum <- which(RegData$edeqtemp %in% koder)#
+      RegData <- RegData[indDum,] #velger de gyldige radene/fjerner de ugyldige 
+            
+      RegData$VariabelGr <- factor(RegData$edeqtemp, levels = koder)
+            
+      tittel <-'RCI EDEQ60GlobalScore'
+}
+      
+if (valgtVar == 'RCICIA30GlobalScore') {
+  retn <- 'V'
+  grtxt <- c('Reliabel \nforverring', 'Sannsynlig \nforverring', 'Ingen endring', 'Sannsynlig\npositiv endring', 'Reliabel \npositiv endring')
+            
+      RegDataStart <- RegData[which(RegData$RegRegtype >= 3 & RegData$RegRegtype <=4), ] #lager dataramme med kun startregistreringer
+      RegDataSlutt <- RegData[which(RegData$RegRegtype >= 5 & RegData$RegRegtype <=6), ] #lager dataramme med kun slttregistreinger ((5=Sluttregistrering voksen, 6=Sluttregistrering ungdom/barn, 98=Avbrutt behandling voksen, 99=Avbrutt behandling ungdom/barn).)
+      RegData <- merge(RegDataStart, RegDataSlutt, by="PasientID", suffixes = c('','.y'))
+            
+      RegData$ciatemp <- (RegData$CIA30GlobalScore.y - RegData$CIA30GlobalScore)/4.9475 #basert på Riksät-syntaks. Endre standard error of diff til norsk.
+      RegData$ciatemp[RegData$ciatemp >=1.96] <- 1
+      RegData$ciatemp[RegData$ciatemp<1.28 & RegData$ciatemp >=-1.28] <- 2
+      RegData$ciatemp[RegData$ciatemp < 1.96 & RegData$ciatemp >-1.28] <- 3
+      RegData$ciatemp[RegData$ciatemp <= -1.28 & RegData$ciatemp > -1.96] <- 4
+      RegData$ciatemp[RegData$ciatemp <= -1.96] <- 5
+            
+      #sortere bort ugyldige rader
+      koder <- c(1:5)
+      indDum <- which(RegData$ciatemp %in% koder)#
+      RegData <- RegData[indDum,] #velger de gyldige radene/fjerner de ugyldige 
+            
+      RegData$VariabelGr <- factor(RegData$ciatemp, levels = koder)
+            
+      tittel <-'RCI CIA30GlobalScore'
+}
+
 if (valgtVar=='RegHenvInstans') { #1 Pasienten selv, 2 Fastlege/primærlege, 3	Øvrig primærhelsetjenste, 4 Spesialisthelsetjenesten,
       # 5	Barnehage / skolesektor/PPT, 6 Sosialtjeneste / barnevern, 7 Politi/fengsel/rettsvesen, 
       # 8 Rehabiliteringsinstitusjon/sykehjem, 9Privatpraktiserende spesialister, 99 Annet
@@ -826,7 +877,7 @@ if (valgtVar=='TidSykBehandling'){                                              
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '36+')
       xAkseTxt <-'Måneder'
-      tittel <- 'Tid fra sykdomsdebut til behandlingsstart' 
+      tittel <- 'Tid fra sykdomsdebut til behandlingsstart (selvrapportert)' 
 }
 
 if (valgtVar=='VentetidKat') {                                                                  #BRUKES I: Andeler
