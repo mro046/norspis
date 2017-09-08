@@ -85,6 +85,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
    MedPsykofarmaka,
    Norsktalende,
    PasientAlder,
+   PasientID,
    PO01Forstod,
    PO02Tillit,
    PO03InfoDiagnose,
