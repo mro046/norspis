@@ -40,6 +40,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
    BehDodUnderBeh,
    BehUtfallsvurdSamlet,
    BehVidereBeh,
+   CIA30GlobalScore,
    DiagVDiabetes,
    DiagVSF,
    ErMann,
@@ -81,6 +82,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
    MedBMI,
    MedIsoBMIBGS,
    MedNevroleptika,
+   MedPsykofarmaka,
    Norsktalende,
    PasientAlder,
    PO01Forstod,
@@ -129,6 +131,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
    ForlopsOversikt.HovedDato,
    ForlopsOversikt.OppflgRegStatus,
    ForlopsOversikt.OppflgStatus,
+   ForlopsOversikt.PasientID,
    ForlopsOversikt.SykehusNavn
    FROM EnkeltLeddNum 
    INNER JOIN ForlopsOversikt 
