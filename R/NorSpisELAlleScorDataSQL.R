@@ -81,6 +81,7 @@ NorSpisELAlleScorData <- function(datoFra = '2015-01-01', datoTil = '2099-01-01'
    MedBenzodiazepiner,
    MedBMI,
    MedIsoBMIBGS,
+   MedIsoBMICDC,
    MedNevroleptika,
    MedPsykofarmaka,
    Norsktalende,
