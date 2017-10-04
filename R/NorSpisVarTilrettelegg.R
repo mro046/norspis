@@ -8,7 +8,7 @@
 #'
 #' Argumentet \emph{valgtVar} har følgende valgmuligheter:
 #'    \itemize{
-#'     \item alder: Aldersfordeling, 10-årige grupper 
+#'     \item alder: Aldersfordeling, 5-årige grupper 
 #'     \item InnMaate: Hastegrad inn på intensiv (Elektivt, Akutt medisinsk, Akutt kirurgisk)
 #'     \item liggetid: Liggetid 
 #'     \item NEMS: Skår for ressursbruk. (Nine Equivalents of Nursing Manpower Use Score)
@@ -67,11 +67,18 @@ NorSpisVarTilrettelegg  <- function(RegData, valgtVar, grVar=''){
       
 if (valgtVar %in% c('Alder','B08StartAldrProbl', 'B12cAldrForsteBeh')) {                  #BRUKES I: Andeler
       #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-      gr <- c(0,seq(5,50,5),150)
+      RegData <- RegData[which(RegData$RegRegtype == 1 | RegData$RegRegtype ==2 | RegData$RegRegtype ==3 | RegData$RegRegtype ==4), ]#velger kun startregistreringer og utredninger fordi ellers får vi dobbelt opp med pasienter (1=Utredning voksen, 2=Utredning ungdom/barn, 3=Startregistrering voksen, 4=Startregistrering ungdom/barn)
+      #feil1: teller en pasient flere ganger hvis mottar behandling to steder ganger - må fjerne duplikat
+      #feil2: teller også en pasient flere ganger hvis mottar behandling samme sted to ganger - må fjerne også denne formen for duplikat
+      #feil3: hvis retter feil 1 og 2 kan utvalget "egen enhet mot resten av landet" vli feil - for hvor skal pasienten telles? Egen enhet: ja. Landet: ja, hvis utvalget er "hele landet", men usikkert hvis mottar beh. to egen enhet pluss landet (alternativene blir å telle pasoenten kun ved egen enhet eller både ved egen enhet og "hele landet"). 
+      #riktig blir kanskje: Telle hver PasientID(variabelnavn) kun én gang for hvert behandlingssted(altså 2 ganger hvis mottar behandling 2 steder)
+      #...men kun engang i statistikken for hele landet 
+      
+      gr <- c(0,seq(5,30,5),150)
       #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
       #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '50+')	#c(names(AndelLand)[-length(gr)], '90+')
+      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')	#c(names(AndelLand)[-length(gr)], '90+')
       subtxt <- 'Aldersgruppe'
       tittel <- switch(valgtVar,
                        Alder = 'Aldersfordeling',
@@ -221,28 +228,28 @@ if (valgtVar=='B07Hovedinntekt') {                                              
 #  tittel <- 'Pasientenes alder da problemene startet'
 #}
 
-if (valgtVar =='B08StartAldrProbl'){                                                      #BRUKES I: GjsnGrVar; 
-      #Velge gyldige observasjoner:
-      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-
-      RegData$Variabel <- RegData[ ,valgtVar]
-      deltittel <- 'alder ved start av problematikk'
-      xaksetxt <- 'Alder (år)'
-    
-}
+#if (valgtVar =='B08StartAldrProbl'){                                                      #BRUKES I: GjsnGrVar; 
+#      #Velge gyldige observasjoner:
+#      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+#
+#      RegData$Variabel <- RegData[ ,valgtVar]
+#      deltittel <- 'alder ved start av problematikk'
+#      xaksetxt <- 'Alder (år)'
+#    
+#}
       
-if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {                                 #BRUKES I: Andeler
-      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
-      gr <- c(0,seq(5,30,5),150)
-      #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
-      #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
-      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
-      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')	#c(names(AndelLand)[-length(gr)], '90+')
-      xAkseTxt <- 'Aldersgruppe'
-      tittel <- switch(valgtVar,
-                       B08StartAldrProbl = 'Alder da problemene startet',
-                       B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
-}
+#if (valgtVar %in% c('B08StartAldrProbl', 'B12cAldrForsteBeh')) {                                 #BRUKES I: Andeler
+#      #  RegData <- RegData[which(RegData$ErOppflg == 0), ] #LENA? Hjelpeargument?
+#      gr <- c(0,seq(5,30,5),150)
+#      #indDum <- which(RegData[ ,valgtVar] %in% c(1:150))
+#      #RegData$VariabelGr[indDum] <- RegData[indDum ,valgtVar]
+#      RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest=TRUE, right=FALSE)
+#      grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')	#c(names(AndelLand)[-length(gr)], '90+')
+#     xAkseTxt <- 'Aldersgruppe'
+#      tittel <- switch(valgtVar,
+#                      B08StartAldrProbl = 'Alder da problemene startet',
+#                       B12cAldrForsteBeh = 'Tidligere behandling: Alder ved start av første behandling')
+#}
       
 if (valgtVar=='B11FamilieSF') {                                                                  #BRUKES I: Andeler
       retn <- 'V'
@@ -294,14 +301,14 @@ if (valgtVar=='B12TidlBehSF') {                                                 
 #alle negative hendelsene i én figur
       
       
-if (valgtVar =='B12cAldrForsteBeh'){                                                      #BRUKES I: GjsnGrVar; 
-      #Velge gyldige observasjoner:
-      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
-      
-      RegData$Variabel <- RegData[ ,valgtVar]
-      deltittel <- 'alder ved første behandling'
-      xaksetxt <- 'Alder (år)'
-}
+#if (valgtVar =='B12cAldrForsteBeh'){                                                      #BRUKES I: GjsnGrVar; 
+#      #Velge gyldige observasjoner:
+#      RegData <- RegData[which(RegData[ ,valgtVar] >0), ]
+#      
+#      RegData$Variabel <- RegData[ ,valgtVar]
+#      deltittel <- 'alder ved første behandling'
+#      xaksetxt <- 'Alder (år)'
+#}
       
       
 
@@ -585,10 +592,10 @@ if (valgtVar == 'MedPsykofarmakaAlle' ) {                                       
       
       
 if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {            #BRUKES I: Andeler 
-                                                                                          #Merknad: Ikke kjørt den rutinemessige "fjern gyldige rader, deretter sørg for at tomme kategorier kommer med", men ser ut til å fungere likevel
-      RegData <- RegData[which(RegData$RegRegtype >= 1 & RegData$RegRegtype <=4), ] #velger kun startregistreringer og utredninger (1=Utredning voksen, 2=Utredning ungdom/barn, 3=Startregistrering voksen, 4=Startregistrering ungdom/barn)
+                                                                                          #Merknad: Ikke kjørt den rutinemessige "velg gyldige rader, deretter sørg for at tomme kategorier kommer med", men ser ut til å fungere likevel
+      RegData <- RegData[which(RegData$RegRegtype > 1 & RegData$RegRegtype <=4), ] #velger kun startregistreringer og utredninger (1-4) (1=Utredning voksen, 2=Utredning ungdom/barn, 3=Startregistrering voksen, 4=Startregistrering ungdom/barn)
       valgtVar <- sub("Start", "", valgtVar) #fjerner "Start" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
-      gr <- c(0,seq(10,30,2.5),150)
+      gr <- c(0,seq(10,30,2),150)
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
       xAkseTxt <- switch(valgtVar, 
@@ -598,14 +605,14 @@ if (valgtVar  %in% c('MedBMIStart','MedIsoBMIBGSStart','MedIsoBMICDCStart')) {  
       tittel <- switch(valgtVar, 
                        MedBMI = 'BMI-fordeling ved innkomst',
                        MedIsoBMIBGS = 'Fordeling iso-BMI ved innkomst (normdata: Bergen Growth Study (BGS))',
-                       MedIsoBMICDC = 'Fordeling iso-BMI ved innkomst (normdata: Centers for Disease Control and Prevention (CDC))')
+                       MedIsoBMICDC = 'Fordeling iso-BMI ved innkomst \n (normdata: Centers for Disease Control and Prevention (CDC))')
 }
       
 if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {            #BRUKES I: Andeler 
                                                                                           #Merknad: Ikke kjørt den rutinemessige "fjern gyldige rader, deretter sørg for at tomme kategorier kommer med", men ser ut til å fungere likevel
       RegData <- RegData[which(RegData$RegRegtype == 5 | RegData$RegRegtype ==6 | RegData$RegRegtype ==98 | RegData$RegRegtype ==99), ] #velger kun sluttregistreringer og avbrudd (5=Sluttregistrering voksen, 6=Sluttregistrering ungdom/barn, 98=Avbrutt behandling voksen, 99=Avbrutt behandling ungdom/barn).Merk: Kan strengt tatt fjerne 98 og 99 her siden BMI ikke måles ved avbrudd, men beholder de for tydelighetens skyld
       valgtVar <- sub("Slutt", "", valgtVar) #fjerner "Slut" fra navnet til Valgtvar slik at kommandoen to linjer nedenfor blir riktig
-      gr <- c(0,seq(10,30,2.5),150)
+      gr <- c(0,seq(10,30,2),150)
       RegData$VariabelGr <- cut(RegData[ ,valgtVar], breaks=gr, include.lowest= TRUE, right=FALSE)
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '30+')
       xAkseTxt <- switch(valgtVar, 
@@ -615,7 +622,7 @@ if (valgtVar  %in% c('MedBMISlutt','MedIsoBMIBGSSlutt','MedIsoBMICDCSlutt')) {  
       tittel <- switch(valgtVar, 
                        MedBMI = 'BMI-fordeling ved utskriving',
                        MedIsoBMIBGS = 'Fordeling iso-BMI ved utskriving (normdata: Bergen Growth Study (BGS))',
-                       MedIsoBMICDC = 'Fordeling iso-BMI ved utskriving (normdata: Centers for Disease Control and Prevention (CDC))')
+                       MedIsoBMICDC = 'Fordeling iso-BMI ved utskriving \n (normdata: Centers for Disease Control and Prevention (CDC))')
 }
 
 if (valgtVar == 'NegHend' ) {                                                                    #BRUKES I: Andeler
@@ -890,7 +897,7 @@ if (valgtVar=='VentetidKat') {                                                  
       RegData$VariabelGr <- cut(RegData$Ventetid, breaks=gr, include.lowest= TRUE, right=FALSE)
       grtxt <- c(levels(RegData$VariabelGr)[-(length(gr)-1)], '16+')
       xAkseTxt <- 'Uker'
-      tittel <- 'Ventetid'
+      tittel <- 'Ventetid: Tid fra "henvisning mottatt" til utredningdato/behandlingsstart'
 }
 
 if (valgtVar=='VentetidOver2Uker') {                                                            #BRUKES I: AndelerGrVar       #Kvalitetsindikator

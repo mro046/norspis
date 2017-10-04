@@ -32,7 +32,7 @@ NorSpisUtvalg <- function(RegData, datoFra, datoTil, aar=0, minald=0, maxald=130
                               '7' = RegData[which(RegData$Region == as.character(RegData$Region[indEgen1])),])	#kun egen region
       }
  
- 
+RegData$EnhNavn <- as.factor(RegData$EnhNavn) #gjøres her om til faktor for å forsikre oss om at også tomme sykehus kommer med, e.g. i gjsngrvar
 Ninn <- dim(RegData)[1]
 indAld <- which(RegData$Alder >= minald & RegData$Alder <= maxald)
 indDato <- which(RegData$HovedDato >= as.POSIXlt(datoFra) & RegData$HovedDato <= as.POSIXlt(datoTil))
@@ -95,7 +95,6 @@ utvalgTxt <- c(paste0(
       }							
       
 
-RegData$EnhNavn <- as.factor(RegData$EnhNavn)
 
       
 UtData <- list(RegData=RegData, utvalgTxt=utvalgTxt, fargepalett=fargepalett, ind=ind, 
